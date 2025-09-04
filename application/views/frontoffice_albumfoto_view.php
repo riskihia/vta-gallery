@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Front Office - Album Foto</title>
+
+	<!-- Global stylesheets -->
+	<link rel="icon" type="image/png" sizes="16x16" href="<?php echo BASE_URL ?>static/images/dispenad.png">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
+	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/bootstrap.css" rel="stylesheet" type="text/css">
+	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/core.css" rel="stylesheet" type="text/css">
+	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/components.css" rel="stylesheet" type="text/css">
+	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/colors.css" rel="stylesheet" type="text/css">
+	<!-- /global stylesheets -->
+
+	<!-- Core JS files -->
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/loaders/pace.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/core/libraries/jquery.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/core/libraries/bootstrap.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/loaders/blockui.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/ui/nicescroll.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/ui/drilldown.js"></script>
+	<!-- /core JS files -->
+
+	<!-- Theme JS files -->
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/media/fancybox.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/core/libraries/jquery_ui/core.min.js"></script>
+    <script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/forms/wizards/form_wizard/form.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/forms/wizards/form_wizard/form_wizard.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/forms/selects/select2.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/forms/styling/uniform.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/core/libraries/jasny_bootstrap.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/forms/validation/validate.min.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/notifications/sweet_alert.min.js"></script>
+
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/core/app.js"></script>
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/pages/gallery.js"></script>
+	
+	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/pages/wizard_form.js"></script>
+	<!-- /theme JS files -->
+
+</head>
+
+<body>
+
+	<!-- Main navbar -->
+	<div class="navbar navbar-inverse">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#"> <img src="<?php echo BASE_URL ?>static/images/logo_head.png" alt=""></a>
+
+			<ul class="nav navbar-nav pull-right visible-xs-block">
+				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+			</ul>
+		</div>
+
+		<div class="navbar-collapse collapse" id="navbar-mobile">
+
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown language-switch">
+					<p class="navbar-text"><span class="label bg-success-400">Online</span></p>
+				</li>
+
+				<li class="dropdown dropdown-user">
+		          <a class="dropdown-toggle" data-toggle="dropdown">
+		            <img src="<?php echo BASE_URL ?>static/images/users.jpg" class="img-circle" alt=""> <?php echo $_SESSION['username']." " ?></span>  <i class="caret"> </i>
+		            <!-- <img src="data:image/jpeg;base64,<?php echo base64_encode($data['photo'][0][0]); ?>" class="img-circle"  alt="">  -->
+		          </a>
+
+		          <ul class="dropdown-menu dropdown-menu-right">
+		            <li><a href="<?php echo BASE_URL."users_profil"; ?>"><i class="icon-user-plus"></i> My profile</a></li>
+		           
+		            <li class="divider"></li>
+		            <li><a href="<?php echo BASE_URL ?>auth/logout"><i class="icon-switch2"></i> Logout</a></li>
+		          </ul>
+		        </li>
+			</ul>
+		</div>
+	</div>
+	<!-- /main navbar -->
+
+
+	<!-- Second navbar -->
+	<div class="navbar navbar-default" id="navbar-second">
+		<ul class="nav navbar-nav no-border visible-xs-block">
+			<li><a class="text-center collapsed" data-toggle="collapse" data-target="#navbar-second-toggle"><i class="icon-menu7"></i></a></li>
+		</ul>
+
+		<div class="navbar-collapse collapse" id="navbar-second-toggle">
+			<ul class="nav navbar-nav">
+				<li><a href="<?php echo BASE_URL."frontoffice/dashboard"; ?>"><i class="icon-display4 position-left"></i> Dashboard</a></li>
+
+				<!-- <li class="dropdown mega-menu mega-menu-wide active">
+					<a href="<?php echo BASE_URL."frontoffice/gallery_foto"; ?>"><i class="icon-images2 position-left"></i> Gallery Foto </a>
+				</li>
+
+				<li class="dropdown mega-menu mega-menu-wide">
+					<a href="<?php echo BASE_URL."frontoffice/gallery_video"; ?>"><i class="icon-clapboard-play position-left"></i> Gallery Video </a>
+				</li> -->
+
+				<li class="dropdown mega-menu mega-menu-wide">
+					<a href="<?php echo BASE_URL."frontoffice/pencarian"; ?>"><i class="icon-search4 position-left"></i> Pencarian dan Download </a>
+				</li>
+
+				
+			</ul>
+		</div>
+	</div>
+	<!-- /second navbar -->
+
+
+	<!-- Page header -->
+	<div class="page-header">
+		<div class="page-header-content">
+			<div class="page-title">
+				<h4><a href="#" onclick="javascript:window.history.back();"><i class="icon-arrow-left52 position-left"></i></a> <span class="text-semibold">Gallery</span> - <?php echo $data['info']['nama_kegiatan']?> <div class="text-right" style="margin-top:-35px"><button type="button" class="btn btn-default btn-xs heading-btn" data-toggle="modal" data-target="#modal_form"><i class="icon-file-download2 position-left"></i> Download</button></div></h4>
+
+				<ul class="breadcrumb breadcrumb-caret position-right">
+					<li><a href="<?php echo BASE_URL."frontoffice/"; ?>">Home</a></li>
+					<li><a href="<?php echo BASE_URL."frontoffice/gallery_foto/"; ?>">Gallery</a></li>
+                	<li class="active"><?php $m = new Model(); echo $m->format_tanggal($data['info']['tanggal']);?></li>
+					<li class="active"><?php echo $data['info']['nama_kegiatan']?></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- /page header -->
+
+
+	<!-- Page container -->
+	<div class="page-container">
+
+		<!-- Page content -->
+		<div class="page-content">
+
+			<!-- Main content -->
+			<div class="content-wrapper">
+
+				<!-- Image grid -->
+				<?php foreach ($data['aadata'] as $key => $value) { 
+					$string = $value['nama_kegiatan']; 
+					if (strlen($string) > 40) {
+                          $stringCut = substr($string, 0, 40);
+                          $endPoint  = strrpos($stringCut, ' ');
+                          $string    = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+                          $string   .= "...";
+                      }
+
+                    if($value['structured'] == 0){
+                    	$filedir = ROOT_DIR."static/files/bahan/".$value['dir']."/".$value['kode_parent']."/".$value['subdir']."/".$value['nama_file'];
+						$filename = BASE_URL."static/files/bahan/".$value['dir']."/".$value['kode_parent']."/".$value['subdir']."/".$value['nama_file'];
+                    } else {
+                    	$filedir = ROOT_DIR."static/files/bahan/".$value['dir']."/".$value['subdir']."/".$value['nama_file'];
+						$filename = BASE_URL."static/files/bahan/".$value['dir']."/".$value['subdir']."/".$value['nama_file'];
+			        }
+					// $filedir = ROOT_DIR."static/files/bahan/dokumen/".$value['kode_parent']."/Image/".$value['nama_file'];
+					// $filename = BASE_URL."static/files/bahan/dokumen/".$value['kode_parent']."/Image/".$value['nama_file'];
+					if(file_exists($filedir)){
+                    	$fileshow = $filename;
+                    } else {
+                    	$fileshow = BASE_URL."static/images/placeholder.jpg";
+                    }
+					?>
+					<div class="col-lg-3 col-sm-6">
+						<div class="thumbnail">
+							<div class="thumb">
+								<img src="<?php echo $fileshow; ?>"  style="height: 200px;" alt="">
+								<div class="caption-overflow">
+									<span>
+										<a href="<?php echo $fileshow; ?>" data-popup="lightbox" rel="gallery"  class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-zoomin3"></i></a>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php } ?>			
+				<!-- /image grid -->
+
+				<div class="row">
+	              <div class="col-lg-12 text-center">
+					<?php echo $data['number_paging'] ?>
+	              </div>
+		        </div>
+
+			</div>
+			<!-- /main content -->
+
+		</div>
+		<!-- /page content -->
+
+		<!-- Footer -->
+		<div class="footer text-muted">
+			<img src="<?php echo BASE_URL; ?>static/images/dispenad.png" alt="Dispen"> &copy; 2020 <a href="https://tniad.mil.id/" target="_blank">- Dinas Penerangan Angkatan Darat</a>
+		</div>
+		<!-- /footer -->
+
+	</div>
+	<!-- /page container -->
+
+	<!-- Info modal -->
+	  <div id="modal_form" class="modal fade">
+	    <div class="modal-dialog modal-full">
+	      <div class="modal-content">
+	        <div class="modal-header bg-teal">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h6 class="modal-title"><i class="icon-file-download2" title="Dokumen"></i>&nbsp; Download</h6>
+	        </div>
+
+	        <div class="modal-body">
+	          <!-- Wizard with validation -->
+	          <div class="panel panel-white">          
+	              <form class="form-validation" action="<?php echo BASE_URL."frontoffice/savedownload/".$data['encode']; ?>" method="post">
+	                <fieldset class="step" id="validation-step1">
+	                  <h6 class="form-wizard-title text-semibold">
+	                    <span class="form-wizard-count">1</span>
+	                    Personel info
+	                    <small class="display-block">Masukkan data personel untuk mendownload file ini.</small>
+	                  </h6>
+
+	                  <div class="row">
+	                    <div class="col-md-6">
+	                      <div class="form-group">
+	                        <label>Nama Lengkap: <span class="text-danger">*</span></label>
+	                        <input type="text" name="nama_lengkap" class="form-control required" placeholder="Nama lengkap">
+	                      </div>
+	                    </div>
+
+	                    <div class="col-md-6">
+	                      <div class="form-group">
+	                        <label>Pangkat: <span class="text-danger">*</span></label>
+	                        <select  class="select required" data-placeholder="Pilih pangkat" name="pangkat" >
+	                          <option></option>
+	                            <?php
+	                              $jp = count($data['pangkat']);
+	                              for ($i=0; $i < $jp; $i++) { 
+	                                $jk = count($data['pangkat'][$i]['pangkat']);
+	                                echo "<optgroup class=\"bg-teal\" label=\"".$data['pangkat'][$i]['milpnsval']."\">";
+	                                  for ($n=0; $n < $jk; $n++) { 
+	                                    echo "<option class=\"text-size-mini\" value=\"".$data['pangkat'][$i]['pangkat'][$n]['kd_pangkat']."\">".$data['pangkat'][$i]['pangkat'][$n]['nm_pangkat']."</option>"."\n";
+	                                  }
+	                                echo "</optgroup>"."\n";
+	                              }
+	                            ?>
+	                        </select>
+	                      </div>
+	                    </div>
+	                  </div>
+
+	                  <div class="row">
+	                    <div class="col-md-6">
+	                      <div class="form-group">
+	                        <label>NRP: <span class="text-danger">*</span></label>
+	                        <input type="text" name="nrp" class="form-control required" placeholder="NRP">
+	                      </div>
+	                    </div>
+
+	                    <div class="col-md-6">
+	                      <div class="form-group">
+	                        <label>Jabatan: <span class="text-danger">*</span></label>
+	                        <input type="text" name="jabatan" class="form-control required" placeholder="Jabatan">
+	                      </div>
+	                    </div>
+	                  </div>
+
+	                  <div class="row">
+	                    <div class="col-md-6">
+	                      <div class="form-group">
+	                        <label>Handphone:<span class="text-danger">*</span></label>
+	                        <input type="text" name="telp" class="form-control required" placeholder="+62-999-9999-9999" data-mask="+62-999-9999-9999">
+	                      </div>
+	                    </div>
+
+	                    <div class="col-md-6">
+	                      <label>Korps:<span class="text-danger">*</span></label>
+	                      <div class="row">
+	                        <div class="col-md-12">
+	                          <div class="form-group">
+	                            <select data-placeholder="Pilih korps" class="select required"  name="korps" >
+	                            <option></option>
+	                                <?php foreach ($data['korps'] as $key => $korps) { echo "<option value=\"".$korps[0]."\">".$korps[1]."</option>"."\n";} ?>
+	                            </select>
+	                          </div>
+	                        </div>
+
+	                      </div>
+	                    </div>
+	                  </div>
+
+	                  <div class="row">
+	                    <div class="col-md-12">
+	                      <div class="form-group">
+	                        <label>Keperluan: <span class="text-danger">*</span></label>
+	                        <textarea rows="5" cols="5" class="form-control required" placeholder="" name="keperluan"></textarea>
+	                        <span class="text-size-mini text-warning-300"><em>* Tulis keperluan penggunaan dokumen ini.</em></span>
+	                      </div>
+	                    </div> 
+	                  </div>
+	                </fieldset>
+
+	                <fieldset class="step" id="validation-step2">
+	                  <h6 class="form-wizard-title text-semibold">
+	                    <span class="form-wizard-count">2</span>
+	                    Choose file
+	                    <small class="display-block">Pilih file yang akan di download.</small>
+	                  </h6>
+
+	                  <div class="row">
+	                    <div class="col-md-12">
+	                      <div class="form-group">
+	                        <table class="table table-striped media-library table-lg">
+	                          <thead>
+	                              <tr>
+	                                  <th class=""><!-- <input type="checkbox" name="checkAll" id="checkAll" class="styled"> --></th>
+	                                  <th class="text-bold text-teal">Preview</th>
+	                                  <th class="text-bold text-teal">File Name</th>
+	                                  <th class="text-bold text-teal">File info</th>
+	                              </tr>
+	                          </thead>
+	                          <tbody>
+
+	                            <?php foreach ($data['attch'] as $key => $file) { 
+	                            $nama_file =  explode(".", $file['nama_file']); 
+	                            $tipes = explode('/', $file['tipe_file']); 
+	                            if($file['structured'] == 0){  	
+									$filename = BASE_URL."static/files/bahan/".$file['dir']."/".$file['kode_parent']."/".$file['subdir']."/".$file['nama_file'];
+			                    } else {
+			                    	$filename = BASE_URL."static/files/bahan/".$file['dir']."/".$file['subdir']."/".$file['nama_file'];
+			                    }
+	                            //$filename = BASE_URL."static/files/bahan/".$file['dir']."/".$file['kode_parent']."/".$file['subdir']."/".$file['nama_file'];
+	                            if($filename){
+	                                $fileattch = $filename;
+	                            }else{
+	                                $fileattch = BASE_URL."static/images/placeholder.jpg";
+	                            }
+	                            
+
+	                            ?>
+	                              
+	                              <tr>
+	                                <td><input type="checkbox" name="chkfile[]" value="<?php echo $file['autono'] ?>" class="styled"></td>
+	                                <td>
+	                                  <a href="<?php echo $fileattch; ?>" data-popup="lightbox">
+
+	                                    <?php if($tipes[0] == 'video') {
+	                                      echo '<video width="190" controls controlsList="nodownload"><source src="'.$fileattch.'" type="video/mp4" ></video>';
+	                                    } else {
+	                                      echo '<img src="'.$fileattch.'" alt="" class="img-rounded img-preview">';
+	                                    }
+	                                    ?>
+	                                    
+	                                  </a>
+	                                </td>
+	                                <td><a href="#"><?php echo $nama_file[0]; ?></a></td>
+	                                <td>
+	                                  <ul class="list-condensed list-unstyled no-margin">                                     
+	                                    <li><span class="text-semibold">Size:</span> <code><?php echo number_format($file['ukuran']/1024). ' KB'; ?></code></li>
+	                                    <li><span class="text-semibold">Format:</span> <code><?php echo $file['tipe_file']; ?></code></li>
+	                                  </ul>
+	                                </td>
+	                              </tr>
+	                             <?php  } ?>                        
+	                              
+	                          </tbody>
+	                      </table>
+	                      </div>
+	                    </div>
+	                    
+	                  </div> 
+	                    
+	                </fieldset>
+
+	                <div class="form-wizard-actions text-right">
+	                  <button type="reset" id="validation-back" class="btn btn-default"><i class="icon-circle-left2 position-left"></i> Back</button>
+	                  <button type="submit" id="validation-next" class="btn bg-teal">Next <i class="icon-circle-right2 position-right"></i></button>
+	                </div>
+	              </form>
+	          </div>
+	          <!-- /wizard with validation -->
+
+	      </div>
+	    </div>
+	  </div>
+	  <!-- /info modal -->  
+
+</body>
+</html>
+<script type="text/javascript">
+$(function() {
+        $(this).bind("contextmenu", function(e) {
+            e.preventDefault();
+        });
+    }); 
+</script>
+
+
