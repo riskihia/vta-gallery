@@ -154,14 +154,21 @@ class Dokumen_model extends Model {
     	return $result;
     }
 
+    // public function get_project()
+    // {
+    //     $result = $this->query("SELECT 
+    //         prj.`autocode`,
+    //         mp.`nama_project`
+    //         FROM prj_penetapan_proyek prj
+    //         JOIN m_project mp ON prj.`id_pm` = mp.`autono`
+    //         GROUP BY mp.`nama_project`;");
+
+    //     return $result;
+    // }
     public function get_project()
     {
-        $result = $this->query("SELECT 
-            prj.`autocode`,
-            mp.`nama_project`
-            FROM prj_penetapan_proyek prj
-            JOIN m_project mp ON prj.`id_pm` = mp.`autono`
-            GROUP BY mp.`nama_project`;");
+        $result = $this->query("SELECT autocode, nama_project FROM m_project 
+GROUP BY nama_project;");
 
         return $result;
     }
@@ -232,7 +239,7 @@ class Dokumen_model extends Model {
 
     public function get_media()
     {
-    	$result = $this->query("SELECT autocode, nama_media FROM ref_media WHERE direktori = 'Image' ORDER BY nama_media ASC");
+    	$result = $this->query("SELECT autocode, nama_media FROM ref_media ORDER BY nama_media ASC");
 
     	return $result;
     }
@@ -246,11 +253,11 @@ class Dokumen_model extends Model {
     public function get_projectedit($id)
     {
     	$result = $this->query("SELECT
-  prj.autocode,
+  mp.autocode,
   mp.`nama_project`,
   IF (b.autocode IS NULL, '', 'selected') AS pselct
 FROM
-  prj_penetapan_proyek prj JOIN m_project mp ON prj.`id_pm` = mp.`autono`
+  m_project mp 
   LEFT JOIN
     (SELECT
       autono,
@@ -259,12 +266,34 @@ FROM
     FROM
       tbl_dokumen
     WHERE autono = $id) b
-    ON b.`project` = prj.`autocode`
+    ON b.`project` = mp.`autocode`
 GROUP BY mp.`nama_project`
 ORDER BY mp.`nama_project` ASC");
 
     	return $result;
     }
+//     public function get_projectedit($id)
+//     {
+//     	$result = $this->query("SELECT
+//   prj.autocode,
+//   mp.`nama_project`,
+//   IF (b.autocode IS NULL, '', 'selected') AS pselct
+// FROM
+//   prj_penetapan_proyek prj JOIN m_project mp ON prj.`id_pm` = mp.`autono`
+//   LEFT JOIN
+//     (SELECT
+//       autono,
+//       autocode,
+//       project
+//     FROM
+//       tbl_dokumen
+//     WHERE autono = $id) b
+//     ON b.`project` = prj.`autocode`
+// GROUP BY mp.`nama_project`
+// ORDER BY mp.`nama_project` ASC");
+
+//     	return $result;
+//     }
 
     public function get_provinsi()
     {
