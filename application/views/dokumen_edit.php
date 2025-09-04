@@ -73,6 +73,17 @@
                           <?php foreach ($data['aadata'] as $key => $val) { ?>
 
                           <div class="form-group">
+                            <label class="control-label col-lg-2">Project</label>
+                            <div class="col-lg-10">
+                              <select data-placeholder="Pilih Project" class="select"  name="project" required="required">
+                                  <option></option>
+                                  <?php var_dump($data['project']); foreach ($data['project'] as $key => $project) { echo "<option value=\"".$project[0]."\" ".$project[2].">".$project[1]."</option>"."\n";} ?>
+                              </select>
+                              <span class="help-block red"><code>* Wajib diisi</code></span>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
                             <label class="control-label col-lg-2">Nama kegiatan</label>
                             <div class="col-lg-10">
                              <input type="text" class="form-control" name="nama_kegiatan" value="<?php echo $val['nama_kegiatan'] ?>" required>
@@ -117,12 +128,12 @@
                               </select>
                             </div>
                           </div>
-                          <div class="form-group">
+                          <!-- <div class="form-group">
                             <label class="control-label col-lg-2">No Card Memory</label>
                             <div class="col-lg-10">
                              <input type="text" class="form-control" name="no_card" value="<?php echo $val['no_card'] ?>">
                             </div>
-                          </div>
+                          </div> -->
                           <div class="form-group">
                             <label class="control-label col-lg-2">Pejabat</label>
                             <div class="col-lg-10">
@@ -157,7 +168,7 @@
                               </select>
                             </div>
                           </div>
-                          <div class="form-group">
+                          <!-- <div class="form-group">
                             <label class="control-label col-lg-2">Jenis Kamera</label>
                             <div class="col-lg-10">
                               <select data-placeholder="Pilih jenis kamera" class="select"  name="kamera" >
@@ -165,7 +176,7 @@
                                   <?php foreach ($data['kamera'] as $key => $cam) { echo "<option value=\"".$cam[0]."\" ".$cam[2].">".$cam[1]."</option>"."\n";} ?>
                               </select>
                             </div>
-                          </div>
+                          </div> -->
                           
                           <div class="form-group">
                             <label class="control-label col-lg-2">Narasi</label>

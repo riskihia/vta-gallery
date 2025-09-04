@@ -178,6 +178,7 @@ class Dokumen extends Controller {
 		$data['encode']	     = $x;
 
 		//$data['provinsi']	 = $model->get_provinsi();
+		$data['project']	     = $model->get_project();
 
 		$data['kondisi']	 = $model->get_kondisi();
 
@@ -231,6 +232,8 @@ class Dokumen extends Controller {
 		
 		$data['media']         = $model->get_mediaedit($id);
 
+		$data['project']         = $model->get_projectedit($id);
+
 		$data['kamera']	       = $model->get_kameraedit($id);
 		
 		$data['personel']      = $model->get_personeledit($id);
@@ -266,6 +269,7 @@ class Dokumen extends Controller {
 		// $data['parent_id']     = $this->base64url_decode($x) ;
     	// $data['parent_id']     = 0 ;
 		$data['nama_kegiatan'] = $model->escapeString($_REQUEST['nama_kegiatan']) ;
+		$data['project'] = $model->escapeString($_REQUEST['project']) ;
 		$data['jenis_media']   = $model->escapeString($_REQUEST['jenis_media']) ;
 		$data['kondisi_media'] = $model->escapeString($_REQUEST['kondisi_media']) ;
 		$data['no_card']       = $model->escapeString($_REQUEST['no_card']) ;
@@ -381,6 +385,7 @@ class Dokumen extends Controller {
 
 		$data['parent_id']     = $this->base64url_decode($x) ;
 		$data['nama_kegiatan'] = $model->escapeString($_REQUEST['nama_kegiatan']) ;
+		$data['project'] = $model->escapeString($_REQUEST['project']) ;
 		$data['jenis_media']   = $model->escapeString($_REQUEST['jenis_media']) ;
 		$data['kondisi_media'] = $model->escapeString($_REQUEST['kondisi_media']) ;
 		$data['no_card']       = $model->escapeString($_REQUEST['no_card']) ;
@@ -468,11 +473,11 @@ class Dokumen extends Controller {
 
 		if($child){
 
-			$this->redirect('dokumen_foto/detail/'.$child);
+			$this->redirect('dokumen/detail/'.$child);
 
 		} else {
 
-			$this->redirect('dokumen_foto');
+			$this->redirect('dokumen');
 
 		}
 

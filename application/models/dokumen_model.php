@@ -154,6 +154,17 @@ class Dokumen_model extends Model {
     	return $result;
     }
 
+    public function get_project()
+    {
+        $result = $this->query("SELECT 
+            prj.`autocode`,
+            mp.`nama_project`
+            FROM prj_penetapan_proyek prj
+            JOIN m_project mp ON prj.`id_pm` = mp.`autono`
+            GROUP BY mp.`nama_project`;");
+
+        return $result;
+    }
     public function get_kondisi()
     {
         $result = $this->query("SELECT autocode, nama_kondisi FROM ref_kondisi ORDER BY nama_kondisi ASC");
@@ -221,7 +232,7 @@ class Dokumen_model extends Model {
 
     public function get_media()
     {
-    	$result = $this->query("SELECT autocode, nama_media FROM ref_media  ORDER BY nama_media ASC");
+    	$result = $this->query("SELECT autocode, nama_media FROM ref_media WHERE direktori = 'Image' ORDER BY nama_media ASC");
 
     	return $result;
     }
@@ -229,6 +240,28 @@ class Dokumen_model extends Model {
     public function get_mediaedit($id)
     {
     	$result = $this->query("SELECT a.autocode, a.`nama_media`, IF(b.autocode IS NULL, '', 'selected') AS pselct FROM ref_media  a  LEFT JOIN ( SELECT  autono, autocode, jenis_media FROM tbl_dokumen WHERE autono = $id) b ON b.`jenis_media` = a.`autocode`  ORDER BY a.nama_media ASC");
+
+    	return $result;
+    }
+    public function get_projectedit($id)
+    {
+    	$result = $this->query("SELECT
+  prj.autocode,
+  mp.`nama_project`,
+  IF (b.autocode IS NULL, '', 'selected') AS pselct
+FROM
+  prj_penetapan_proyek prj JOIN m_project mp ON prj.`id_pm` = mp.`autono`
+  LEFT JOIN
+    (SELECT
+      autono,
+      autocode,
+      project
+    FROM
+      tbl_dokumen
+    WHERE autono = $id) b
+    ON b.`project` = prj.`autocode`
+GROUP BY mp.`nama_project`
+ORDER BY mp.`nama_project` ASC");
 
     	return $result;
     }
@@ -297,7 +330,7 @@ class Dokumen_model extends Model {
 
         $sWhere = "WHERE nama_file IS NOT NULL";
 
-        $sJoin  = "LEFT JOIN ( SELECT parent_id, nama_file FROM vt_files GROUP BY parent_id) AS vt_files ON tbl_dokumen.`autono` = vt_files.`parent_id`";
+        $sJoin  = "LEFT JOIN ( SELECT parent_id, nama_file FROM vt_files WHERE tipe_file LIKE '%image%' GROUP BY parent_id) AS vt_files ON tbl_dokumen.`autono` = vt_files.`parent_id`";
 
 
         $data = $this->query(

@@ -68,6 +68,16 @@
 
                         <fieldset class="content-group">
 
+                          <div class="form-group">
+                            <label class="control-label col-lg-2">Project</label>
+                            <div class="col-lg-10">
+                              <select data-placeholder="Pilih project" class="select"  name="project" >
+                                  <option></option>
+                                  <?php foreach ($data['project'] as $key => $value) { echo "<option value=\"".$value[0]."\">".$value[1]."</option>"."\n";} ?>
+                              </select>
+                            </div>
+                          </div>
+
 						              <div class="form-group">
                             <label class="control-label col-lg-2">Nama kegiatan</label>
                             <div class="col-lg-10">
@@ -109,12 +119,12 @@
                               </select>
                             </div>
                           </div>
-                          <div class="form-group">
+                          <!-- <div class="form-group">
                             <label class="control-label col-lg-2">No Card Memory</label>
                             <div class="col-lg-10">
                              <input type="text" class="form-control" name="no_card">
                             </div>
-                          </div>
+                          </div> -->
                           <div class="form-group">
                             <label class="control-label col-lg-2">Pejabat</label>
                             <div class="col-lg-10">
@@ -148,7 +158,7 @@
                               </select>
                             </div>
                           </div>
-                          <div class="form-group">
+                          <!-- <div class="form-group">
                             <label class="control-label col-lg-2">Jenis Kamera</label>
                             <div class="col-lg-10">
                               <select data-placeholder="Pilih jenis kamera" class="select"  name="kamera" >
@@ -156,7 +166,7 @@
                                   <?php foreach ($data['kamera'] as $key => $cam) { echo "<option value=\"".$cam[0]."\">".$cam[1]."</option>"."\n";} ?>
                               </select>
                             </div>
-                          </div>
+                          </div> -->
                           <div class="form-group">
                             <label class="control-label col-lg-2">Narasi</label>
                             <div class="col-lg-10">
