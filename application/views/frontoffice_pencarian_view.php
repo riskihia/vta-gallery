@@ -284,7 +284,7 @@
 			                    }
 
 								if($value['tanggal'] != ''){
-                                	$tgl = " ".$m->format_tanggal($value['tanggal']);
+                                	$tgl = " ".$m->format_tanggal($video['tanggal']);
                                 } else {
                                 	$tgl = 'Tanggal belum ada';
                                 }
@@ -294,10 +294,16 @@
 									<div class="thumbnail">
 										<div class="thumb">
 											<video width="100%" height="200px" controls controlsList="nodownload" style="outline: none;border: none;background: #090909"><source src="<?php echo $videofile; ?>#t=20" type="video/mp4" preload="metadata"></video>
+											<div class="caption-overflow">
+												<span>
+													<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="btn border-white text-white btn-flat btn-icon btn-rounded" title="Lihat semua video"><i class="icon-play3"></i></a>
+													<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5" title="Lihat album video"><i class="icon-clapboard-play"></i></a>
+												</span>
+											</div>
 										</div>
 
 										<div class="caption">
-											<h6 class="no-margin"><a href="<?php echo BASE_URL."frontoffice/show_video/".$idx;?>" class="text-default" title="<?php echo $video['nama_kegiatan'];?>"><?php echo $string ?></a> <a href="#" class="text-muted"></a></h6>
+											<h6 class="no-margin"><a href="<?php echo BASE_URL."frontoffice/album_video/".$idx;?>" class="text-default" title="<?php echo $video['nama_kegiatan'];?>"><?php echo $string ?></a> <a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a></h6>
                                         	<span class="help-block text-grey text-size-large"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?></span>
 										</div>
 									</div>

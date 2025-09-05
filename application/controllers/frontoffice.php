@@ -4,13 +4,13 @@ class Frontoffice extends Controller {
 
 	public function __construct()
     {
-        $session = $this->loadHelper('Session_helper');
+        // $session = $this->loadHelper('Session_helper');
 
-        if(!$session->get('username')){
+        // if(!$session->get('username')){
 
-        	$this->redirect('auth/login');
+        // 	$this->redirect('auth/login');
 
-        }
+        // }
     }
 	
 	function index()
@@ -79,8 +79,30 @@ class Frontoffice extends Controller {
 		$data['limit']         = 20;
     	$data['aadata']        = $model->query("SELECT * FROM vt_files WHERE parent_id = $id");
     	$data['attch']         = $model->get_file_attachment($id);
-		$data['curl']          = $this->curl;
+		$data['number_paging'] = ''; // Pagination jika diperlukan
 		$template              = $this->loadView('frontoffice_albumfoto_view');
+		$template->set('data', $data);
+		$template->render();
+	}
+
+	function album_video($x)
+	{
+		$model                 = $this->loadModel('Frontoffice_model');
+    	$id                    = $this->base64url_decode($x);
+		$data                  = array();
+		$data['breadcrumb1']   = 'Gallery';
+    	$data['breadcrumb2']   = 'Album Video';
+		$data['title']         = 'Video';
+		$data['encode']        = $x;
+    	$data['info']          = $model->getinfos($id);
+    	$data['pangkat']       = $model->get_pangkat();
+		$data['korps']         = $model->get_korps();
+		$data['page']          = ( isset( $_GET['page'] ) ) ? $_GET['page'] : 1;
+		$data['limit']         = 20;
+    	$data['aadata']        = $model->query("SELECT * FROM vt_files WHERE parent_id = $id AND tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%'");
+    	$data['attch']         = $model->get_file_attachment($id);
+		$data['number_paging'] = ''; // Pagination jika diperlukan
+		$template              = $this->loadView('frontoffice_album_video_view');
 		$template->set('data', $data);
 		$template->render();
 	}
@@ -146,16 +168,18 @@ class Frontoffice extends Controller {
 		$data['limit']               = 12;
 		$input['keywords']           = str_replace('+',  ' ', $data['q']);
 
-		// Foto
-		$queryfoto                   = "SELECT autono, nama_kegiatan, tanggal, kode_parent, nama_file, dir, subdir, tipe_file,structured, ukuran  FROM tbl_dokumen a RIGHT JOIN (SELECT parent_id,structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%'";	
-		$resTotalLengthFoto          = $model->query("SELECT COUNT(FOUND_ROWS()) FROM  `tbl_dokumen` a RIGHT JOIN (SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%'");
+		// Foto - Tampilkan 1 card per project (GROUP BY parent_id)
+		$queryfoto                   = "SELECT autono, nama_kegiatan, tanggal, kode_parent, nama_file, dir, subdir, tipe_file,structured, ukuran  FROM tbl_dokumen a RIGHT JOIN (SELECT parent_id,structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%')";	
+		
+		$resTotalLengthFoto          = $model->query("SELECT COUNT(*) as total FROM (SELECT autono FROM tbl_dokumen a RIGHT JOIN (SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%')) as total_query");
 		$data['total_foto']          = $resTotalLengthFoto[0][0];
 		$data['foto']                = $model->pagination($queryfoto, $data['limit'], $data['page']);
 		$data['number_paging_foto']  = $model->createPagingSearch($data['q'],$data['foto']['total'],$data['foto']['limit'], $data['foto']['page'], "tab-image");
 		
-		// Video
-		$queryvideo                  = "SELECT autono, nama_kegiatan, tanggal, kode_parent, dir, subdir, nama_file, tipe_file,structured, ukuran  FROM tbl_dokumen a RIGHT JOIN (SELECT parent_id,structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%'";	
-		$resTotalLengthVideo         = $model->query("SELECT COUNT(FOUND_ROWS()) FROM  `tbl_dokumen` a RIGHT JOIN (SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%'");
+		// Video - Tampilkan 1 card per project (GROUP BY parent_id)
+		$queryvideo                  = "SELECT autono, nama_kegiatan, tanggal, kode_parent, dir, subdir, nama_file, tipe_file,structured, ukuran  FROM tbl_dokumen a RIGHT JOIN (SELECT parent_id,structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%')";	
+		
+		$resTotalLengthVideo         = $model->query("SELECT COUNT(*) as total FROM (SELECT autono FROM tbl_dokumen a RIGHT JOIN (SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%')) as total_query");
 		$data['total_video']         = $resTotalLengthVideo[0][0];
 		$data['video']               = $model->pagination($queryvideo, $data['limit'], $data['page']);
 		$data['number_paging_video'] = $model->createPagingSearch($data['q'],$data['video']['total'],$data['video']['limit'], $data['video']['page'], "tab-video");
