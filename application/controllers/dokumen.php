@@ -108,7 +108,8 @@ class Dokumen extends Controller {
 			array( 'db' => 'complete',  'dt' => 7 ),
 			array( 'db' => 'created_by',   'dt' => 8 ),
 			array( 'db' => 'keterangan',   'dt' => 9 ),
-			array( 'db' => 'autocode',  'dt' => 10 )
+			array( 'db' => 'autocode',  'dt' => 10 ),
+			array( 'db' => 'nama_project',  'dt' => 11 )
 
 		);
 

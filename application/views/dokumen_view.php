@@ -78,6 +78,7 @@
 
                         <tr>
                           <th class="text-center text-bold text-teal">No</th>
+        									<th class="text-center text-bold text-teal">Nama Project</th>
         									<th class="text-center text-bold text-teal">Nama kegiatan</th>
                           <th class="text-center text-bold text-teal">Operator</th>
         									<th class="text-center text-bold text-teal">Photo</th>
@@ -256,6 +257,15 @@
                     render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
+            },
+            {
+              "data": 11,
+              "width": 'auto',
+              "render": function (data, type, row, meta) {
+              return (data === null || data === "" || typeof data === "undefined")
+                ? '<i>silakan input nama project</i>'
+                : data;
+              }
             },
 						{
                 "data": 1,

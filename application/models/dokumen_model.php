@@ -359,7 +359,13 @@ ORDER BY mp.`nama_project` ASC");
 
         $sWhere = "WHERE nama_file IS NOT NULL";
 
-        $sJoin  = "LEFT JOIN ( SELECT parent_id, nama_file FROM vt_files WHERE tipe_file LIKE '%image%' GROUP BY parent_id) AS vt_files ON tbl_dokumen.`autono` = vt_files.`parent_id`";
+        $sJoin  = "LEFT JOIN ( SELECT parent_id, nama_file FROM vt_files WHERE tipe_file LIKE '%image%' GROUP BY parent_id) AS vt_files ON tbl_dokumen.`autono` = vt_files.`parent_id` 
+        LEFT JOIN
+            (SELECT 
+            autocode AS autocode_m_project,
+            nama_project
+            FROM m_project) AS m_project
+            ON tbl_dokumen.`project` = m_project.`autocode_m_project`";
 
 
         $data = $this->query(
