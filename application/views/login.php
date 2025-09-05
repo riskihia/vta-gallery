@@ -29,7 +29,7 @@
   <!-- Page container -->
   <div class="page-container login-container">
     <!-- Page content -->
-    <div class="page-content" style="background: url('<?php echo BASE_URL ?>static/images/backgrounds/bg1.jpg'); background-size: cover;">
+    <div class="page-content" style="background: url('<?php echo BASE_URL ?>static/images/backgrounds/bge1.jpg'); background-size: cover;">
       <!-- Main content -->
       <div class="content-wrapper">
         <!-- Content area -->
@@ -38,9 +38,9 @@
             <div class="panel panel-body login-form">
               <div class="text-center">
                 <div>
-                  <img src="<?php echo BASE_URL."static/images/logo_lg.png"?>" class ="img-thumbnail icon-object border-grey-300 no-border text-slate-300"></div>   
+                  <img src="<?php echo BASE_URL."static/images/LOGO VTAH GROUP - putih.png"?>" class ="img-thumbnail border-grey-300 no-border text-slate-300"></div>   
                     
-                    <h5 class="content-group text-teal-600 text-bold"><?php echo "BACK OFFICE MANAJEMEN <br> FOTO & VIDEO" ?> </h5>   
+                    <h5 class="content-group text-slate-900 text-bold"><?php echo "VTA-GALLERY <br> FOTO & VIDEO" ?> </h5>   
                     <small class="display-block">
                         <h5 class="text-size-sm text-slate-600 text-bold"><?php // echo $config['divi_name']?></h5>
                     </small>
@@ -75,7 +75,7 @@
             </div>
           </form>
           <div class="footer text-white">
-            Copyright &copy;2021 - <a href="http://vitech.asia//" class="text-warning-300">Vitech Asia </a>
+            Copyright &copy;2025 - <a href="http://vitech.asia//" class="text-warning-300">Vitech Asia </a>
           </div>
         </div>
       </div>
