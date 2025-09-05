@@ -79,12 +79,11 @@
                         <tr>
                           <th class="text-center text-bold text-teal">No</th>
         									<th class="text-center text-bold text-teal">Nama kegiatan</th>
-                          <th class="text-center text-bold text-teal">Tanggal</th>
                           <th class="text-center text-bold text-teal">Operator</th>
-                         
         									<th class="text-center text-bold text-teal">Photo</th>
-                           <th class="text-center text-bold text-teal">Selesai</th>
                           <th class="text-center text-bold text-teal">Upload</th>
+                          <th class="text-center text-bold text-teal">Selesai</th>
+                          <th class="text-center text-bold text-teal">Tanggal</th>
         									<th class="text-center text-bold text-teal">Actions</th>
                         </tr>
 
@@ -266,7 +265,7 @@
                     return "<code>"+row[10]+"</code> "+row[1];
                 }
             },
-						{"data": 5,width: 200, className: 'center'},
+						
             {"data": 8,width:'auto'},
             { 
                 "data": null,
@@ -282,7 +281,18 @@
                        }  
                    }
             },
-            
+            { 
+                "data": null,
+                "width": 50,
+                "sortable": false,
+                  "className": "center",
+                  "render": function ( data, type, row, meta ) {
+                       
+                        return "<a href=\"#\" onClick=\"tes('"+row[0]+"')\"  class=\"btn-sx\" data-toggle=\"modal\" data-target=\"#modal_video\" title=\"Upload video\"><i class=\"icon-file-upload2 text-grey-600\"></i></a> ";
+                          
+                       
+                   }
+            },
             { 
                 "data": 7,
                 "width": 50,
@@ -296,18 +306,8 @@
                        }  
                    }
             },
-        	{ 
-                "data": null,
-                "width": 50,
-                "sortable": false,
-                  "className": "center",
-                  "render": function ( data, type, row, meta ) {
-                       
-                        return "<a href=\"#\" onClick=\"tes('"+row[0]+"')\"  class=\"btn-sx\" data-toggle=\"modal\" data-target=\"#modal_video\" title=\"Upload video\"><i class=\"icon-file-upload2 text-grey-600\"></i></a> ";
-                          
-                       
-                   }
-            },
+        	
+            {"data": 5,width: 200, className: 'center'},
             {
 
                 "data": null,
