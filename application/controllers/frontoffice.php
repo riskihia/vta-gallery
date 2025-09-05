@@ -181,7 +181,7 @@ class Frontoffice extends Controller {
 		
 		LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project`  
 
-		RIGHT JOIN (SELECT parent_id,structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%')";	
+		RIGHT JOIN (SELECT parent_id,structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%') ORDER BY autono DESC";	
 		
 		$resTotalLengthFoto          = $model->query("SELECT COUNT(*) as total FROM (SELECT autono FROM tbl_dokumen a RIGHT JOIN (SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%')) as total_query");
 		$data['total_foto']          = $resTotalLengthFoto[0][0];
@@ -193,7 +193,7 @@ class Frontoffice extends Controller {
 		
 		LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project`  
 
-		RIGHT JOIN (SELECT parent_id,structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%')";	
+		RIGHT JOIN (SELECT parent_id,structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%') ORDER BY autono DESC";	
 		
 		$resTotalLengthVideo         = $model->query("SELECT COUNT(*) as total FROM (SELECT autono FROM tbl_dokumen a RIGHT JOIN (SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%')) as total_query");
 		$data['total_video']         = $resTotalLengthVideo[0][0];
