@@ -160,8 +160,11 @@
 							</div>
 
 							<div class="caption">
+								<?php if(!empty($value['nama_project'])): ?>
+								<h6 class="no-margin text-primary text-size-small"><strong><?php echo $value['nama_project']; ?></strong></h6>
+								<?php endif; ?>
 								<h6 class="no-margin"><a href="<?php echo BASE_URL."frontoffice/show_video/".$idx;?>" class="text-default" title="<?php echo $value['nama_kegiatan'];?>"><?php echo $string ?></a> <a href="#" class="text-muted">&nbsp;</a></h6>
-                            	<span class="help-block text-grey text-size-large"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?></span>
+                            	<span class="help-block text-grey text-size-small"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?></span>
 							</div>
 						</div>
 					</div>

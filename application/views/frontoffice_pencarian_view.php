@@ -16,6 +16,49 @@
 	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/colors.css" rel="stylesheet" type="text/css">
 	<!-- /global stylesheets -->
 
+	<!-- Custom CSS for grid layout -->
+	<style>
+		.gallery-grid .col-lg-3, .gallery-grid .col-sm-6 {
+			margin-bottom: 20px;
+		}
+		.gallery-grid .thumbnail {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+		.gallery-grid .thumb {
+			flex-shrink: 0;
+		}
+		.gallery-grid .caption {
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			min-height: 80px;
+		}
+		.gallery-grid .caption h6 {
+			margin-bottom: 5px;
+			line-height: 1.3;
+		}
+		.gallery-grid .caption .help-block {
+			margin-top: auto;
+			margin-bottom: 0;
+		}
+		.project-name {
+			max-height: 20px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		.kegiatan-name {
+			max-height: 40px;
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+		}
+	</style>
+
 	<!-- Core JS files -->
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/plugins/loaders/pace.min.js"></script>
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/core/libraries/jquery.min.js"></script>
@@ -210,6 +253,7 @@
 							<div class="tab-pane <?php echo $diimage;?>" id="tab-image">
 							<p class="text-muted text-size-small content-group">About <?php echo $data['total_foto']; ?> results foto (0.34 seconds) </p>																	
 							<!-- Image grid -->
+							<div class="row gallery-grid">
 							<?php $c = new Controller(); $m = new Model(); foreach ($data['foto']['aadata'] as $key => $value) { 
 								$string = $value['nama_kegiatan']; 
 								if (strlen($string) > 30) {
@@ -249,12 +293,20 @@
 										</div>
 
 										<div class="caption">
-											<h6 class="no-margin"><a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-default"><?php echo $string ?></a> <a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a></h6>
-			                            	<span class="help-block text-grey text-size-large"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo " ".$m->format_tanggal($value['tanggal'])?></span>
+											<?php if(!empty($value['nama_project'])): ?>
+											<div class="project-name">
+												<h6 class="no-margin text-primary text-size-small"><strong><?php echo $value['nama_project']; ?></strong></h6>
+											</div>
+											<?php endif; ?>
+											<div class="kegiatan-name">
+												<h6 class="no-margin"><a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-default"><?php echo $string ?></a> <a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a></h6>
+											</div>
+			                            	<span class="help-block text-grey text-size-small"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo " ".$m->format_tanggal($value['tanggal'])?></span>
 										</div>
 									</div>
 								</div>
-								<?php } ?>			
+								<?php } ?>
+							</div>			
 							<!-- /image grid -->
 
 							<div class="row">
@@ -267,6 +319,7 @@
 							<div class="tab-pane <?php echo $divideo;?>" id="tab-video" >																	
 							<!-- Video grid -->
 							<p class="text-muted text-size-small content-group">About <?php echo $data['total_video']; ?> results video (0.34 seconds) </p>	
+							<div class="row gallery-grid">
 							<?php foreach ($data['video']['aadata'] as $key => $video) { 
 								$string = $video['nama_kegiatan']; 
 								if (strlen($string) > 32) {
@@ -283,7 +336,7 @@
 			                    	$videofile = BASE_URL."static/files/bahan/".$video['dir']."/".$video['subdir']."/".$video['nama_file'];
 			                    }
 
-								if($value['tanggal'] != ''){
+								if($video['tanggal'] != ''){
                                 	$tgl = " ".$m->format_tanggal($video['tanggal']);
                                 } else {
                                 	$tgl = 'Tanggal belum ada';
@@ -303,12 +356,20 @@
 										</div>
 
 										<div class="caption">
-											<h6 class="no-margin"><a href="<?php echo BASE_URL."frontoffice/album_video/".$idx;?>" class="text-default" title="<?php echo $video['nama_kegiatan'];?>"><?php echo $string ?></a> <a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a></h6>
-                                        	<span class="help-block text-grey text-size-large"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?></span>
+											<?php if(!empty($video['nama_project'])): ?>
+											<div class="project-name">
+												<h6 class="no-margin text-primary text-size-small"><strong><?php echo $video['nama_project']; ?></strong></h6>
+											</div>
+											<?php endif; ?>
+											<div class="kegiatan-name">
+												<h6 class="no-margin"><a href="<?php echo BASE_URL."frontoffice/album_video/".$idx;?>" class="text-default" title="<?php echo $video['nama_kegiatan'];?>"><?php echo $string ?></a> <a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a></h6>
+											</div>
+                                        	<span class="help-block text-grey text-size-small"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?></span>
 										</div>
 									</div>
 								</div>
-								<?php } ?>					
+								<?php } ?>
+							</div>					
 							<!-- /video grid -->
 							<div class="row">
 				              <div class="col-lg-12 text-center">

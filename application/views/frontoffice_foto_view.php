@@ -167,8 +167,11 @@
 							</div>
 
 							<div class="caption">
+								<?php if(!empty($value['nama_project'])): ?>
+								<h6 class="no-margin text-primary text-size-small"><strong><?php echo $value['nama_project']; ?></strong></h6>
+								<?php endif; ?>
 								<h6 class="no-margin"><a href="<?php echo BASE_URL."frontoffice/album_foto/".$idx; ?>" class="text-default"><?php echo $string ?></a> <a href="<?php echo BASE_URL."frontoffice/album_foto/".$idx; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a></h6>
-                            	<span class="help-block text-grey text-size-large"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo " ".$m->format_tanggal($value['tanggal'])?></span>
+                            	<span class="help-block text-grey text-size-small"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo " ".$m->format_tanggal($value['tanggal'])?></span>
 							</div>
 						</div>
 					</div>
