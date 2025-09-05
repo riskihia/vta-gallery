@@ -77,7 +77,7 @@ class Frontoffice extends Controller {
 		$data['korps']         = $model->get_korps();
 		$data['page']          = ( isset( $_GET['page'] ) ) ? $_GET['page'] : 1;
 		$data['limit']         = 20;
-    	$data['aadata']        = $model->query("SELECT * FROM vt_files WHERE parent_id = $id");
+    	$data['aadata']        = $model->query("SELECT * FROM vt_files WHERE parent_id = $id AND tipe_file LIKE 'image%'");
     	$data['attch']         = $model->get_file_attachment($id);
 		$data['number_paging'] = ''; // Pagination jika diperlukan
 		$template              = $this->loadView('frontoffice_albumfoto_view');
