@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?php global $config; echo $config['app_name']?></title>
-  <link rel="icon" type="image/png" sizes="16x16" href="<?php echo BASE_URL ?>static/images/favicons.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="<?php echo BASE_URL ?>static/images/vitechasia2.png">
   <link href="<?php echo BASE_URL ?>static/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
   <link href="<?php echo BASE_URL ?>static/css/bootstrap.css" rel="stylesheet" type="text/css">
   <link href="<?php echo BASE_URL ?>static/css/core.css" rel="stylesheet" type="text/css">
@@ -158,7 +158,7 @@
           <div class="sidebar-user">
             <div class="category-content">
               <div class="media">
-                <a href="#" class="media-left"><img src="<?php echo BASE_URL ?>static/images/logo_sm.png" class="img-ad img-thumbnail" alt=""></a>
+                <a href="#" class="media-left"><img src="<?php echo BASE_URL ?>static/images/vitechasia.png" class="img-ad img-thumbnail" alt=""></a>
                 <div class="media-body">
                   <span class="media-heading text-semibold text-warning-400"><?php echo $config['divi_name']; ?></span>
                   <div class="text-size-mini text-muted text-nowrap"><?php echo $config['dept_name']; ?></div>
