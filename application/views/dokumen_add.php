@@ -151,13 +151,22 @@
                             </div>
                           </div>
                           <div class="form-group">
+                            <label class="control-label col-lg-2">Team</label>
+                            <div class="col-lg-10">
+                              <select data-placeholder="Pilih team" class="select"  name="team" >
+                                  <option></option>
+                                  <?php foreach ($data['team'] as $key => $value) { echo "<option value=\"".$value[0]."\">".$value[1]."</option>"."\n";} ?>
+                              </select>
+                            </div>
+                          </div>
+                          <!-- <div class="form-group">
                             <label class="control-label col-lg-2">Fotografer</label>
                             <div class="col-lg-10">
                              <select  class="select" data-placeholder="Pilih fotografer" multiple="multiple"   name="fotografer[]" >
                                   <?php foreach ($data['fotografer'] as $key => $value) { echo "<option value=\"".$value[0]."\">".$value[1]."</option>"."\n";} ?>
                               </select>
                             </div>
-                          </div>
+                          </div> -->
                           <!-- <div class="form-group">
                             <label class="control-label col-lg-2">Jenis Kamera</label>
                             <div class="col-lg-10">
