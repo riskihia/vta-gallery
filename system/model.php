@@ -1892,10 +1892,20 @@ class Model {
 	{
 		global $config;
 		$kode_apps = $config['app_code'];
-		$result    = $this->execute("SELECT a.`menu_id` AS id, a.`menu_name` AS title, a.`parent_id`, a.`linkto` AS url, a.`menu_icon` AS icons, b.`group_id`, IF(b.`permission_a` = 1, true,false) AS permission_a, IF(a.`linkto` = '".$activemenu."', 'active', '') AS sactive  FROM tmenu a LEFT JOIN ( SELECT group_id, menu_id, permission_a FROM tusermenu WHERE group_id = $group_id) AS b ON a.`menu_id` = b.`menu_id` WHERE a.`kode_apps` IN ('0', '$kode_apps') AND group_id = $group_id AND a.`enabled` = 'Y' ORDER BY a.`menu_id`, a.`ordering` ASC");
+		$result    = $this->execute("SELECT a.`menu_id` AS id, a.`menu_name` AS title, a.`parent_id`, a.`linkto` AS url, a.`menu_icon` AS icons, b.`group_id`, IF(b.`permission_a` = 1, true,false) AS permission_a, IF(a.`linkto` = '".$activemenu."', 'active', '') AS sactive  FROM tmenu a LEFT JOIN ( SELECT group_id, menu_id, permission_a FROM tusermenu WHERE group_id = $group_id) AS b ON a.`menu_id` = b.`menu_id` WHERE a.`kode_apps` IN ('0', '$kode_apps') AND group_id = $group_id AND a.`enabled` = 'Y' ORDER BY (a.`ordering` IS NULL) ASC,
+  a.`ordering` ASC,
+  a.`menu_id` ASC");
 
 		return $result;
 	}
+	// public function show_menu($group_id = null, $activemenu = NULL)
+	// {
+	// 	global $config;
+	// 	$kode_apps = $config['app_code'];
+	// 	$result    = $this->execute("SELECT a.`menu_id` AS id, a.`menu_name` AS title, a.`parent_id`, a.`linkto` AS url, a.`menu_icon` AS icons, b.`group_id`, IF(b.`permission_a` = 1, true,false) AS permission_a, IF(a.`linkto` = '".$activemenu."', 'active', '') AS sactive  FROM tmenu a LEFT JOIN ( SELECT group_id, menu_id, permission_a FROM tusermenu WHERE group_id = $group_id) AS b ON a.`menu_id` = b.`menu_id` WHERE a.`kode_apps` IN ('0', '$kode_apps') AND group_id = $group_id AND a.`enabled` = 'Y' ORDER BY a.`menu_id`, a.`ordering` ASC");
+
+	// 	return $result;
+	// }
 
 	public function show_menus($group_id = null)
 	{
