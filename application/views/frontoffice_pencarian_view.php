@@ -309,7 +309,18 @@
 													<a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-default"><?php echo $string ?></a>
 													<a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a>
 												</h6>
-											</div>              	<span class="help-block text-grey text-size-small"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo " ".$m->format_tanggal($value['tanggal'])?></span>
+											</div>
+											<span class="help-block text-grey text-size-small">
+												<i class="icon-calendar3 pull-left"></i>&nbsp; <?php echo " ".$m->format_tanggal($value['tanggal'])?>
+											</span>
+											<span class="help-block text-grey text-size-small">
+												<i class="icon-location3 pull-left"></i>&nbsp; 
+												<?php echo !empty($value['lokasi']) ? htmlspecialchars($value['lokasi']) : '-'; ?>
+											</span>
+											<span class="help-block text-grey text-size-small">
+												<i class="icon-info22 pull-left"></i>&nbsp; 
+												<?php echo !empty($value['keterangan']) ? htmlspecialchars($value['keterangan']) : '-'; ?>
+											</span>
 										</div>
 									</div>
 								</div>
