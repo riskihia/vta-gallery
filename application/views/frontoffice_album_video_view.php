@@ -7,7 +7,7 @@
 	<title>Front Office - Album Video</title>
 
 	<!-- Global stylesheets -->
-	<link rel="icon" type="image/png" sizes="16x16" href="<?php echo BASE_URL ?>static/images/dispenad.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="<?php echo BASE_URL ?>static/images/vitechasia2.png">
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
 	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/bootstrap.css" rel="stylesheet" type="text/css">
@@ -49,7 +49,7 @@
 	<!-- Main navbar -->
 	<div class="navbar navbar-inverse">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#"> <img src="<?php echo BASE_URL ?>static/images/logo_head.png" alt=""></a>
+			<a class="navbar-brand" style="padding: 0px 20px !important;" href="#"> <img style="height: 100%; margin-top: 0 !important;" src="<?php echo BASE_URL ?>static/images/LOGO VTAH GROUP - putih.png" alt=""></a>
 
 			<ul class="nav navbar-nav pull-right visible-xs-block">
 				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
@@ -193,7 +193,7 @@
 
 		<!-- Footer -->
 		<div class="footer text-muted">
-			<img src="<?php echo BASE_URL; ?>static/images/dispenad.png" alt="Dispen"> &copy; 2020 <a href="https://tniad.mil.id/" target="_blank">- Dinas Penerangan Angkatan Darat</a>
+			<img style="height: 42px;" src="<?php echo BASE_URL ?>static/images/LOGO VTAH GROUP (1).png" alt="Dispen"> &copy; 2025 <a href="#" target="#">- Vitechasia - VTA GALLERY</a>
 		</div>
 		<!-- /footer -->
 
