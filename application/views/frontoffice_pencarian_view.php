@@ -294,14 +294,22 @@
 
 										<div class="caption">
 											<?php if(!empty($value['nama_project'])): ?>
-											<div class="project-name">
-												<h6 class="no-margin text-primary text-size-small"><strong><?php echo $value['nama_project']; ?></strong></h6>
-											</div>
+												<div class="project-name">
+													<h6 class="no-margin text-primary text-size-small">
+														<strong>
+															<a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-primary" title="<?php echo $value['nama_project']; ?>">
+																<?php echo $value['nama_project']; ?>
+															</a>
+														</strong>
+													</h6>
+												</div>
 											<?php endif; ?>
 											<div class="kegiatan-name">
-												<h6 class="no-margin"><a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-default"><?php echo $string ?></a> <a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a></h6>
-											</div>
-			                            	<span class="help-block text-grey text-size-small"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo " ".$m->format_tanggal($value['tanggal'])?></span>
+												<h6 class="no-margin">
+													<a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-default"><?php echo $string ?></a>
+													<a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a>
+												</h6>
+											</div>              	<span class="help-block text-grey text-size-small"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo " ".$m->format_tanggal($value['tanggal'])?></span>
 										</div>
 									</div>
 								</div>
@@ -357,14 +365,22 @@
 
 										<div class="caption">
 											<?php if(!empty($video['nama_project'])): ?>
-											<div class="project-name">
-												<h6 class="no-margin text-primary text-size-small"><strong><?php echo $video['nama_project']; ?></strong></h6>
-											</div>
+												<div class="project-name">
+													<h6 class="no-margin text-primary text-size-small">
+														<strong>
+															<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="text-primary" title="<?php echo $video['nama_project']; ?>">
+																<?php echo $video['nama_project']; ?>
+															</a>
+														</strong>
+													</h6>
+												</div>
 											<?php endif; ?>
 											<div class="kegiatan-name">
-												<h6 class="no-margin"><a href="<?php echo BASE_URL."frontoffice/album_video/".$idx;?>" class="text-default" title="<?php echo $video['nama_kegiatan'];?>"><?php echo $string ?></a> <a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a></h6>
-											</div>
-                                        	<span class="help-block text-grey text-size-small"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?></span>
+												<h6 class="no-margin">
+													<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx;?>" class="text-default" title="<?php echo $video['nama_kegiatan'];?>"><?php echo $string ?></a>
+													<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a>
+												</h6>
+											</div>              	<span class="help-block text-grey text-size-small"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?></span>
 										</div>
 									</div>
 								</div>
