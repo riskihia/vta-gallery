@@ -102,15 +102,7 @@
                             </div>
                           </div>
 
-                          <div class="form-group">
-                            <label class="control-label col-lg-2">Team</label>
-                            <div class="col-lg-10">
-                              <select data-placeholder="Pilih Team" class="select"  multiple="multiple" name="team[]" >
-                                  <option></option>
-                                  <?php foreach ($data['team'] as $key => $team) { echo "<option value=\"".$team[0]."\" ".$team[2].">".$team[1]."</option>"."\n";} ?>
-                              </select>
-                            </div>
-                          </div>
+                          
                           <div class="form-group">
                             <label class="control-label col-lg-2">Kategori kegiatan</label>
                             <div class="col-lg-10">
@@ -170,13 +162,22 @@
                               </div>
                           </div>
                           <div class="form-group">
+                            <label class="control-label col-lg-2">Team</label>
+                            <div class="col-lg-10">
+                              <select data-placeholder="Pilih Team" class="select"  multiple="multiple" name="team[]" >
+                                  <option></option>
+                                  <?php foreach ($data['team'] as $key => $team) { echo "<option value=\"".$team[0]."\" ".$team[2].">".$team[1]."</option>"."\n";} ?>
+                              </select>
+                            </div>
+                          </div>
+                          <!-- <div class="form-group">
                             <label class="control-label col-lg-2">Fotografer</label>
                             <div class="col-lg-10">
                              <select  class="select" data-placeholder="Pilih fotografer" multiple="multiple" name="fotografer[]">
                                   <?php foreach ($data['fotografer'] as $key => $fot) { echo "<option value=\"".$fot[0]."\" ".$fot[2].">".$fot[1]."</option>"."\n";} ?>
                               </select>
                             </div>
-                          </div>
+                          </div> -->
                           <!-- <div class="form-group">
                             <label class="control-label col-lg-2">Jenis Kamera</label>
                             <div class="col-lg-10">
