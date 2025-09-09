@@ -18,44 +18,236 @@
 
 	<!-- Custom CSS for grid layout -->
 	<style>
-		.gallery-grid .col-lg-3, .gallery-grid .col-sm-6 {
-			margin-bottom: 20px;
+		/* Modern Flexible Grid Layout */
+		.gallery-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: 20px;
+			padding: 0 15px;
+			align-items: start; /* Ensures items align to top */
+			margin: 0; /* Reset any Bootstrap margin */
 		}
+		
+		/* Ensure first child doesn't have extra space */
+		.gallery-grid::before {
+			display: none !important;
+		}
+		
+		/* Reset Bootstrap columns untuk grid items */
+		.gallery-grid .col-lg-3, 
+		.gallery-grid .col-sm-6 {
+			width: auto !important;
+			padding: 0 !important;
+			margin-bottom: 0 !important;
+			float: none !important;
+			position: relative !important;
+			min-height: auto !important;
+		}
+		
+		/* Card styling dengan flexbox */
 		.gallery-grid .thumbnail {
 			height: 100%;
 			display: flex;
 			flex-direction: column;
+			border: 1px solid #ddd;
+			border-radius: 8px;
+			overflow: hidden;
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+			background: #fff;
 		}
+		
+		.gallery-grid .thumbnail:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+		}
+		
+		/* Thumb container dengan aspect ratio konsisten */
 		.gallery-grid .thumb {
 			flex-shrink: 0;
+			position: relative;
+			width: 100%;
+			height: 200px;
+			overflow: hidden;
 		}
+		
+		.gallery-grid .thumb img,
+		.gallery-grid .thumb video {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+			background-color: #f5f5f5;
+		}
+		
+		/* Video specific styling */
+		.gallery-grid .thumb video {
+			background-color: #000;
+		}
+		
+		.gallery-grid .thumb video::-webkit-media-controls-panel {
+			background-color: rgba(0,0,0,0.8);
+		}
+		
+		/* Caption area yang fleksibel */
 		.gallery-grid .caption {
 			flex-grow: 1;
 			display: flex;
 			flex-direction: column;
-			justify-content: space-between;
-			min-height: 80px;
+			padding: 15px;
+			min-height: 120px;
 		}
-		.gallery-grid .caption h6 {
-			margin-bottom: 5px;
-			line-height: 1.3;
-		}
-		.gallery-grid .caption .help-block {
-			margin-top: auto;
-			margin-bottom: 0;
-		}
+		
+		/* Project name styling */
 		.project-name {
+			margin-bottom: 8px;
+		}
+		
+		.project-name h6 {
+			margin-bottom: 0;
+			line-height: 1.3;
+			font-size: 12px;
 			max-height: 20px;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
 		}
+		
+		/* Kegiatan name with flexible height */
 		.kegiatan-name {
-			max-height: 40px;
+			flex-grow: 1;
+			margin-bottom: 10px;
+		}
+		
+		.kegiatan-name h6 {
+			margin-bottom: 0;
+			line-height: 1.4;
+			font-size: 14px;
+			max-height: 56px; /* 4 lines max */
 			overflow: hidden;
 			display: -webkit-box;
-			-webkit-line-clamp: 2;
+			-webkit-line-clamp: 3;
 			-webkit-box-orient: vertical;
+			line-clamp: 3; /* Standard property */
+		}
+		
+		/* Info section at bottom */
+		.caption-info {
+			margin-top: auto;
+		}
+		
+		.gallery-grid .caption .help-block {
+			margin-bottom: 5px;
+			font-size: 11px;
+			line-height: 1.3;
+		}
+		
+		.gallery-grid .caption .help-block:last-child {
+			margin-bottom: 0;
+		}
+		
+		/* Caption overlay improvements */
+		.caption-overflow {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0,0,0,0.7);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+		}
+		
+		.thumb:hover .caption-overflow {
+			opacity: 1;
+		}
+		
+		/* Responsive adjustments */
+		@media (max-width: 767px) {
+			.gallery-grid {
+				grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+				gap: 15px;
+			}
+			
+			.gallery-grid .thumb {
+				height: 180px;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.gallery-grid {
+				grid-template-columns: 1fr;
+				gap: 15px;
+			}
+			
+			.gallery-grid .thumb {
+				height: 200px;
+			}
+		}
+		
+		/* Large screens optimization */
+		@media (min-width: 1200px) {
+			.gallery-grid {
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			}
+		}
+		
+		/* Fallback untuk browser lama yang tidak support CSS Grid */
+		@supports not (display: grid) {
+			.gallery-grid {
+				display: flex;
+				flex-wrap: wrap;
+				margin: 0 -10px; /* Negative margin untuk spacing */
+			}
+			
+			.gallery-grid .col-lg-3, 
+			.gallery-grid .col-sm-6 {
+				width: calc(25% - 20px) !important;
+				margin: 0 10px 20px 10px !important;
+				padding: 0 !important;
+				float: none !important;
+			}
+			
+			@media (max-width: 991px) {
+				.gallery-grid .col-lg-3, 
+				.gallery-grid .col-sm-6 {
+					width: calc(50% - 20px) !important;
+				}
+			}
+			
+			@media (max-width: 767px) {
+				.gallery-grid .col-lg-3, 
+				.gallery-grid .col-sm-6 {
+					width: calc(100% - 20px) !important;
+				}
+			}
+		}
+		
+		/* Smooth loading animation */
+		.gallery-grid .thumbnail {
+			animation: fadeInUp 0.3s ease-out;
+		}
+		
+		.gallery-grid .thumbnail.loading {
+			opacity: 0.7;
+		}
+		
+		.gallery-grid .thumbnail.loaded {
+			opacity: 1;
+			transform: translateY(0);
+		}
+		
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
 		}
 	</style>
 
@@ -253,7 +445,7 @@
 							<div class="tab-pane <?php echo $diimage;?>" id="tab-image">
 							<p class="text-muted text-size-small content-group">About <?php echo $data['total_foto']; ?> results foto (0.34 seconds) </p>																	
 							<!-- Image grid -->
-							<div class="row gallery-grid">
+							<div class="gallery-grid">
 							<?php $c = new Controller(); $m = new Model(); foreach ($data['foto']['aadata'] as $key => $value) { 
 								$string = $value['nama_kegiatan']; 
 								if (strlen($string) > 30) {
@@ -310,17 +502,19 @@
 													<a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a>
 												</h6>
 											</div>
-											<span class="help-block text-grey text-size-small">
-												<i class="icon-calendar3 pull-left"></i>&nbsp; <?php echo " ".$m->format_tanggal($value['tanggal'])?>
-											</span>
-											<span class="help-block text-grey text-size-small">
-												<i class="icon-location3 pull-left"></i>&nbsp; 
-												<?php echo !empty($value['lokasi']) ? htmlspecialchars($value['lokasi']) : '-'; ?>
-											</span>
-											<span class="help-block text-grey text-size-small">
-												<i class="icon-info22 pull-left"></i>&nbsp; 
-												<?php echo !empty($value['keterangan']) ? htmlspecialchars($value['keterangan']) : '-'; ?>
-											</span>
+											<div class="caption-info">
+												<span class="help-block text-grey text-size-small">
+													<i class="icon-calendar3 pull-left"></i>&nbsp; <?php echo " ".$m->format_tanggal($value['tanggal'])?>
+												</span>
+												<span class="help-block text-grey text-size-small">
+													<i class="icon-location3 pull-left"></i>&nbsp; 
+													<?php echo !empty($value['lokasi']) ? htmlspecialchars($value['lokasi']) : '-'; ?>
+												</span>
+												<span class="help-block text-grey text-size-small">
+													<i class="icon-info22 pull-left"></i>&nbsp; 
+													<?php echo !empty($value['keterangan']) ? htmlspecialchars($value['keterangan']) : '-'; ?>
+												</span>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -338,7 +532,7 @@
 							<div class="tab-pane <?php echo $divideo;?>" id="tab-video" >																	
 							<!-- Video grid -->
 							<p class="text-muted text-size-small content-group">About <?php echo $data['total_video']; ?> results video (0.34 seconds) </p>	
-							<div class="row gallery-grid">
+							<div class="gallery-grid">
 							<?php foreach ($data['video']['aadata'] as $key => $video) { 
 								$string = $video['nama_kegiatan']; 
 								if (strlen($string) > 32) {
@@ -391,7 +585,12 @@
 													<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx;?>" class="text-default" title="<?php echo $video['nama_kegiatan'];?>"><?php echo $string ?></a>
 													<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a>
 												</h6>
-											</div>              	<span class="help-block text-grey text-size-small"><i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?></span>
+											</div>
+											<div class="caption-info">
+												<span class="help-block text-grey text-size-small">
+													<i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?>
+												</span>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -435,6 +634,64 @@ $(function() {
             e.preventDefault();
         });
     }); 
+
+// Gallery Grid Enhancement
+$(document).ready(function() {
+    // Ensure images are loaded before calculating layout
+    function initGalleryGrid() {
+        var $gallery = $('.gallery-grid');
+        var $items = $gallery.find('.thumbnail');
+        
+        // Add loading state
+        $items.addClass('loading');
+        
+        // Counter for loaded images
+        var totalImages = $gallery.find('img, video').length;
+        var loadedCount = 0;
+        
+        function checkAllLoaded() {
+            loadedCount++;
+            if (loadedCount >= totalImages) {
+                $items.removeClass('loading');
+                // Add staggered animation
+                $items.each(function(index) {
+                    var $this = $(this);
+                    setTimeout(function() {
+                        $this.addClass('loaded');
+                    }, index * 50);
+                });
+            }
+        }
+        
+        // Handle image load
+        $gallery.find('img').on('load error', checkAllLoaded);
+        
+        // Handle video load
+        $gallery.find('video').on('loadeddata error', checkAllLoaded);
+        
+        // Fallback if no images/videos
+        if (totalImages === 0) {
+            $items.removeClass('loading').addClass('loaded');
+        }
+    }
+    
+    // Initialize grid
+    initGalleryGrid();
+    
+    // Reinitialize on tab change
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
+        setTimeout(initGalleryGrid, 100);
+    });
+    
+    // Handle window resize
+    var resizeTimer;
+    $(window).on('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            initGalleryGrid();
+        }, 250);
+    });
+});
 </script>
 
 
