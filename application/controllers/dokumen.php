@@ -417,12 +417,22 @@ class Dokumen extends Controller {
 		
 		$result                = $model->mupdate($this->table, $data, $this->primaryKey, $id, $this->title);
 
-		// Reset dokumen child
-		$reset_lokasi   = $model->execute("DELETE FROM tbl_dokumen_wilayah WHERE parent_id = $id");
-		$reset_personel = $model->execute("DELETE FROM tbl_dokumen_personel WHERE parent_id = $id");
-		$reset_kategori = $model->execute("DELETE FROM tbl_dokumen_kategori WHERE parent_id = $id");
-		$reset_team = $model->execute("DELETE FROM tbl_dokumen_team WHERE parent_id = $id");
-		$reset_satker   = $model->execute("DELETE FROM tbl_dokumen_satker WHERE parent_id = $id");
+		// Reset dokumen child hanya jika ada datanya
+		if ($model->getval("tbl_dokumen_wilayah", "parent_id", "parent_id", $id)) {
+			$reset_lokasi = $model->execute("DELETE FROM tbl_dokumen_wilayah WHERE parent_id = $id");
+		}
+		if ($model->getval("tbl_dokumen_personel", "parent_id", "parent_id", $id)) {
+			$reset_personel = $model->execute("DELETE FROM tbl_dokumen_personel WHERE parent_id = $id");
+		}
+		if ($model->getval("tbl_dokumen_kategori", "parent_id", "parent_id", $id)) {
+			$reset_kategori = $model->execute("DELETE FROM tbl_dokumen_kategori WHERE parent_id = $id");
+		}
+		if ($model->getval("tbl_dokumen_team", "parent_id", "parent_id", $id)) {
+			$reset_team = $model->execute("DELETE FROM tbl_dokumen_team WHERE parent_id = $id");
+		}
+		if ($model->getval("tbl_dokumen_satker", "parent_id", "parent_id", $id)) {
+			$reset_satker = $model->execute("DELETE FROM tbl_dokumen_satker WHERE parent_id = $id");
+		}
 
 		for ($i=0; $i < $jteam ; $i++) { 
 			$category['parent_id']       = $id;
