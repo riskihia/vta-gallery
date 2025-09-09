@@ -280,6 +280,7 @@ class Dokumen extends Controller {
 		$data['no_card']       = $model->escapeString($_REQUEST['no_card']) ;
 		$data['kamera']        = $model->escapeString($_REQUEST['kamera']) ;
 		$data['lokasi']        = $model->escapeString($_REQUEST['lokasi']) ;
+		$data['keterangan']        = $model->escapeString($_REQUEST['keterangan']) ;
 		$data['narasi']        = $model->escapeString($_REQUEST['narasi']) ;
 		$data['tanggal']       = $model->escapeString($_REQUEST['tanggal']) ;
 		$data['complete']      = $model->escapeString($_REQUEST['complete']) ;		
@@ -404,6 +405,7 @@ class Dokumen extends Controller {
 		$data['no_card']       = $model->escapeString($_REQUEST['no_card']) ;
 		$data['kamera']        = $model->escapeString($_REQUEST['kamera']) ;
 		$data['lokasi']        = $model->escapeString($_REQUEST['lokasi']) ;
+		$data['keterangan']        = $model->escapeString($_REQUEST['keterangan']) ;
 		$data['narasi']        = $model->escapeString($_REQUEST['narasi']) ;
 		$data['tanggal']       = $model->escapeString($_REQUEST['tanggal']) ;	
 		$data['complete']      = $model->escapeString($_REQUEST['complete']) ;	
