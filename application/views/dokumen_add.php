@@ -153,11 +153,10 @@
                           <div class="form-group">
                             <label class="control-label col-lg-2">Team</label>
                             <div class="col-lg-10">
-                              <select data-placeholder="Pilih team" class="select"  name="team" >
-                                  <option></option>
+                              <select  class="select" data-placeholder="Pilih team" multiple="multiple" name="team[]" >
                                   <?php foreach ($data['team'] as $key => $value) { echo "<option value=\"".$value[0]."\">".$value[1]."</option>"."\n";} ?>
                               </select>
-                            </div>
+                            </div>  
                           </div>
                           <!-- <div class="form-group">
                             <label class="control-label col-lg-2">Fotografer</label>

@@ -168,10 +168,18 @@ class Dokumen_model extends Model {
     public function get_project()
     {
         $result = $this->query("SELECT autocode, nama_project FROM m_project 
-GROUP BY nama_project;");
+            GROUP BY nama_project;");
 
         return $result;
     }
+
+    public function get_team()
+    {
+        $result = $this->query("SELECT autocode, nm_pegawai FROM m_pegawai WHERE id_jabatan IS NOT NULL AND id_jabatan != 0 ORDER BY id_jabatan ASC;");
+
+        return $result;
+    }
+
     public function get_kondisi()
     {
         $result = $this->query("SELECT autocode, nama_kondisi FROM ref_kondisi ORDER BY nama_kondisi ASC");
@@ -232,6 +240,32 @@ GROUP BY nama_project;");
     public function get_kategoriedit($id)
     {
     	$result = $this->query("SELECT a.autocode, a.`nama_kategori`, IF(b.kd_kategori IS NULL, '', 'selected') AS pselct FROM ref_kategori  a LEFT JOIN ( SELECT  parent_id, parent_autocode, kd_kategori FROM tbl_dokumen_kategori WHERE parent_id = $id) b ON b.`kd_kategori` = a.`autocode` LIMIT 50");
+
+    	return $result;
+    }
+
+    public function get_teamedit($id)
+    {
+    	$result = $this->query("SELECT
+            a.autocode,
+            a.`nm_pegawai`,
+            IF (
+                b.kd_pegawai IS NULL,
+                '',
+                'selected'
+            ) AS pselct
+            FROM
+            m_pegawai a
+            LEFT JOIN
+                (SELECT
+                parent_id,
+                parent_autocode,
+                kd_pegawai
+                FROM
+                tbl_dokumen_team
+                WHERE parent_id = $id) b
+                ON b.`kd_pegawai` = a.`autocode`
+            WHERE id_jabatan IS NOT NULL AND id_jabatan != 0 ORDER BY id_jabatan ASC");
 
     	return $result;
     }
