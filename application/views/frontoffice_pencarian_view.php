@@ -510,10 +510,16 @@
 													<i class="icon-location3 pull-left"></i>&nbsp; 
 													<?php echo !empty($value['lokasi']) ? htmlspecialchars($value['lokasi']) : '-'; ?>
 												</span>
-												<span class="help-block text-grey text-size-small">
+												<span class="help-block text-grey text-size-small" style="text-align: justify; text-align-last: center;">
 													<i class="icon-info22 pull-left"></i>&nbsp; 
 													<?php echo !empty($value['keterangan']) ? htmlspecialchars($value['keterangan']) : '-'; ?>
 												</span>
+												<?php if (!empty($value['team'])): ?>
+													<span class="help-block text-grey text-size-small">
+														<i class="icon-users4 pull-left"></i>&nbsp; 
+														<?php echo htmlspecialchars($value['team']); ?>
+													</span>
+												<?php endif; ?>
 											</div>
 										</div>
 									</div>
@@ -590,6 +596,20 @@
 												<span class="help-block text-grey text-size-small">
 													<i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?>
 												</span>
+												<span class="help-block text-grey text-size-small">
+													<i class="icon-location3 pull-left"></i>&nbsp; 
+													<?php echo !empty($video['lokasi']) ? htmlspecialchars($video['lokasi']) : '-'; ?>
+												</span>
+												<span class="help-block text-grey text-size-small" style="text-align: justify; text-align-last: center;">
+													<i class="icon-info22 pull-left"></i>&nbsp; 
+													<?php echo !empty($video['keterangan']) ? htmlspecialchars($video['keterangan']) : '-'; ?>
+												</span>
+												<?php if (!empty($video['team'])): ?>
+													<span class="help-block text-grey text-size-small">
+														<i class="icon-users4 pull-left"></i>&nbsp; 
+														<?php echo htmlspecialchars($video['team']); ?>
+													</span>
+												<?php endif; ?>
 											</div>
 										</div>
 									</div>

@@ -437,10 +437,10 @@ class Dokumen extends Controller {
 		}
 
 		for ($i=0; $i < $jteam ; $i++) { 
-			$category['parent_id']       = $id;
-			$category['kd_pegawai']     = $model->escapeString($_REQUEST['team'][$i]);
-			$category['parent_autocode'] = $autocode;
-			$categoryresult              = $model->msave("tbl_dokumen_team", $category, $this->title);
+			$team['parent_id']       = $id;
+			$team['kd_pegawai']     = $model->escapeString($_REQUEST['team'][$i]);
+			$team['parent_autocode'] = $autocode;
+			$teamresult              = $model->msave("tbl_dokumen_team", $team, $this->title);
 		}
 		for ($i=0; $i < $jkategori ; $i++) { 
 			$category['parent_id']       = $id;
