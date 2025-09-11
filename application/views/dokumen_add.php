@@ -110,12 +110,14 @@
                             </div>
                           </div>
                           
-                          <div class="form-group">
+                          <div class="form-group hidden">
                             <label class="control-label col-lg-2">Kondisi Media</label>
                             <div class="col-lg-10">
-                              <select data-placeholder="Pilih kondisi media" class="select"  name="kondisi_media" >
-                                  <option></option>
-                                  <?php foreach ($data['kondisi'] as $key => $value) { echo "<option value=\"".$value[0]."\">".$value[1]."</option>"."\n";} ?>
+                              <select data-placeholder="Pilih kondisi media" class="select" name="kondisi_media">
+                                <?php foreach ($data['kondisi'] as $key => $value) { 
+                                  $selected = ($key === 0) ? 'selected' : '';
+                                  echo "<option value=\"".$value[0]."\" $selected>".$value[1]."</option>\n";
+                                } ?>
                               </select>
                             </div>
                           </div>
@@ -175,7 +177,7 @@
                               </select>
                             </div>
                           </div> -->
-                          <div class="form-group">
+                          <div class="form-group hidden">
                             <label class="control-label col-lg-2">Narasi</label>
                             <div class="col-lg-10">
                              <textarea class="summernote" name="narasi"></textarea>
