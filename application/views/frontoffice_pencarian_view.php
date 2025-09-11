@@ -273,10 +273,12 @@
 
 	<!-- Main navbar -->
 	<div class="navbar navbar-inverse">
-		<div class="navbar-header">
-			<a class="navbar-brand" style="padding: 0px 20px !important;" href="#"> <img style="height: 100%; margin-top: 0 !important;" src="<?php echo BASE_URL ?>static/images/LOGO VTAH GROUP - putih.png" alt=""></a>
-
-			<ul class="nav navbar-nav pull-right visible-xs-block">
+		<div class="navbar-header" style="display: flex; align-items: center;">
+			<a class="navbar-brand" style="padding: 0px 0px 0px 20px !important;" href="#">
+				<img style="height: 100%; margin-top: 0 !important;" src="<?php echo BASE_URL ?>static/images/LOGO VTAH GROUP - putih.png" alt="">
+			</a>
+			<span style="display: flex; align-items: center;">FRONTOFFICE - VTA GALLERY</span>
+			<ul class="nav navbar-nav pull-right visible-xs-block" style="margin-left: auto;">
 				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
 			</ul>
 		</div>
@@ -639,7 +641,9 @@
 
 		<!-- Footer -->
 		<div class="footer text-muted">
-			<img style="height: 42px;" src="<?php echo BASE_URL ?>static/images/LOGO VTAH GROUP (1).png" alt="Dispen"> &copy; 2025 <a href="#" target="#">- Vitechasia - VTA GALLERY</a>
+			<span style="padding-left: 20px">
+				&copy; 	2025 <span href="#" target="#">- VTA GALLERY</a>
+			</span>
 		</div>
 		<!-- /footer -->
 
