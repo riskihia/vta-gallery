@@ -38,7 +38,7 @@
 <div class="form-group">
                             <label class="control-label col-lg-2">Nama kategori</label>
                             <div class="col-lg-10">
-                             <input type="text" class="form-control" name="nama_kategori" value="<?php echo $value['nama_kategori'] ?>" >
+                             <input type="text" class="form-control" name="nama_sub_kategori" value="<?php echo $value['nama_sub_kategori'] ?>" >
                             </div>
                           </div><div class="form-group">
                             <label class="control-label col-lg-2">Keterangan</label>

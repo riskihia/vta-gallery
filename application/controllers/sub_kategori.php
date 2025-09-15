@@ -14,7 +14,7 @@ class Sub_kategori extends Controller {
 
 	private $menu       = "Referensi";
 
-	private $title      = "sub_kategori";
+	private $title      = "Sub Kategori";
 
 	private $curl       = BASE_URL."sub_kategori";
 
@@ -98,7 +98,7 @@ class Sub_kategori extends Controller {
 
 			array( 'db' => 'autono', 'dt' => 0, 'formatter' => function( $d, $row ) { return $this->base64url_encode($d); } ),
 
-			array( 'db' => 'nama_kategori',  'dt' => 1 ),array( 'db' => 'keterangan',  'dt' => 2 ),
+			array( 'db' => 'nama_sub_kategori',  'dt' => 1 ),array( 'db' => 'keterangan',  'dt' => 2 ),
 
 		);
 
@@ -197,11 +197,11 @@ class Sub_kategori extends Controller {
 		$model                = $this->loadModel($this->model);
 
 
-		$data['nama_kategori'] = htmlspecialchars($_REQUEST['nama_kategori']) ;
+		$data['nama_sub_kategori'] = htmlspecialchars($_REQUEST['nama_sub_kategori']) ;
 		$data['keterangan'] = htmlspecialchars($_REQUEST['keterangan']) ;
 
 
-		$data['autocode']     = $model->autocode($this->table, "CAT-");	
+		$data['autocode']     = $model->autocode($this->table, "SUB-CAT-");	
 
 		$result               = $model->msave($this->table, $data, $this->title);
 
@@ -233,7 +233,7 @@ class Sub_kategori extends Controller {
 
 		$child              = $uri->segment(5);
 
-		$data['nama_kategori'] = htmlspecialchars($_REQUEST['nama_kategori']) ;
+		$data['nama_sub_kategori'] = htmlspecialchars($_REQUEST['nama_sub_kategori']) ;
 		$data['keterangan'] = htmlspecialchars($_REQUEST['keterangan']) ;
 	
 
