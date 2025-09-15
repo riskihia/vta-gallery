@@ -135,15 +135,27 @@
 			margin-top: auto;
 		}
 		
-		.gallery-grid .caption .help-block {
-			margin-bottom: 5px;
-			font-size: 11px;
-			line-height: 1.3;
-		}
-		
-		.gallery-grid .caption .help-block:last-child {
-			margin-bottom: 0;
-		}
+		   .gallery-grid .caption .help-block {
+			   margin-bottom: 5px;
+			   font-size: 11px;
+			   line-height: 1.3;
+			   display: flex;
+			   align-items: center;
+			   gap: 2px;
+		   }
+
+		   .gallery-grid .caption .help-block:last-child {
+			   margin-bottom: 0;
+		   }
+
+		   .gallery-grid .caption .help-block i[class^="icon-"] {
+			   margin-right: 4px;
+			   min-width: 16px;
+			   text-align: center;
+			   font-size: 13px;
+			   line-height: 1;
+			   align-self: center;
+		   }
 		
 		/* Caption overlay improvements */
 		.caption-overflow {
@@ -410,7 +422,7 @@
 
 								<div class="col-sm-6 text-right">
 									<ul class="list-inline no-margin-bottom">
-										<li><a href="#" class="btn btn-link btn-sm"><i class="icon-menu7 position-left"></i>&nbsp;</a></li>
+										<li><a href="#" class="btn btn-link btn-sm"><i class="icon-menu7 position-left"></i></a></li>
 									</ul>
 								</div>
 							</div>
@@ -505,21 +517,30 @@
 												</h6>
 											</div>
 											<div class="caption-info">
-												<span class="help-block text-grey text-size-small">
-													<i class="icon-calendar3 pull-left"></i>&nbsp; <?php echo " ".$m->format_tanggal($value['tanggal'])?>
-												</span>
-												<span class="help-block text-grey text-size-small">
-													<i class="icon-location3 pull-left"></i>&nbsp; 
-													<?php echo !empty($value['lokasi']) ? htmlspecialchars($value['lokasi']) : '-'; ?>
-												</span>
-												<span class="help-block text-grey text-size-small" style="text-align: justify; text-align-last: center;">
-													<i class="icon-info22 pull-left"></i>&nbsp; 
-													<?php echo !empty($value['keterangan']) ? htmlspecialchars($value['keterangan']) : '-'; ?>
-												</span>
+												<?php if (!empty($value['tanggal'])): ?>
+													<span class="help-block text-grey text-size-small">
+														<i class="icon-calendar3 pull-left"></i> <?php echo " ".$m->format_tanggal($value['tanggal'])?>
+													</span>
+												<?php endif; ?>
+
+												<?php if (!empty($value['lokasi'])): ?>
+													<span class="help-block text-grey text-size-small">
+														<i class="icon-location3 pull-left"></i> 
+														<?php echo htmlspecialchars($value['lokasi']); ?>
+													</span>
+												<?php endif; ?>
+
 												<?php if (!empty($value['team'])): ?>
 													<span class="help-block text-grey text-size-small">
-														<i class="icon-users4 pull-left"></i>&nbsp; 
+														<i class="icon-users4 pull-left"></i> 
 														<?php echo htmlspecialchars($value['team']); ?>
+													</span>
+												<?php endif; ?>
+
+												<?php if (!empty($value['keterangan'])): ?>
+													<span class="help-block text-grey text-size-small">
+														<i class="icon-info22 pull-left"></i> 
+														<?php echo htmlspecialchars($value['keterangan']); ?>
 													</span>
 												<?php endif; ?>
 											</div>
@@ -595,21 +616,30 @@
 												</h6>
 											</div>
 											<div class="caption-info">
-												<span class="help-block text-grey text-size-small">
-													<i class="icon-calendar3 pull-left"></i>&nbsp;  <?php echo $tgl; ?>
-												</span>
-												<span class="help-block text-grey text-size-small">
-													<i class="icon-location3 pull-left"></i>&nbsp; 
-													<?php echo !empty($video['lokasi']) ? htmlspecialchars($video['lokasi']) : '-'; ?>
-												</span>
-												<span class="help-block text-grey text-size-small" style="text-align: justify; text-align-last: center;">
-													<i class="icon-info22 pull-left"></i>&nbsp; 
-													<?php echo !empty($video['keterangan']) ? htmlspecialchars($video['keterangan']) : '-'; ?>
-												</span>
+												<?php if (!empty($video['tanggal'])): ?>
+													<span class="help-block text-grey text-size-small">
+														<i class="icon-calendar3 pull-left"></i> <?php echo " ".$m->format_tanggal($video['tanggal'])?>
+													</span>
+												<?php endif; ?>
+
+												<?php if (!empty($video['lokasi'])): ?>
+													<span class="help-block text-grey text-size-small">
+														<i class="icon-location3 pull-left"></i> 
+														<?php echo htmlspecialchars($video['lokasi']); ?>
+													</span>
+												<?php endif; ?>
+
 												<?php if (!empty($video['team'])): ?>
 													<span class="help-block text-grey text-size-small">
-														<i class="icon-users4 pull-left"></i>&nbsp; 
+														<i class="icon-users4 pull-left"></i> 
 														<?php echo htmlspecialchars($video['team']); ?>
+													</span>
+												<?php endif; ?>
+
+												<?php if (!empty($video['keterangan'])): ?>
+													<span class="help-block text-grey text-size-small">
+														<i class="icon-info22 pull-left"></i> 
+														<?php echo htmlspecialchars($video['keterangan']); ?>
 													</span>
 												<?php endif; ?>
 											</div>

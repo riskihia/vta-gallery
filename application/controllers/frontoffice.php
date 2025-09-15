@@ -177,10 +177,20 @@ class Frontoffice extends Controller {
 		$input['keywords']           = str_replace('+',  ' ', $data['q']);
 
 		// Foto - Tampilkan 1 card per project (GROUP BY parent_id)
-		$queryfoto                   = "SELECT autono, nama_kegiatan, mp.`nama_project`, tanggal, lokasi,COALESCE(
-    GROUP_CONCAT(DISTINCT mps.nm_pegawai ORDER BY mps.nm_pegawai SEPARATOR ', '),
-    ''
-  ) AS team, keterangan, kode_parent, nama_file, dir, subdir, tipe_file,structured, ukuran  FROM tbl_dokumen a
+		$queryfoto                   = "SELECT autono, nama_kegiatan, mp.`nama_project`, tanggal, lokasi,
+		
+		GROUP_CONCAT(
+  DISTINCT mps.nm_pegawai
+  ORDER BY
+    CASE
+      WHEN mps.nm_pegawai IN ('Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi') THEN 0
+      ELSE 1
+    END,
+    FIELD(mps.nm_pegawai,'Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi'),
+    mps.id_jabatan,
+    mps.nm_pegawai
+  SEPARATOR ', '
+) AS team, keterangan, kode_parent, nama_file, dir, subdir, tipe_file,structured, ukuran  FROM tbl_dokumen a
 
 		LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project`
 
@@ -190,7 +200,7 @@ class Frontoffice extends Controller {
 			(SELECT parent_id, kd_pegawai FROM tbl_dokumen_team) AS teams
 			ON teams.parent_id = a.`autono`
 		LEFT JOIN 
-			(SELECT autocode,nm_pegawai FROM m_pegawai) AS mps
+			(SELECT autocode,nm_pegawai,id_jabatan FROM m_pegawai) AS mps
 			ON mps.autocode= teams.kd_pegawai
 		
 		WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%' OR mp.nama_project LIKE '%".$data['q']."%') 
@@ -204,10 +214,22 @@ class Frontoffice extends Controller {
 		$data['number_paging_foto']  = $model->createPagingSearch($data['q'],$data['foto']['total'],$data['foto']['limit'], $data['foto']['page'], "tab-image");
 		
 		// Video - Tampilkan 1 card per project (GROUP BY parent_id)
-		$queryvideo                  = "SELECT autono, nama_kegiatan, mp.`nama_project`, tanggal, lokasi, COALESCE(
-    GROUP_CONCAT(DISTINCT mps.nm_pegawai ORDER BY mps.nm_pegawai SEPARATOR ', '),
-    ''
-  ) AS team, keterangan, kode_parent, dir, subdir, nama_file, tipe_file,structured, ukuran  FROM tbl_dokumen a 
+		$queryvideo                  = "SELECT autono, nama_kegiatan, mp.`nama_project`, tanggal, lokasi, 
+		
+		GROUP_CONCAT(
+  DISTINCT mps.nm_pegawai
+  ORDER BY
+    CASE
+      WHEN mps.nm_pegawai IN ('Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi') THEN 0
+      ELSE 1
+    END,
+	FIELD(mps.nm_pegawai,'Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi'),
+    mps.id_jabatan,
+    mps.nm_pegawai
+  SEPARATOR ', '
+)
+ AS team
+		, keterangan, kode_parent, dir, subdir, nama_file, tipe_file,structured, ukuran  FROM tbl_dokumen a 
 		
 		LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project`  
 
@@ -217,7 +239,7 @@ class Frontoffice extends Controller {
 			(SELECT parent_id, kd_pegawai FROM tbl_dokumen_team) AS teams
 			ON teams.parent_id = a.`autono`
 		LEFT JOIN 
-			(SELECT autocode,nm_pegawai FROM m_pegawai) AS mps
+			(SELECT autocode,nm_pegawai, id_jabatan FROM m_pegawai) AS mps
 			ON mps.autocode= teams.kd_pegawai
 		
 		WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%' OR mp.nama_project LIKE '%".$data['q']."%') 
