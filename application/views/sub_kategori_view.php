@@ -36,7 +36,7 @@
                     <table class="table datatable table-striped">
                       <thead>
                         <tr>
-        									<th class="text-center  text-bold text-teal">Nama kategori</th>
+        									<th class="text-center  text-bold text-teal">Nama sub kategori</th>
         									<th class="text-center  text-bold text-teal">Keterangan</th>
         									<th class="text-center  text-bold text-teal">Actions</th>
                         </tr>
