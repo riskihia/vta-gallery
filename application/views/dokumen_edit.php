@@ -114,6 +114,16 @@
                           </div>
 
                           <div class="form-group">
+                            <label class="control-label col-lg-2">Sub kategori kegiatan</label>
+                            <div class="col-lg-10">
+                              <select data-placeholder="Pilih sub kategori" class="select"  multiple="multiple" name="sub_kategori[]" >
+                                  <option></option>
+                                  <?php foreach ($data['sub_kategori'] as $key => $category) { echo "<option value=\"".$category[0]."\" ".$category[2].">".$category[1]."</option>"."\n";} ?>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
                             <label class="control-label col-lg-2">Lokasi</label>
                             <div class="col-lg-10">
                              <input type="text" class="form-control" name="lokasi" value="<?php echo $val['lokasi'] ?>">

@@ -154,6 +154,13 @@ class Dokumen_model extends Model {
     	return $result;
     }
 
+    public function get_sub_kategori()
+    {
+    	$result = $this->query("SELECT autocode, nama_sub_kategori FROM ref_sub_kategori ORDER BY nama_sub_kategori ASC LIMIT 50");
+
+    	return $result;
+    }
+
     // public function get_project()
     // {
     //     $result = $this->query("SELECT 
@@ -240,6 +247,13 @@ class Dokumen_model extends Model {
     public function get_kategoriedit($id)
     {
     	$result = $this->query("SELECT a.autocode, a.`nama_kategori`, IF(b.kd_kategori IS NULL, '', 'selected') AS pselct FROM ref_kategori  a LEFT JOIN ( SELECT  parent_id, parent_autocode, kd_kategori FROM tbl_dokumen_kategori WHERE parent_id = $id) b ON b.`kd_kategori` = a.`autocode` LIMIT 50");
+
+    	return $result;
+    }
+
+    public function get_subkategoriedit($id)
+    {
+    	$result = $this->query("SELECT a.autocode, a.`nama_sub_kategori`, IF(b.kd_sub_kategori IS NULL, '', 'selected') AS pselct FROM ref_sub_kategori  a LEFT JOIN ( SELECT  parent_id, parent_autocode, kd_sub_kategori FROM tbl_dokumen_sub_kategori WHERE parent_id = $id) b ON b.`kd_sub_kategori` = a.`autocode` LIMIT 50");
 
     	return $result;
     }

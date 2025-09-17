@@ -186,7 +186,10 @@ class Dokumen extends Controller {
 		$data['kondisi']	 = $model->get_kondisi();
 
 		$data['kategori']	 = $model->get_kategori();
+		
+		$data['sub_kategori']	 = $model->get_sub_kategori();
 
+		// error_log("sub : " . json_encode($data['sub_kategori']));	
 		$data['personel']	 = $model->get_personel();
 
 		$data['fotografer']	 = $model->get_fotografer();
@@ -230,6 +233,8 @@ class Dokumen extends Controller {
 		// $data['provinsi']      = $model->get_provinsiedit($id);
 		
 		$data['kategori']      = $model->get_kategoriedit($id);
+		
+		$data['sub_kategori']      = $model->get_subkategoriedit($id);
 		
 		$data['team']      = $model->get_teamedit($id);
 
@@ -288,7 +293,8 @@ class Dokumen extends Controller {
 		$data['autocode']      = $model->autocode($this->table, "DOC-");	
 
 		$jkategori             = count($_REQUEST['kategori']);
-		$jteam             = count($_REQUEST['team']);
+		$jsubkategori          = count($_REQUEST['sub_kategori']);
+		$jteam             	   = count($_REQUEST['team']);
 		$jlokasi               = count($_REQUEST['provinsi']);
 		$jpersonel             = count($_REQUEST['personel']);	
 		$jfotografer           = count($_REQUEST['fotografer']);	
@@ -309,6 +315,13 @@ class Dokumen extends Controller {
 			$category['kd_kategori']     = $model->escapeString($_REQUEST['kategori'][$i]);
 			$category['parent_autocode'] = $data['autocode'];
 			$categoryresult              = $model->msave("tbl_dokumen_kategori", $category, $this->title);
+		}
+
+		for ($i=0; $i < $jsubkategori ; $i++) { 
+			$subcategory['parent_id']       = $lastid;
+			$subcategory['kd_sub_kategori']     = $model->escapeString($_REQUEST['sub_kategori'][$i]);
+			$subcategory['parent_autocode'] = $data['autocode'];
+			$subcategoryresult              = $model->msave("tbl_dokumen_sub_kategori", $subcategory, $this->title);
 		}
 
 		for ($t=0; $t < $jlokasi ; $t++) { 
@@ -411,6 +424,7 @@ class Dokumen extends Controller {
 		$data['complete']      = $model->escapeString($_REQUEST['complete']) ;	
 
 		$jkategori             = count($_REQUEST['kategori']);
+		$jsubkategori          = count($_REQUEST['sub_kategori']);
 		$jteam             = count($_REQUEST['team']);
 		$jlokasi               = count($_REQUEST['provinsi']);
 		$jpersonel             = (!empty($_REQUEST['personel']) ?  count($_REQUEST['personel']) : 0);	
@@ -428,6 +442,9 @@ class Dokumen extends Controller {
 		}
 		if ($model->getval("tbl_dokumen_kategori", "parent_id", "parent_id", $id)) {
 			$reset_kategori = $model->execute("DELETE FROM tbl_dokumen_kategori WHERE parent_id = $id");
+		}
+		if ($model->getval("tbl_dokumen_sub_kategori", "parent_id", "parent_id", $id)) {
+			$reset_kategori = $model->execute("DELETE FROM tbl_dokumen_sub_kategori WHERE parent_id = $id");
 		}
 		if ($model->getval("tbl_dokumen_team", "parent_id", "parent_id", $id)) {
 			$reset_team = $model->execute("DELETE FROM tbl_dokumen_team WHERE parent_id = $id");
@@ -447,6 +464,13 @@ class Dokumen extends Controller {
 			$category['kd_kategori']     = $model->escapeString($_REQUEST['kategori'][$i]);
 			$category['parent_autocode'] = $autocode;
 			$categoryresult              = $model->msave("tbl_dokumen_kategori", $category, $this->title);
+		}
+
+		for ($i=0; $i < $jsubkategori ; $i++) { 
+			$subcategory['parent_id']       = $id;
+			$subcategory['kd_sub_kategori']     = $model->escapeString($_REQUEST['sub_kategori'][$i]);
+			$subcategory['parent_autocode'] = $autocode;
+			$subcategoryresult              = $model->msave("tbl_dokumen_sub_kategori", $subcategory, $this->title);
 		}
 
 		for ($t=0; $t < $jlokasi ; $t++) { 

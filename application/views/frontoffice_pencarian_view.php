@@ -516,6 +516,17 @@
 													<a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a>
 												</h6>
 											</div>
+											
+											<!-- <div class="kategori-name">
+												<span class="label label-warning">Kategori</span>
+												<span class="label label-warning">Kategori</span>
+												<span class="label label-warning">Kategori</span>
+											</div>
+											<div class="sub_kategori-name">
+												<span class="label label-primary label-rounded">Sub kategori</span>
+												<span class="label label-primary label-rounded">Sub kategori</span>
+												<span class="label label-primary label-rounded">Sub kategori</span>
+											</div> -->
 											<div class="caption-info">
 												<?php if (!empty($value['tanggal'])): ?>
 													<span class="help-block text-grey text-size-small">
