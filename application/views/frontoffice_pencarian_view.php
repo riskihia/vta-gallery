@@ -415,7 +415,7 @@
 					</div>
 
 					<div class="panel-body">
-						<form action="<?php echo BASE_URL; ?>frontoffice/pencarian/" class="main-search" method="get">
+						<form action="<?php echo BASE_URL; ?>frontoffice/pencarian/" class="main-search" method="get" id="main-search-form">
 							<div class="input-group content-group">
 								<div class="has-feedback has-feedback-left">
 									<input type="text" class="form-control input-xlg" name="q" value="<?php echo $data['q']; ?>" placeholder="Masukkan kata kunci..">
@@ -428,7 +428,8 @@
 									<button type="submit" class="btn btn-primary btn-xlg">Search</button>
 								</div>
 							</div>
-
+						</form>
+						<form action="<?php echo BASE_URL; ?>frontoffice/pencarian/" method="post" id="form-filter-project">
 							<div class="row search-option-buttons">
 								<div class="col-sm-6">
 									<ul class="list-inline list-inline-condensed no-margin-bottom">
@@ -454,14 +455,14 @@
 												<li>
 													<ul id="project-list-wrapper" style="max-height: 220px; overflow-y: auto; padding: 0; margin: 0;">
 														<?php
-														$projects = $data['foto']['aadata'];
+														$projects = $data["list_project"];
 														$projectNames = [];
 														foreach ($projects as $project) {
 															if (!empty($project['nama_project']) && !in_array($project['nama_project'], $projectNames)) {
 																$projectNames[] = $project['nama_project'];
 																?>
 																<li style="padding: 0;">
-																	<a href="#" class="project-select" data-project="<?php echo htmlspecialchars($project['autocode_mp']); ?>" style="display: block; padding: 8px 15px; color: #333;">
+																	<a href="#" class="project-select" data-project="<?php echo htmlspecialchars($project['project']); ?>" style="display: block; padding: 8px 15px; color: #333;">
 																		<i class="icon-office"></i> <?php echo htmlspecialchars($project['nama_project']); ?>
 																	</a>
 																</li>
@@ -483,7 +484,21 @@
 									</ul>
 								</div>
 							</div>
+							<!-- Hidden input for project -->
+							<input type="hidden" name="project" id="selected-project-input" value="">
 						</form>
+						<script>
+						$(function() {
+							// Submit form when a project is selected
+							$('#project-dropdown-menu').on('click', '.project-select', function(e) {
+								e.preventDefault();
+								e.stopPropagation();
+								var projectId = $(this).data('project');
+								$('#selected-project-input').val(projectId);
+								$('#form-filter-project').submit();
+							});
+						});
+						</script>
 					</div>
 				</div>
 				<!-- /search field -->
@@ -774,25 +789,6 @@
 			$(this).closest('.dropdown').find('.dropdown-toggle').html(
 				'<i class="icon-stack3 position-left"></i> ' + projectName + ' <span class="caret"></span>'
 			);
-			
-			// Optional: Add your AJAX call here if needed
-			/*
-			$.ajax({
-				url: '<?php echo BASE_URL; ?>frontoffice/pencarian',
-				type: 'POST',
-				data: { projectId: projectId, projectName: projectName },
-				dataType: 'json',
-				beforeSend: function() {
-					console.log("Sending AJAX request...");
-				},
-				success: function(response) {
-					console.log("AJAX Response:", response);
-				},
-				error: function(xhr, status, error) {
-					console.error("AJAX Error:", error);
-				}
-			});
-			*/
 			
 			// Close the dropdown after selection
 			$(this).closest('.dropdown-menu').parent().removeClass('open');

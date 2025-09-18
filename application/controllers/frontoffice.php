@@ -183,10 +183,40 @@ class Frontoffice extends Controller {
 		$data['breadcrumb1']         = 'Gallery';
 		$data['title']               = 'Pencarian';
 		$data['q']                   = ( isset( $_GET['q'] ) ) ? $_GET['q'] : '';
+		$project             = ( isset( $_POST['project'] ) ) ? $_POST['project'] : '';
+		error_log("project : " . $project);
+
+		$filter_project = "";
+		
+		if($project){
+			$filter_project = "AND mp.autocode_mp = '".$this->base64url_decode($project)."'";
+			
+		}
+		error_log("filter : " . $filter_project);
 		$data['tab']                 = ( isset( $_GET['tab'] ) ) ? $_GET['tab'] : '';
 		$data['page']                = ( isset( $_GET['page'] ) ) ? $_GET['page'] : 1;
 		$data['limit']               = 12;
 		$input['keywords']           = str_replace('+',  ' ', $data['q']);
+
+		$query_filter_project = "SELECT DISTINCT d.project, mp.`nama_project`
+			FROM tbl_dokumen d
+			LEFT JOIN m_project mp ON d.`project` = mp.`autocode`
+			WHERE d.project IS NOT NULL AND mp.`nama_project` IS NOT NULL;";
+
+		$data["list_project"] = $model->query($query_filter_project);
+		error_log(json_encode($data["list_project"]));
+
+		
+		// Definisikan field yang perlu di-encode  
+        $fieldsToEncode = ['project', '0'];  
+        // Buat formatter reusable  
+        $formatter = $this->getBase64Formatter($fieldsToEncode); 
+		
+		if (is_callable($formatter)) {  
+			foreach ($data["list_project"] as &$row) {  
+				$row = $formatter($row); // Terapkan formatter ke setiap baris  
+			}
+		}  
 
 		// Foto - Tampilkan 1 card per project (GROUP BY parent_id)
 		$queryfoto                   = "SELECT autono, nama_kegiatan, mp.`autocode_mp`, mp.`nama_project`, tanggal, lokasi,
@@ -215,7 +245,7 @@ class Frontoffice extends Controller {
 			(SELECT autocode,nm_pegawai,id_jabatan FROM m_pegawai) AS mps
 			ON mps.autocode= teams.kd_pegawai
 		
-		WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%' OR mp.nama_project LIKE '%".$data['q']."%') 
+		WHERE a.`file_dokumen` = 1 $filter_project AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%' OR mp.nama_project LIKE '%".$data['q']."%') 
 		
 		
 		GROUP BY a.autono ORDER BY a.autono DESC";	
@@ -223,18 +253,9 @@ class Frontoffice extends Controller {
 		$resTotalLengthFoto          = $model->query("SELECT COUNT(*) as total FROM (SELECT autono FROM tbl_dokumen a LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project` RIGHT JOIN (SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%' OR mp.nama_project LIKE '%".$data['q']."%')) as total_query");
 		$data['total_foto']          = $resTotalLengthFoto[0][0];
 		
-		// Definisikan field yang perlu di-encode  
-        $fieldsToEncode = ['autocode_mp'];  
-        // Buat formatter reusable  
-        $formatter = $this->getBase64Formatter($fieldsToEncode); 
-		
 		$data['foto']                = $model->pagination($queryfoto, $data['limit'], $data['page']);
 
-		if (is_callable($formatter)) {  
-			foreach ($data['foto']['aadata'] as &$row) {  
-				$row = $formatter($row); // Terapkan formatter ke setiap baris  
-			}
-		}  
+		
 
 		
 
