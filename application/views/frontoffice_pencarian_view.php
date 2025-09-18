@@ -412,8 +412,8 @@
 											</a>
 
 											<ul class="dropdown-menu">
-												<li><a href="#"><i class="icon-images2"></i> Foto</a></li>
-												<li><a href="#"><i class="icon-clapboard-play"></i> Video</a></li>
+												<li><a href="#" class="category-select" data-category="foto"><i class="icon-images2"></i> Images</a></li>
+												<li><a href="#" class="category-select" data-category="video"><i class="icon-clapboard-play"></i> Videos</a></li>
 											</ul>
 										</li>
 										<li class="dropdown">
@@ -749,6 +749,38 @@
 					console.error(error);
 				}
 			});
+		});
+
+		// Category filter functionality - switch tabs based on selected category
+		$('.category-select').on('click', function(e) {
+			e.preventDefault();
+			
+			var category = $(this).data('category');
+			console.log('Selected category:', category);
+			
+			// Update dropdown button text
+			var categoryText = $(this).text().trim();
+			$(this).closest('.dropdown').find('.dropdown-toggle').html(
+				'<i class="icon-stack2 position-left"></i> ' + categoryText + ' <span class="caret"></span>'
+			);
+			
+			// Switch to corresponding tab
+			if (category === 'foto') {
+				// Activate Images tab
+				$('.nav-tabs li').removeClass('active');
+				$('a[href="#tab-image"]').parent().addClass('active');
+				$('.tab-pane').removeClass('active');
+				$('#tab-image').addClass('active');
+			} else if (category === 'video') {
+				// Activate Videos tab
+				$('.nav-tabs li').removeClass('active');
+				$('a[href="#tab-video"]').parent().addClass('active');
+				$('.tab-pane').removeClass('active');
+				$('#tab-video').addClass('active');
+			}
+			
+			// Optional: You can add additional filtering logic here
+			// For example, filter the displayed content based on category
 		});
 	});
 
