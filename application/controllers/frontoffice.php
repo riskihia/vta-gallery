@@ -174,17 +174,89 @@ class Frontoffice extends Controller {
 		$template->set('data', $data);
 		$template->render();
 	}
+	function set_project_session() {
+		// Start session jika belum dimulai
+		if (session_status() == PHP_SESSION_NONE) {
+			session_start();
+		}
+		
+		// Ambil project_id dari POST
+		$project_id = isset($_POST['project_id']) ? $_POST['project_id'] : null;
+		if ($project_id !== null) {
+			$_SESSION['selected_project_id'] = $project_id;
+			error_log("Session set successfully: " . json_encode(['status' => 'success', 'project_id' => $project_id, 'session_id' => session_id()]));
+			echo json_encode(['status' => 'success', 'project_id' => $project_id]);
+		} else {
+			error_log("Error: No project_id provided");
+			echo json_encode(['status' => 'error', 'message' => 'No project_id provided']);
+		}
+		exit;
+	}
+
+	function clear_project_session() {
+		// Start session jika belum dimulai
+		if (session_status() == PHP_SESSION_NONE) {
+			session_start();
+		}
+		
+		// Clear session project
+		unset($_SESSION['selected_project_id']);
+		error_log("Project session cleared");
+		
+		// Redirect ke halaman pencarian
+		$this->redirect('frontoffice/pencarian/');
+	}
+
+	function clear_project_session_ajax() {
+		// Start session jika belum dimulai
+		if (session_status() == PHP_SESSION_NONE) {
+			session_start();
+		}
+		
+		// Clear session project
+		unset($_SESSION['selected_project_id']);
+		error_log("Project session cleared via AJAX");
+		
+		echo json_encode(['status' => 'success', 'message' => 'Project filter cleared']);
+		exit;
+	}
 
 	function pencarian()
 	{
 		$model                       = $this->loadModel('Frontoffice_model');
 		
+		// Start session jika belum dimulai
+		if (session_status() == PHP_SESSION_NONE) {
+			session_start();
+		}
+		
+		error_log("Session ID: " . session_id());
+		error_log("Full session data: " . json_encode($_SESSION));
+		
 		$data                        = array();
 		$data['breadcrumb1']         = 'Gallery';
 		$data['title']               = 'Pencarian';
 		$data['q']                   = ( isset( $_GET['q'] ) ) ? $_GET['q'] : '';
-		$project             = ( isset( $_POST['project'] ) ) ? $_POST['project'] : '';
-		error_log("project : " . $project);
+		
+		// Handle project filter - prioritas: POST > SESSION
+		$project = '';
+		
+		if (isset($_POST['project']) && !empty($_POST['project'])) {
+			// Jika ada POST project (dari form filter)
+			$project = $_POST['project'];
+			// Update session dengan project terbaru
+			$_SESSION['selected_project_id'] = $project;
+			error_log("Project from POST, updated session: " . $project);
+		} elseif (isset($_SESSION['selected_project_id']) && !empty($_SESSION['selected_project_id'])) {
+			// Jika tidak ada POST, ambil dari session
+			$project = $_SESSION['selected_project_id'];
+			error_log("Project from SESSION: " . $project);
+		}
+		
+		error_log("Final project value: " . $project);
+		
+		// Store project untuk digunakan di view
+		$data['project'] = $project;
 
 		$filter_project = "";
 		
