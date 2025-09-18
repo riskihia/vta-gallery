@@ -262,6 +262,31 @@
 				transform: translateY(0);
 			}
 		}
+
+
+
+		/* #######################3 */
+		/* ####### SUTYLE Filter by product */
+		/* #######################3 */
+		#project-list-wrapper .project-select.active {
+			background: #e3f2fd;
+			color: #1976d2;
+		}
+		#project-list-wrapper .project-select:hover {
+			background: #f0f0f0;
+			transition: background 0.15s;
+		}
+		#project-list-wrapper {
+			scrollbar-width: thin;
+			scrollbar-color: #bdbdbd #f5f5f5;
+		}
+		#project-list-wrapper::-webkit-scrollbar {
+			width: 6px;
+		}
+		#project-list-wrapper::-webkit-scrollbar-thumb {
+			background: #bdbdbd;
+			border-radius: 3px;
+		}
 	</style>
 
 	<!-- Core JS files -->
@@ -448,47 +473,6 @@
 												</li>
 											</ul>
 										</li>
-										<script>
-										$(document).ready(function() {
-											$('#project-search-input').on('keyup', function() {
-												var filter = $(this).val().toLowerCase();
-												$('#project-list-wrapper li').each(function() {
-													var text = $(this).text().toLowerCase();
-													$(this).toggle(text.indexOf(filter) > -1);
-												});
-											});
-											// Project select: set selected, keep scroll
-											$('#project-list-wrapper').on('click', '.project-select', function(e) {
-												e.preventDefault();
-												$('#project-list-wrapper .project-select').removeClass('active');
-												$(this).addClass('active');
-												// Optionally, close dropdown after select:
-												$(this).closest('.dropdown-menu').dropdown('toggle');
-												// You can trigger your AJAX or form submit here
-											});
-										});
-										</script>
-										<style>
-										#project-list-wrapper .project-select.active {
-											background: #e3f2fd;
-											color: #1976d2;
-										}
-										#project-list-wrapper .project-select:hover {
-											background: #f0f0f0;
-											transition: background 0.15s;
-										}
-										#project-list-wrapper {
-											scrollbar-width: thin;
-											scrollbar-color: #bdbdbd #f5f5f5;
-										}
-										#project-list-wrapper::-webkit-scrollbar {
-											width: 6px;
-										}
-										#project-list-wrapper::-webkit-scrollbar-thumb {
-											background: #bdbdbd;
-											border-radius: 3px;
-										}
-										</style>
 										<li><a href="<?php echo BASE_URL; ?>frontoffice/pencarian/" class="btn btn-link btn-sm"><i class="icon-reload-alt position-left"></i> Refine your search</a></li>
 									</ul>
 								</div>
@@ -767,55 +751,72 @@
 </body>
 </html>
 
-<script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
-<script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/select2.min.js"></script>
-<script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/selectboxit.min.js"></script>
-
-
-
-<script type="text/javascript" src="<?php echo BASE_URL ?>static/js/pages/form_select2.js"></script>
-<script type="text/javascript" src="<?php echo BASE_URL ?>static/js/pages/form_multiselect.js"></script>
+<!-- Commented out problematic scripts that cause conflicts -->
+<!-- <script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/bootstrap_multiselect.js"></script> -->
+<!-- <script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/select2.min.js"></script> -->
+<!-- <script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/selectboxit.min.js"></script> -->
+<!-- <script type="text/javascript" src="<?php echo BASE_URL ?>static/js/pages/form_select2.js"></script> -->
+<!-- <script type="text/javascript" src="<?php echo BASE_URL ?>static/js/pages/form_multiselect.js"></script> -->
 <script type="text/javascript">
 	$(document).ready(function() {
-		// Inisialisasi Select2 agar dropdown punya fitur search
-		$('.select-search').select2({
-			placeholder: "Pilih kondisi media",
-			allowClear: true,
-			width: 'resolve'
-		});
-	});
-	$(document).ready(function() {
+		// Improved project dropdown functionality
 		$('#project-dropdown-menu').on('click', '.project-select', function(e) {
+			e.preventDefault();
+			e.stopPropagation(); // Prevent event bubbling
+			
 			var projectId = $(this).data('project');
 			var projectName = $(this).text().trim();
-			// keyword = "test";
-			e.preventDefault();
-			// var projectId = $(this).data('project');
+			
+			console.log("Selected project:", projectName);
+			console.log("Project ID:", projectId);
+			
+			// Update the dropdown button text to show selected project
+			$(this).closest('.dropdown').find('.dropdown-toggle').html(
+				'<i class="icon-stack3 position-left"></i> ' + projectName + ' <span class="caret"></span>'
+			);
+			
+			// Optional: Add your AJAX call here if needed
+			/*
 			$.ajax({
 				url: '<?php echo BASE_URL; ?>frontoffice/pencarian',
 				type: 'POST',
 				data: { projectId: projectId, projectName: projectName },
 				dataType: 'json',
 				beforeSend: function() {
-					// Optional: show loading indicator
-					console.log("testing...");
-					console.log(projectId);
-					console.log(projectName);
+					console.log("Sending AJAX request...");
 				},
 				success: function(response) {
-					// TODO: handle response, update UI as needed
-					console.log(response);
+					console.log("AJAX Response:", response);
 				},
 				error: function(xhr, status, error) {
-					// Optional: handle error
-					console.error(error);
+					console.error("AJAX Error:", error);
 				}
+			});
+			*/
+			
+			// Close the dropdown after selection
+			$(this).closest('.dropdown-menu').parent().removeClass('open');
+		});
+
+		// Prevent dropdown from closing when clicking inside the dropdown menu
+		$('#project-dropdown-menu').on('click', function(e) {
+			e.stopPropagation();
+		});
+
+		// Handle search input in project dropdown
+		$('#project-search-input').on('keyup', function(e) {
+			e.stopPropagation(); // Prevent dropdown from closing
+			var filter = $(this).val().toLowerCase();
+			$('#project-list-wrapper li').each(function() {
+				var text = $(this).text().toLowerCase();
+				$(this).toggle(text.indexOf(filter) > -1);
 			});
 		});
 
 		// Category filter functionality - switch tabs based on selected category
 		$('.category-select').on('click', function(e) {
 			e.preventDefault();
+			e.stopPropagation(); // Prevent event bubbling
 			
 			var category = $(this).data('category');
 			console.log('Selected category:', category);
@@ -841,8 +842,8 @@
 				$('#tab-video').addClass('active');
 			}
 			
-			// Optional: You can add additional filtering logic here
-			// For example, filter the displayed content based on category
+			// Close the dropdown after selection
+			$(this).closest('.dropdown-menu').parent().removeClass('open');
 		});
 	});
 
