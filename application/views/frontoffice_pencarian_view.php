@@ -14,6 +14,7 @@
 	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/core.css" rel="stylesheet" type="text/css">
 	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/components.css" rel="stylesheet" type="text/css">
 	<link href="<?php echo BASE_URL; ?>/static/css/frontoffice/colors.css" rel="stylesheet" type="text/css">
+	
 	<!-- /global stylesheets -->
 
 	<!-- Custom CSS for grid layout -->
@@ -417,33 +418,77 @@
 											</ul>
 										</li>
 										<li class="dropdown">
-											<a href="#" class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown">
+											<a href="#" class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 												<i class="icon-stack3 position-left"></i> Pilih Project <span class="caret"></span>
 											</a>
-											<ul class="dropdown-menu" id="project-dropdown-menu">
-												<?php
-												$projects = $data['foto']['aadata'];
-												foreach ($projects as $project): ?>
-													<li>
-														<a href="#" class="project-select" data-project="<?php echo htmlspecialchars($project['autocode_mp']); ?>">
-															<i class="icon-office"></i> <?php echo htmlspecialchars($project['nama_project']); ?>
-														</a>
-													</li>
-												<?php endforeach; ?>
+											<ul class="dropdown-menu" id="project-dropdown-menu" style="min-width: 250px; max-height: 300px; overflow-y: auto;">
+												<li style="padding: 8px 15px;">
+													<input type="text" class="form-control input-sm" id="project-search-input" placeholder="Cari project...">
+												</li>
+												<li role="separator" class="divider"></li>
+												<li>
+													<ul id="project-list-wrapper" style="max-height: 220px; overflow-y: auto; padding: 0; margin: 0;">
+														<?php
+														$projects = $data['foto']['aadata'];
+														$projectNames = [];
+														foreach ($projects as $project) {
+															if (!empty($project['nama_project']) && !in_array($project['nama_project'], $projectNames)) {
+																$projectNames[] = $project['nama_project'];
+																?>
+																<li style="padding: 0;">
+																	<a href="#" class="project-select" data-project="<?php echo htmlspecialchars($project['autocode_mp']); ?>" style="display: block; padding: 8px 15px; color: #333;">
+																		<i class="icon-office"></i> <?php echo htmlspecialchars($project['nama_project']); ?>
+																	</a>
+																</li>
+																<?php
+															}
+														}
+														?>
+													</ul>
+												</li>
 											</ul>
-											<script>
-											$(document).ready(function() {
-												$('#project-dropdown-menu').on('click', '.project-select', function(e) {
-													e.preventDefault();
-													var projectId = $(this).data('project');
-													var projectName = $(this).text().trim();
-													console.log('Selected project ID:', projectId);
-													console.log('Selected project Name:', projectName);
-													// Lakukan aksi filter sesuai kebutuhan
+										</li>
+										<script>
+										$(document).ready(function() {
+											$('#project-search-input').on('keyup', function() {
+												var filter = $(this).val().toLowerCase();
+												$('#project-list-wrapper li').each(function() {
+													var text = $(this).text().toLowerCase();
+													$(this).toggle(text.indexOf(filter) > -1);
 												});
 											});
-											</script>
-										</li>
+											// Project select: set selected, keep scroll
+											$('#project-list-wrapper').on('click', '.project-select', function(e) {
+												e.preventDefault();
+												$('#project-list-wrapper .project-select').removeClass('active');
+												$(this).addClass('active');
+												// Optionally, close dropdown after select:
+												$(this).closest('.dropdown-menu').dropdown('toggle');
+												// You can trigger your AJAX or form submit here
+											});
+										});
+										</script>
+										<style>
+										#project-list-wrapper .project-select.active {
+											background: #e3f2fd;
+											color: #1976d2;
+										}
+										#project-list-wrapper .project-select:hover {
+											background: #f0f0f0;
+											transition: background 0.15s;
+										}
+										#project-list-wrapper {
+											scrollbar-width: thin;
+											scrollbar-color: #bdbdbd #f5f5f5;
+										}
+										#project-list-wrapper::-webkit-scrollbar {
+											width: 6px;
+										}
+										#project-list-wrapper::-webkit-scrollbar-thumb {
+											background: #bdbdbd;
+											border-radius: 3px;
+										}
+										</style>
 										<li><a href="<?php echo BASE_URL; ?>frontoffice/pencarian/" class="btn btn-link btn-sm"><i class="icon-reload-alt position-left"></i> Refine your search</a></li>
 									</ul>
 								</div>
@@ -721,7 +766,24 @@
 
 </body>
 </html>
+
+<script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/bootstrap_multiselect.js"></script>
+<script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/select2.min.js"></script>
+<script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/selectboxit.min.js"></script>
+
+
+
+<script type="text/javascript" src="<?php echo BASE_URL ?>static/js/pages/form_select2.js"></script>
+<script type="text/javascript" src="<?php echo BASE_URL ?>static/js/pages/form_multiselect.js"></script>
 <script type="text/javascript">
+	$(document).ready(function() {
+		// Inisialisasi Select2 agar dropdown punya fitur search
+		$('.select-search').select2({
+			placeholder: "Pilih kondisi media",
+			allowClear: true,
+			width: 'resolve'
+		});
+	});
 	$(document).ready(function() {
 		$('#project-dropdown-menu').on('click', '.project-select', function(e) {
 			var projectId = $(this).data('project');
