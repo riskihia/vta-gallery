@@ -12,6 +12,18 @@ class Frontoffice extends Controller {
 
         // }
     }
+
+	// Method reusable untuk membuat formatter  
+    private function getBase64Formatter($fields) {  
+        return function($row) use ($fields) {  
+            foreach ($fields as $field) {  
+                if (isset($row[$field])) {  
+                    $row[$field] = $this->base64url_encode($row[$field]);  
+                }  
+            }  
+            return $row;  
+        };  
+    }
 	
 	function index()
 	{
@@ -50,7 +62,7 @@ class Frontoffice extends Controller {
 		$data['title']         = 'Foto';
 		$data['page']          = ( isset( $_GET['page'] ) ) ? $_GET['page'] : 1;
 		$data['limit']         = 20;
-		$query                 = "SELECT autono, nama_kegiatan, mp.`nama_project`, tanggal, kode_parent, dir, subdir, nama_file, tipe_file, structured,ukuran  FROM tbl_dokumen a 
+		$query                 = "SELECT autono, nama_kegiatan, mp.`autocode_mp`, mp.`nama_project`, tanggal, kode_parent, dir, subdir, nama_file, tipe_file, structured, ukuran  FROM tbl_dokumen a 
 		
 		LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project`  
 
@@ -119,7 +131,7 @@ class Frontoffice extends Controller {
 		$data['title']         = 'Video';
 		$data['page']          = ( isset( $_GET['page'] ) ) ? $_GET['page'] : 1;
 		$data['limit']         = 12;
-		$query                 = "SELECT autono, nama_kegiatan, mp.`nama_project`, tanggal, kode_parent, dir, subdir, nama_file, tipe_file, structured, ukuran  FROM tbl_dokumen a 
+		$query                 = "SELECT autono, nama_kegiatan, mp.`autocode_mp`, mp.`nama_project`, tanggal, kode_parent, dir, subdir, nama_file, tipe_file, structured, ukuran  FROM tbl_dokumen a 
 		
 		LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project`  
 
@@ -177,7 +189,7 @@ class Frontoffice extends Controller {
 		$input['keywords']           = str_replace('+',  ' ', $data['q']);
 
 		// Foto - Tampilkan 1 card per project (GROUP BY parent_id)
-		$queryfoto                   = "SELECT autono, nama_kegiatan, mp.`nama_project`, tanggal, lokasi,
+		$queryfoto                   = "SELECT autono, nama_kegiatan, mp.`autocode_mp`, mp.`nama_project`, tanggal, lokasi,
 		
 		GROUP_CONCAT(
   DISTINCT mps.nm_pegawai
@@ -210,11 +222,28 @@ class Frontoffice extends Controller {
 		
 		$resTotalLengthFoto          = $model->query("SELECT COUNT(*) as total FROM (SELECT autono FROM tbl_dokumen a LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project` RIGHT JOIN (SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%' OR mp.nama_project LIKE '%".$data['q']."%')) as total_query");
 		$data['total_foto']          = $resTotalLengthFoto[0][0];
+		
+		// Definisikan field yang perlu di-encode  
+        $fieldsToEncode = ['autocode_mp'];  
+        // Buat formatter reusable  
+        $formatter = $this->getBase64Formatter($fieldsToEncode); 
+		
 		$data['foto']                = $model->pagination($queryfoto, $data['limit'], $data['page']);
+
+		if (is_callable($formatter)) {  
+			foreach ($data['foto']['aadata'] as &$row) {  
+				$row = $formatter($row); // Terapkan formatter ke setiap baris  
+			}
+		}  
+
+		
+
+
+		// error_log(json_encode($data['foto']));
 		$data['number_paging_foto']  = $model->createPagingSearch($data['q'],$data['foto']['total'],$data['foto']['limit'], $data['foto']['page'], "tab-image");
 		
 		// Video - Tampilkan 1 card per project (GROUP BY parent_id)
-		$queryvideo                  = "SELECT autono, nama_kegiatan, mp.`nama_project`, tanggal, lokasi, 
+		$queryvideo                  = "SELECT autono, nama_kegiatan, mp.`autocode_mp`, mp.`nama_project`, tanggal, lokasi,
 		
 		GROUP_CONCAT(
   DISTINCT mps.nm_pegawai

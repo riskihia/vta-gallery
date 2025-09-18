@@ -416,6 +416,34 @@
 												<li><a href="#"><i class="icon-clapboard-play"></i> Video</a></li>
 											</ul>
 										</li>
+										<li class="dropdown">
+											<a href="#" class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown">
+												<i class="icon-stack3 position-left"></i> Pilih Project <span class="caret"></span>
+											</a>
+											<ul class="dropdown-menu" id="project-dropdown-menu">
+												<?php
+												$projects = $data['foto']['aadata'];
+												foreach ($projects as $project): ?>
+													<li>
+														<a href="#" class="project-select" data-project="<?php echo htmlspecialchars($project['autocode_mp']); ?>">
+															<i class="icon-office"></i> <?php echo htmlspecialchars($project['nama_project']); ?>
+														</a>
+													</li>
+												<?php endforeach; ?>
+											</ul>
+											<script>
+											$(document).ready(function() {
+												$('#project-dropdown-menu').on('click', '.project-select', function(e) {
+													e.preventDefault();
+													var projectId = $(this).data('project');
+													var projectName = $(this).text().trim();
+													console.log('Selected project ID:', projectId);
+													console.log('Selected project Name:', projectName);
+													// Lakukan aksi filter sesuai kebutuhan
+												});
+											});
+											</script>
+										</li>
 										<li><a href="<?php echo BASE_URL; ?>frontoffice/pencarian/" class="btn btn-link btn-sm"><i class="icon-reload-alt position-left"></i> Refine your search</a></li>
 									</ul>
 								</div>
@@ -694,69 +722,100 @@
 </body>
 </html>
 <script type="text/javascript">
-$(function() {
-        $(this).bind("contextmenu", function(e) {
-            e.preventDefault();
-        });
-    }); 
+	$(document).ready(function() {
+		$('#project-dropdown-menu').on('click', '.project-select', function(e) {
+			var projectId = $(this).data('project');
+			var projectName = $(this).text().trim();
+			// keyword = "test";
+			e.preventDefault();
+			// var projectId = $(this).data('project');
+			$.ajax({
+				url: '<?php echo BASE_URL; ?>frontoffice/pencarian',
+				type: 'POST',
+				data: { projectId: projectId, projectName: projectName },
+				dataType: 'json',
+				beforeSend: function() {
+					// Optional: show loading indicator
+					console.log("testing...");
+					console.log(projectId);
+					console.log(projectName);
+				},
+				success: function(response) {
+					// TODO: handle response, update UI as needed
+					console.log(response);
+				},
+				error: function(xhr, status, error) {
+					// Optional: handle error
+					console.error(error);
+				}
+			});
+		});
+	});
 
-// Gallery Grid Enhancement
-$(document).ready(function() {
-    // Ensure images are loaded before calculating layout
-    function initGalleryGrid() {
-        var $gallery = $('.gallery-grid');
-        var $items = $gallery.find('.thumbnail');
-        
-        // Add loading state
-        $items.addClass('loading');
-        
-        // Counter for loaded images
-        var totalImages = $gallery.find('img, video').length;
-        var loadedCount = 0;
-        
-        function checkAllLoaded() {
-            loadedCount++;
-            if (loadedCount >= totalImages) {
-                $items.removeClass('loading');
-                // Add staggered animation
-                $items.each(function(index) {
-                    var $this = $(this);
-                    setTimeout(function() {
-                        $this.addClass('loaded');
-                    }, index * 50);
-                });
-            }
-        }
-        
-        // Handle image load
-        $gallery.find('img').on('load error', checkAllLoaded);
-        
-        // Handle video load
-        $gallery.find('video').on('loadeddata error', checkAllLoaded);
-        
-        // Fallback if no images/videos
-        if (totalImages === 0) {
-            $items.removeClass('loading').addClass('loaded');
-        }
-    }
-    
-    // Initialize grid
-    initGalleryGrid();
-    
-    // Reinitialize on tab change
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function() {
-        setTimeout(initGalleryGrid, 100);
-    });
-    
-    // Handle window resize
-    var resizeTimer;
-    $(window).on('resize', function() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function() {
-            initGalleryGrid();
-        }, 250);
-    });
-});
+
+	$(function() {
+			$(this).bind("contextmenu", function(e) {
+				e.preventDefault();
+			});
+		}); 
+
+	// Gallery Grid Enhancement
+	$(document).ready(function() {
+		// Ensure images are loaded before calculating layout
+		function initGalleryGrid() {
+			var $gallery = $('.gallery-grid');
+			var $items = $gallery.find('.thumbnail');
+			
+			// Add loading state
+			$items.addClass('loading');
+			
+			// Counter for loaded images
+			var totalImages = $gallery.find('img, video').length;
+			var loadedCount = 0;
+			
+			function checkAllLoaded() {
+				loadedCount++;
+				if (loadedCount >= totalImages) {
+					$items.removeClass('loading');
+					// Add staggered animation
+					$items.each(function(index) {
+						var $this = $(this);
+						setTimeout(function() {
+							$this.addClass('loaded');
+						}, index * 50);
+					});
+				}
+			}
+			
+			// Handle image load
+			$gallery.find('img').on('load error', checkAllLoaded);
+			
+			// Handle video load
+			$gallery.find('video').on('loadeddata error', checkAllLoaded);
+			
+			// Fallback if no images/videos
+			if (totalImages === 0) {
+				$items.removeClass('loading').addClass('loaded');
+			}
+		}
+		
+		// Initialize grid
+		initGalleryGrid();
+		
+		// Reinitialize on tab change
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function() {
+			setTimeout(initGalleryGrid, 100);
+		});
+		
+		// Handle window resize
+		var resizeTimer;
+		$(window).on('resize', function() {
+			clearTimeout(resizeTimer);
+			resizeTimer = setTimeout(function() {
+				initGalleryGrid();
+			}, 250);
+		});
+	});
 </script>
 
 
