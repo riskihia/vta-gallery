@@ -480,7 +480,7 @@
 												</li>
 											</ul>
 										</li>
-										<li><a href="<?php echo BASE_URL; ?>frontoffice/pencarian/" class="btn btn-link btn-sm"><i class="icon-reload-alt position-left"></i> Refine your search</a></li>
+										<li><a href="#" class="btn btn-link btn-sm refine-search-btn"><i class="icon-reload-alt position-left"></i> Refine your search</a></li>
 									</ul>
 								</div>
 
@@ -773,6 +773,7 @@ $(function () {
 	const $selectedProjectInput = $('#selected-project-input');
 	const $formFilterProject = $('#form-filter-project');
 	const $categorySelect = $('.category-select');
+	const $refineSearchBtn = $('.refine-search-btn');
 	const $tabImage = $('#tab-image');
 	const $tabVideo = $('#tab-video');
 	const $navTabs = $('.nav-tabs');
@@ -922,6 +923,19 @@ $(function () {
 			.html('<i class="icon-stack2 position-left"></i> ' + categoryText + ' <span class="caret"></span>');
 		switchTab(category);
 		$(this).closest('.dropdown-menu').parent().removeClass('open');
+	});
+
+	// Refine Search - Clear session and redirect
+	$refineSearchBtn.on('click', function (e) {
+		e.preventDefault();
+		
+		console.log('Refining search, clearing session...');
+		
+		// Clear project session via AJAX before redirecting
+		clearProjectSession(function () {
+			console.log('Session cleared, redirecting to search page');
+			window.location.href = '<?php echo BASE_URL; ?>frontoffice/pencarian/';
+		});
 	});
 
 	// Disable Right Click
