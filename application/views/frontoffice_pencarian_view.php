@@ -665,10 +665,12 @@
 								<div class="col-lg-3 col-sm-6">
 									<div class="thumbnail">
 										<div class="thumb">
-											<video width="100%" height="200px" controls controlsList="nodownload" style="outline: none;border: none;background: #090909"><source src="<?php echo $videofile; ?>#t=20" type="video/mp4" preload="metadata"></video>
+											<video width="100%" height="200px" muted style="outline: none;border: none;background: #090909">
+												<source src="<?php echo $videofile; ?>#t=20" type="video/mp4" preload="metadata">
+											</video>
 											<div class="caption-overflow">
 												<span>
-													<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="btn border-white text-white btn-flat btn-icon btn-rounded" title="Lihat semua video"><i class="icon-play3"></i></a>
+													<a href="<?php echo $videofile; ?>" data-popup="video-lightbox" class="btn border-white text-white btn-flat btn-icon btn-rounded" title="Play video"><i class="icon-play3"></i></a>
 													<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5" title="Lihat album video"><i class="icon-clapboard-play"></i></a>
 												</span>
 											</div>
@@ -756,6 +758,25 @@
 
 	</div>
 	<!-- /page container -->
+
+	<!-- Video Modal -->
+	<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" style="width: 90%; max-width: 1200px;">
+			<div class="modal-content" style="background: #000; border: none;">
+				<div class="modal-header" style="border: none; padding: 10px;">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #fff; opacity: 0.8;">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="padding: 0;">
+					<video id="modalVideo" width="100%" height="600px" controls style="background: #000;">
+						<source id="modalVideoSource" src="" type="video/mp4">
+						Your browser does not support the video tag.
+					</video>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </body>
 </html>
@@ -956,6 +977,40 @@ $(function () {
 
 	// Initial UI update
 	updateProjectDropdown();
+
+	// =========================
+	// Video Lightbox Popup
+	// =========================
+	// Disable right click
+	$(this).bind("contextmenu", function(e) {
+		e.preventDefault();
+	}); 
+
+	// Video modal popup
+	$('[data-popup="video-lightbox"]').click(function(e) {
+		e.preventDefault();
+		var videoSrc = $(this).attr('href');
+		
+		// Set video source
+		$('#modalVideoSource').attr('src', videoSrc);
+		$('#modalVideo')[0].load(); // Reload video element
+		
+		// Show modal
+		$('#videoModal').modal('show');
+		
+		// Auto play when modal is shown
+		$('#videoModal').on('shown.bs.modal', function() {
+			$('#modalVideo')[0].play();
+		});
+	});
+
+	// Stop video when modal is closed
+	$('#videoModal').on('hidden.bs.modal', function() {
+		var video = $('#modalVideo')[0];
+		video.pause();
+		video.currentTime = 0;
+		$('#modalVideoSource').attr('src', '');
+	});
 });
 </script>
 
