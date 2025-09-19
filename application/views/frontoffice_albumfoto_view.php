@@ -41,6 +41,31 @@
 	
 	<script type="text/javascript" src="<?php echo BASE_URL; ?>/static/js/pages/wizard_form.js"></script>
 	<!-- /theme JS files -->
+	
+	<!-- Custom styles for album info -->
+	<style>
+		.info-item {
+			margin-bottom: 10px;
+			padding: 8px 12px;
+			background: #f8f9fa;
+			border-left: 3px solid #007bff;
+			border-radius: 4px;
+		}
+		
+		.info-item.success { border-left-color: #28a745; }
+		.info-item.warning { border-left-color: #ffc107; }
+		.info-item.info { border-left-color: #17a2b8; }
+		
+		.team-badge {
+			display: inline-block;
+			background: #e3f2fd;
+			color: #1976d2;
+			padding: 2px 6px;
+			border-radius: 10px;
+			font-size: 11px;
+			margin: 1px;
+		}
+	</style>
 
 </head>
 
@@ -136,9 +161,115 @@
 
 		<!-- Page content -->
 		<div class="page-content">
-
-			<!-- Main content -->
+			<!-- Album Information Section -->
 			<div class="content-wrapper">
+				<!-- Album Details Card -->
+				<div class="panel panel-flat" style="margin-bottom: 20px;">
+					<div class="panel-heading">
+						<h5 class="panel-title"><i class="icon-info22 position-left"></i> Informasi Album</h5>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="info-item">
+									<div class="media">
+										<div class="media-left">
+											<i class="icon-calendar22 text-primary"></i>
+										</div>
+										<div class="media-body">
+											<div class="text-muted text-size-small">Tanggal</div>
+											<div class="text-semibold"><?php $m = new Model(); echo $m->format_tanggal($data['info']['tanggal']);?></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="info-item success">
+									<div class="media">
+										<div class="media-left">
+											<i class="icon-location4 text-success"></i>
+										</div>
+										<div class="media-body">
+											<div class="text-muted text-size-small">Lokasi</div>
+											<div class="text-semibold"><?php echo !empty($data['info']['lokasi']) ? $data['info']['lokasi'] : '<span class="text-muted">Tidak tersedia</span>'; ?></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-md-6">
+								<div class="info-item warning">
+									<div class="media">
+										<div class="media-left">
+											<i class="icon-folder-open text-warning"></i>
+										</div>
+										<div class="media-body">
+											<div class="text-muted text-size-small">Project</div>
+											<div class="text-semibold"><?php echo !empty($data['info']['nama_project']) ? $data['info']['nama_project'] : '<span class="text-muted">Tidak tersedia</span>'; ?></div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="info-item info">
+									<div class="media">
+										<div class="media-left">
+											<i class="icon-images2 text-info"></i>
+										</div>
+										<div class="media-body">
+											<div class="text-muted text-size-small">Total Foto</div>
+											<div class="text-semibold"><span class="label label-success"><?php echo count($data['aadata']); ?> Foto</span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<?php if(!empty($data['info']['team'])): ?>
+						<div class="row" style="margin-top: 15px;">
+							<div class="col-sm-12">
+								<div class="info-item info">
+									<div class="media">
+										<div class="media-left">
+											<i class="icon-users text-info"></i>
+										</div>
+										<div class="media-body">
+											<div class="text-muted text-size-small">Tim Terlibat</div>
+											<div style="margin-top: 5px;">
+												<?php 
+												$team_members = explode(', ', $data['info']['team']);
+												foreach($team_members as $member): ?>
+													<span class="team-badge"><?php echo trim($member); ?></span>
+												<?php endforeach; ?>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<?php endif; ?>
+						
+						<?php if(!empty($data['info']['keterangan'])): ?>
+						<div class="row" style="margin-top: 15px;">
+							<div class="col-sm-12">
+								<h6 class="text-semibold"><i class="icon-file-text text-slate"></i> Keterangan</h6>
+								<div class="well well-sm">
+									<?php echo nl2br(htmlspecialchars($data['info']['keterangan'])); ?>
+								</div>
+							</div>
+						</div>
+						<?php endif; ?>
+					</div>
+				</div>
+
+			<!-- Photo Gallery Section -->
+				<div class="panel panel-flat">
+					<div class="panel-heading">
+						<h5 class="panel-title">
+							<i class="icon-images2 position-left"></i> 
+							Galeri Foto
+							<span class="label label-success pull-right"><?php echo count($data['aadata']); ?> Foto</span>
+						</h5>
+					</div>
+					<div class="panel-body">
 
 				<!-- Image grid -->
 				<?php foreach ($data['aadata'] as $key => $value) { 
@@ -168,10 +299,10 @@
 					<div class="col-lg-3 col-sm-6">
 						<div class="thumbnail">
 							<div class="thumb">
-								<img src="<?php echo $fileshow; ?>"  style="height: 200px;" alt="">
+								<img src="<?php echo $fileshow; ?>" style="height: 200px;" alt="">
 								<div class="caption-overflow">
 									<span>
-										<a href="<?php echo $fileshow; ?>" data-popup="lightbox" rel="gallery"  class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-zoomin3"></i></a>
+										<a href="<?php echo $fileshow; ?>" data-popup="lightbox" rel="gallery" class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-zoomin3"></i></a>
 									</span>
 								</div>
 							</div>
@@ -185,6 +316,10 @@
 					<?php echo $data['number_paging'] ?>
 	              </div>
 		        </div>
+		        
+		        </div>
+				</div>
+				<!-- /photo gallery panel -->
 
 			</div>
 			<!-- /main content -->

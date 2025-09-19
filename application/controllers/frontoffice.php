@@ -92,7 +92,29 @@ class Frontoffice extends Controller {
     	$data['breadcrumb2']   = 'Album Foto';
 		$data['title']         = 'Foto';
 		$data['encode']        = $x;
-    	$data['info']          = $model->getinfos($id);
+		
+		// Get detailed album information with team and project data
+		$detailQuery = "SELECT a.autono, a.autocode, a.nama_kegiatan, a.tanggal, a.lokasi, a.keterangan, a.narasi,
+				mp.nama_project,
+				GROUP_CONCAT(
+					DISTINCT mps.nm_pegawai
+					ORDER BY
+						CASE WHEN mps.nm_pegawai IN ('Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi') THEN 0 ELSE 1 END,
+						FIELD(mps.nm_pegawai,'Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi'),
+						mps.id_jabatan,
+						mps.nm_pegawai
+					SEPARATOR ', '
+				) AS team
+			FROM tbl_dokumen a
+			LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON mp.autocode_mp = a.project
+			LEFT JOIN (SELECT parent_id, kd_pegawai FROM tbl_dokumen_team) AS teams ON teams.parent_id = a.autono
+			LEFT JOIN (SELECT autocode, nm_pegawai, id_jabatan FROM m_pegawai) AS mps ON mps.autocode = teams.kd_pegawai
+			WHERE a.autono = $id
+			GROUP BY a.autono";
+		
+		$detailResult = $model->query($detailQuery);
+		$data['info'] = !empty($detailResult) ? $detailResult[0] : $model->getinfos($id);
+		
     	$data['pangkat']       = $model->get_pangkat();
 		$data['korps']         = $model->get_korps();
 		$data['page']          = ( isset( $_GET['page'] ) ) ? $_GET['page'] : 1;
@@ -114,7 +136,29 @@ class Frontoffice extends Controller {
     	$data['breadcrumb2']   = 'Album Video';
 		$data['title']         = 'Video';
 		$data['encode']        = $x;
-    	$data['info']          = $model->getinfos($id);
+		
+		// Get detailed album information with team and project data
+		$detailQuery = "SELECT a.autono, a.autocode, a.nama_kegiatan, a.tanggal, a.lokasi, a.keterangan, a.narasi,
+				mp.nama_project,
+				GROUP_CONCAT(
+					DISTINCT mps.nm_pegawai
+					ORDER BY
+						CASE WHEN mps.nm_pegawai IN ('Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi') THEN 0 ELSE 1 END,
+						FIELD(mps.nm_pegawai,'Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi'),
+						mps.id_jabatan,
+						mps.nm_pegawai
+					SEPARATOR ', '
+				) AS team
+			FROM tbl_dokumen a
+			LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON mp.autocode_mp = a.project
+			LEFT JOIN (SELECT parent_id, kd_pegawai FROM tbl_dokumen_team) AS teams ON teams.parent_id = a.autono
+			LEFT JOIN (SELECT autocode, nm_pegawai, id_jabatan FROM m_pegawai) AS mps ON mps.autocode = teams.kd_pegawai
+			WHERE a.autono = $id
+			GROUP BY a.autono";
+		
+		$detailResult = $model->query($detailQuery);
+		$data['info'] = !empty($detailResult) ? $detailResult[0] : $model->getinfos($id);
+		
     	$data['pangkat']       = $model->get_pangkat();
 		$data['korps']         = $model->get_korps();
 		$data['page']          = ( isset( $_GET['page'] ) ) ? $_GET['page'] : 1;
