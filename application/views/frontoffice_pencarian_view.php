@@ -614,16 +614,35 @@
 												<?php endif; ?>
 
 												<?php if (!empty($value['team'])): ?>
-													<span class="help-block text-grey text-size-small">
-														<i class="icon-users4 pull-left"></i> 
-														<?php echo htmlspecialchars($value['team']); ?>
+													<?php
+														$teamNames = explode(',', $value['team']);
+														$teamNames = array_map('trim', $teamNames);
+														$teamCount = count($teamNames);
+														$displayNames = array_slice($teamNames, 0, 5);
+														$displayText = htmlspecialchars(implode(', ', $displayNames));
+														$tooltipText = htmlspecialchars(implode(', ', $teamNames));
+														if ($teamCount > 5) {
+															$displayText .= ', ...';
+														}
+													?>
+													<span class="help-block text-grey text-size-small" title="<?php echo $tooltipText; ?>">
+														<i class="icon-users4 pull-left"></i>
+														<?php echo $displayText; ?>
 													</span>
 												<?php endif; ?>
 
 												<?php if (!empty($value['keterangan'])): ?>
-													<span class="help-block text-grey text-size-small">
+													<?php
+														// Batasi 30 kata
+														$words = explode(' ', strip_tags($value['keterangan']));
+														$short_keterangan = implode(' ', array_slice($words, 0, 30));
+														if (count($words) > 30) {
+															$short_keterangan .= '...';
+														}
+													?>
+													<span class="help-block text-grey text-size-small" title="<?php echo htmlspecialchars($value['keterangan']); ?>" style="cursor: pointer;">
 														<i class="icon-info22 pull-left"></i> 
-														<?php echo htmlspecialchars($value['keterangan']); ?>
+														<?php echo htmlspecialchars($short_keterangan); ?>
 													</span>
 												<?php endif; ?>
 											</div>
@@ -715,16 +734,35 @@
 												<?php endif; ?>
 
 												<?php if (!empty($video['team'])): ?>
-													<span class="help-block text-grey text-size-small">
-														<i class="icon-users4 pull-left"></i> 
-														<?php echo htmlspecialchars($video['team']); ?>
+													<?php
+														$teamNames = explode(',', $video['team']);
+														$teamNames = array_map('trim', $teamNames);
+														$teamCount = count($teamNames);
+														$displayNames = array_slice($teamNames, 0, 5);
+														$displayText = htmlspecialchars(implode(', ', $displayNames));
+														$tooltipText = htmlspecialchars(implode(', ', $teamNames));
+														if ($teamCount > 5) {
+															$displayText .= ', ...';
+														}
+													?>
+													<span class="help-block text-grey text-size-small" title="<?php echo $tooltipText; ?>">
+														<i class="icon-users4 pull-left"></i>
+														<?php echo $displayText; ?>
 													</span>
 												<?php endif; ?>
 
 												<?php if (!empty($video['keterangan'])): ?>
-													<span class="help-block text-grey text-size-small">
+													<?php
+														// Batasi 30 kata
+														$words = explode(' ', strip_tags($video['keterangan']));
+														$short_keterangan = implode(' ', array_slice($words, 0, 30));
+														if (count($words) > 30) {
+															$short_keterangan .= '...';
+														}
+													?>
+													<span class="help-block text-grey text-size-small" title="<?php echo htmlspecialchars($video['keterangan']); ?>" style="cursor: pointer;">
 														<i class="icon-info22 pull-left"></i> 
-														<?php echo htmlspecialchars($video['keterangan']); ?>
+														<?php echo htmlspecialchars($short_keterangan); ?>
 													</span>
 												<?php endif; ?>
 											</div>
