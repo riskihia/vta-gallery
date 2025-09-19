@@ -99,13 +99,13 @@
 			<ul class="nav navbar-nav">
 				<li  class="dropdown mega-menu mega-menu-wide active"><a href="<?php echo BASE_URL."frontoffice/dashboard"; ?>"><i class="icon-display4 position-left"></i> Dashboard</a></li>
 
-				<li class="dropdown mega-menu mega-menu-wide">
+		<!-- 		<li class="dropdown mega-menu mega-menu-wide">
 					<a href="<?php echo BASE_URL."frontoffice/gallery_foto"; ?>"><i class="icon-images2 position-left"></i> Gallery Foto </a>
 				</li>
 
 				<li class="dropdown mega-menu mega-menu-wide">
 					<a href="<?php echo BASE_URL."frontoffice/gallery_video"; ?>"><i class="icon-clapboard-play position-left"></i> Gallery Video </a>
-				</li>
+				</li> -->
 
 				<li class="dropdown mega-menu mega-menu-wide">
 					<a href="<?php echo BASE_URL."frontoffice/pencarian"; ?>"><i class="icon-search4 position-left"></i> Pencarian dan Download </a>
