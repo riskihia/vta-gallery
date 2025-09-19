@@ -761,246 +761,188 @@
 </html>
 
 
+<!-- Pisahkan JS ke file eksternal jika memungkinkan, berikut contoh refactor dengan pemisahan fungsi, selector jelas, dan struktur rapi -->
 <script type="text/javascript">
-	$(function() {
-		// Get active project from server
-		var activeProject = '<?php echo isset($data["project"]) ? $data["project"] : ""; ?>';
-		
-		// Update dropdown text to show selected project
-		function updateDropdownText() {
-			// Reset all selections
-			$('.project-select, .project-select-all').removeClass('selected').find('.checkmark').remove();
-			
-			if (activeProject) {
-				$('.project-select[data-project="' + activeProject + '"]').each(function() {
-					var projectName = $(this).text().trim().replace(/^\s*✓\s*/, ''); // Remove existing checkmark
-					$(this).html('<i class="icon-checkmark-circle text-success" style="margin-right: 5px;"></i><i class="icon-office"></i> ' + projectName);
-					
-					// Update dropdown button text
-					$('.dropdown-toggle:contains("Pilih Project")').html('<i class="icon-stack3 position-left text-success"></i> ' + projectName + ' <span class="caret"></span>');
+$(function () {
+	// =========================
+	// 1. Selector Definitions
+	// =========================
+	const $projectDropdownMenu = $('#project-dropdown-menu');
+	const $projectListWrapper = $('#project-list-wrapper');
+	const $projectSearchInput = $('#project-search-input');
+	const $selectedProjectInput = $('#selected-project-input');
+	const $formFilterProject = $('#form-filter-project');
+	const $categorySelect = $('.category-select');
+	const $tabImage = $('#tab-image');
+	const $tabVideo = $('#tab-video');
+	const $navTabs = $('.nav-tabs');
+	const $galleryGrid = $('.gallery-grid');
+
+	// =========================
+	// 2. State
+	// =========================
+	let activeProject = '<?php echo isset($data["project"]) ? $data["project"] : ""; ?>';
+
+	// =========================
+	// 3. Functionalities
+	// =========================
+
+	// --- Update Project Dropdown UI ---
+	function updateProjectDropdown() {
+		$projectDropdownMenu.find('.project-select, .project-select-all').removeClass('selected').find('.checkmark').remove();
+
+		if (activeProject) {
+			const $selected = $projectDropdownMenu.find('.project-select[data-project="' + activeProject + '"]');
+			const projectName = $selected.text().trim().replace(/^\s*✓\s*/, '');
+			$selected.html('<i class="icon-checkmark-circle text-success" style="margin-right: 5px;"></i><i class="icon-office"></i> ' + projectName);
+			$projectDropdownMenu.closest('.dropdown').find('.dropdown-toggle:contains("Pilih Project")')
+				.html('<i class="icon-stack3 position-left text-success"></i> ' + projectName + ' <span class="caret"></span>');
+		} else {
+			$projectDropdownMenu.find('.project-select-all')
+				.html('<i class="icon-checkmark-circle text-success" style="margin-right: 5px;"></i><i class="icon-stack3"></i> All Project');
+			$projectDropdownMenu.closest('.dropdown').find('.dropdown-toggle:contains("Pilih Project")')
+				.html('<i class="icon-stack3 position-left text-success"></i> All Project <span class="caret"></span>');
+		}
+	}
+
+	// --- Set Project Session via AJAX ---
+	function setProjectSession(projectId, callback) {
+		$.ajax({
+			url: '<?php echo BASE_URL; ?>frontoffice/set_project_session',
+			type: 'POST',
+			data: { project_id: projectId },
+			dataType: 'json',
+			complete: callback
+		});
+	}
+
+	// --- Clear Project Session via AJAX ---
+	function clearProjectSession(callback) {
+		$.ajax({
+			url: '<?php echo BASE_URL; ?>frontoffice/clear_project_session_ajax',
+			type: 'POST',
+			dataType: 'json',
+			complete: callback
+		});
+	}
+
+	// --- Filter Project List by Search ---
+	function filterProjectList(keyword) {
+		const filter = keyword.toLowerCase();
+		$projectListWrapper.find('li').each(function () {
+			const text = $(this).text().toLowerCase();
+			$(this).toggle(text.indexOf(filter) > -1);
+		});
+	}
+
+	// --- Switch Tab by Category ---
+	function switchTab(category) {
+		$navTabs.find('li').removeClass('active');
+		if (category === 'foto') {
+			$navTabs.find('a[href="#tab-image"]').parent().addClass('active');
+			$('.tab-pane').removeClass('active');
+			$tabImage.addClass('active');
+		} else if (category === 'video') {
+			$navTabs.find('a[href="#tab-video"]').parent().addClass('active');
+			$('.tab-pane').removeClass('active');
+			$tabVideo.addClass('active');
+		}
+	}
+
+	// --- Gallery Grid Animation ---
+	function initGalleryGrid() {
+		const $items = $galleryGrid.find('.thumbnail');
+		$items.addClass('loading');
+		const totalMedia = $galleryGrid.find('img, video').length;
+		let loaded = 0;
+
+		function markLoaded() {
+			loaded++;
+			if (loaded >= totalMedia) {
+				$items.removeClass('loading');
+				$items.each(function (i) {
+					const $el = $(this);
+					setTimeout(function () {
+						$el.addClass('loaded');
+					}, i * 50);
 				});
-			} else {
-				// Show "All Project" as selected
-				$('.project-select-all').html('<i class="icon-checkmark-circle text-success" style="margin-right: 5px;"></i><i class="icon-stack3"></i> All Project');
-				$('.dropdown-toggle:contains("Pilih Project")').html('<i class="icon-stack3 position-left text-success"></i> All Project <span class="caret"></span>');
 			}
 		}
-		
-		// Initialize on page load
-		updateDropdownText();
-		
-		// Handle "All Project" selection (clear filter)
-		$('#project-dropdown-menu').on('click', '.project-select-all', function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			
-			console.log('Clearing project filter...');
-			
-			// Update active project
-			activeProject = '';
-			$('#selected-project-input').val('');
-			
-			// Clear session via AJAX
-			$.ajax({
-				url: '<?php echo BASE_URL; ?>frontoffice/clear_project_session_ajax',
-				type: 'POST',
-				dataType: 'json',
-				success: function(response) {
-					console.log('AJAX Clear Response:', response);
-					if (response.status === 'success') {
-						console.log('Project filter cleared successfully');
-						// Update UI
-						updateDropdownText();
-						// Reload page to show all results
-						window.location.href = '<?php echo BASE_URL; ?>frontoffice/pencarian/?q=<?php echo urlencode($data["q"]); ?>';
-					} else {
-						console.error('Failed to clear filter:', response.message);
-					}
-				},
-				error: function(xhr, status, error) {
-					console.error('AJAX Clear Error:', error);
-					console.error('Response Text:', xhr.responseText);
-					// Fallback - reload page anyway
-					window.location.href = '<?php echo BASE_URL; ?>frontoffice/pencarian/?q=<?php echo urlencode($data["q"]); ?>';
-				}
-			});
-		});
-		
-		// Submit form when a project is selected
-		$('#project-dropdown-menu').on('click', '.project-select', function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			var projectId = $(this).data('project');
-			var projectName = $(this).text().trim();
-			$('#selected-project-input').val(projectId);
 
-			console.log('Setting project to session:', projectId);
-			
-			// Update active project
-			activeProject = projectId;
-			
-			// Simpan project id ke session via AJAX
-			$.ajax({
-				url: '<?php echo BASE_URL; ?>frontoffice/set_project_session',
-				type: 'POST',
-				data: { project_id: projectId },
-				dataType: 'json',
-				success: function(response) {
-					console.log('AJAX Response:', response);
-					if (response.status === 'success') {
-						console.log('Project saved to session successfully');
-						// Setelah berhasil, submit form filter
-						$('#form-filter-project').submit();
-					} else {
-						console.error('Failed to save project:', response.message);
-						// Tetap submit form meskipun session gagal
-						$('#form-filter-project').submit();
-					}
-				},
-				error: function(xhr, status, error) {
-					console.error('AJAX Error:', error);
-					console.error('Response Text:', xhr.responseText);
-					// Tetap submit form meskipun ada error
-					$('#form-filter-project').submit();
-				}
-			});
-		});
-	});
-	
-	$(document).ready(function() {
-		// Improved project dropdown functionality
-		$('#project-dropdown-menu').on('click', '.project-select, .project-select-all', function(e) {
-			e.preventDefault();
-			e.stopPropagation(); // Prevent event bubbling
-			
-			var projectId = $(this).data('project');
-			var projectName = $(this).text().trim();
-			
-			console.log("Selected project:", projectName);
-			console.log("Project ID:", projectId);
-			
-			// Update the dropdown button text to show selected project
-			$(this).closest('.dropdown').find('.dropdown-toggle').html(
-				'<i class="icon-stack3 position-left"></i> ' + projectName + ' <span class="caret"></span>'
-			);
-			
-			// Close the dropdown after selection
-			$(this).closest('.dropdown-menu').parent().removeClass('open');
-		});
+		$galleryGrid.find('img').on('load error', markLoaded);
+		$galleryGrid.find('video').on('loadeddata error', markLoaded);
 
-		// Prevent dropdown from closing when clicking inside the dropdown menu
-		$('#project-dropdown-menu').on('click', function(e) {
-			e.stopPropagation();
-		});
-
-		// Handle search input in project dropdown
-		$('#project-search-input').on('keyup', function(e) {
-			e.stopPropagation(); // Prevent dropdown from closing
-			var filter = $(this).val().toLowerCase();
-			$('#project-list-wrapper li').each(function() {
-				var text = $(this).text().toLowerCase();
-				$(this).toggle(text.indexOf(filter) > -1);
-			});
-		});
-
-		// Category filter functionality - switch tabs based on selected category
-		$('.category-select').on('click', function(e) {
-			e.preventDefault();
-			e.stopPropagation(); // Prevent event bubbling
-			
-			var category = $(this).data('category');
-			console.log('Selected category:', category);
-			
-			// Update dropdown button text
-			var categoryText = $(this).text().trim();
-			$(this).closest('.dropdown').find('.dropdown-toggle').html(
-				'<i class="icon-stack2 position-left"></i> ' + categoryText + ' <span class="caret"></span>'
-			);
-			
-			// Switch to corresponding tab
-			if (category === 'foto') {
-				// Activate Images tab
-				$('.nav-tabs li').removeClass('active');
-				$('a[href="#tab-image"]').parent().addClass('active');
-				$('.tab-pane').removeClass('active');
-				$('#tab-image').addClass('active');
-			} else if (category === 'video') {
-				// Activate Videos tab
-				$('.nav-tabs li').removeClass('active');
-				$('a[href="#tab-video"]').parent().addClass('active');
-				$('.tab-pane').removeClass('active');
-				$('#tab-video').addClass('active');
-			}
-			
-			// Close the dropdown after selection
-			$(this).closest('.dropdown-menu').parent().removeClass('open');
-		});
-	});
-
-
-	$(function() {
-		$(this).bind("contextmenu", function(e) {
-			e.preventDefault();
-		});
-	}); 
-
-	// Gallery Grid Enhancement
-	$(document).ready(function() {
-		// Ensure images are loaded before calculating layout
-		function initGalleryGrid() {
-			var $gallery = $('.gallery-grid');
-			var $items = $gallery.find('.thumbnail');
-			
-			// Add loading state
-			$items.addClass('loading');
-			
-			// Counter for loaded images
-			var totalImages = $gallery.find('img, video').length;
-			var loadedCount = 0;
-			
-			function checkAllLoaded() {
-				loadedCount++;
-				if (loadedCount >= totalImages) {
-					$items.removeClass('loading');
-					// Add staggered animation
-					$items.each(function(index) {
-						var $this = $(this);
-						setTimeout(function() {
-							$this.addClass('loaded');
-						}, index * 50);
-					});
-				}
-			}
-			
-			// Handle image load
-			$gallery.find('img').on('load error', checkAllLoaded);
-			
-			// Handle video load
-			$gallery.find('video').on('loadeddata error', checkAllLoaded);
-			
-			// Fallback if no images/videos
-			if (totalImages === 0) {
-				$items.removeClass('loading').addClass('loaded');
-			}
+		if (totalMedia === 0) {
+			$items.removeClass('loading').addClass('loaded');
 		}
-		
-		// Initialize grid
-		initGalleryGrid();
-		
-		// Reinitialize on tab change
-		$('a[data-toggle="tab"]').on('shown.bs.tab', function() {
-			setTimeout(initGalleryGrid, 100);
-		});
-		
-		// Handle window resize
-		var resizeTimer;
-		$(window).on('resize', function() {
-			clearTimeout(resizeTimer);
-			resizeTimer = setTimeout(function() {
-				initGalleryGrid();
-			}, 250);
+	}
+
+	// =========================
+	// 4. Event Bindings
+	// =========================
+
+	// Project: All Project
+	$projectDropdownMenu.on('click', '.project-select-all', function (e) {
+		e.preventDefault();
+		activeProject = '';
+		$selectedProjectInput.val('');
+		clearProjectSession(function () {
+			updateProjectDropdown();
+			window.location.href = '<?php echo BASE_URL; ?>frontoffice/pencarian/?q=<?php echo urlencode($data["q"]); ?>';
 		});
 	});
+
+	// Project: Select Specific Project
+	$projectDropdownMenu.on('click', '.project-select', function (e) {
+		e.preventDefault();
+		const projectId = $(this).data('project');
+		$selectedProjectInput.val(projectId);
+		activeProject = projectId;
+		setProjectSession(projectId, function () {
+			$formFilterProject.submit();
+		});
+	});
+
+	// Dropdown UI: Prevent close on click inside
+	$projectDropdownMenu.on('click', function (e) {
+		e.stopPropagation();
+	});
+
+	// Project Search
+	$projectSearchInput.on('keyup', function () {
+		filterProjectList($(this).val());
+	});
+
+	// Category Filter (Tab Switch)
+	$categorySelect.on('click', function (e) {
+		e.preventDefault();
+		const category = $(this).data('category');
+		const categoryText = $(this).text().trim();
+		$(this).closest('.dropdown').find('.dropdown-toggle')
+			.html('<i class="icon-stack2 position-left"></i> ' + categoryText + ' <span class="caret"></span>');
+		switchTab(category);
+		$(this).closest('.dropdown-menu').parent().removeClass('open');
+	});
+
+	// Disable Right Click
+	$(document).on("contextmenu", function (e) {
+		e.preventDefault();
+	});
+
+	// Gallery Animation: On load, tab change, resize
+	initGalleryGrid();
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function () {
+		setTimeout(initGalleryGrid, 100);
+	});
+	let resizeTimer;
+	$(window).on('resize', function () {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout(initGalleryGrid, 250);
+	});
+
+	// Initial UI update
+	updateProjectDropdown();
+});
 </script>
 
 
