@@ -232,15 +232,21 @@
 		/* Smooth loading animation */
 		.gallery-grid .thumbnail {
 			animation: fadeInUp 0.3s ease-out;
+			opacity: 1; /* Default opacity - ensure it's always visible */
 		}
 		
 		.gallery-grid .thumbnail.loading {
-			opacity: 0.7;
+			opacity: 0.9; /* Reduced loading opacity effect - was 0.7 */
 		}
 		
 		.gallery-grid .thumbnail.loaded {
-			opacity: 1;
+			opacity: 1 !important; /* Force full opacity when loaded */
 			transform: translateY(0);
+		}
+
+		/* Fallback untuk browser cache issues */
+		.gallery-grid .thumbnail:not(.loading):not(.loaded) {
+			opacity: 1 !important;
 		}
 		
 		@keyframes fadeInUp {
@@ -497,8 +503,20 @@ $(function() {
 	// Gallery Animation
 	function initGalleryGrid() {
 		const $items = $('.gallery-grid').find('.thumbnail');
-		$items.addClass('loading');
+		
+		// Reset all previous states first
+		$items.removeClass('loading loaded');
+		
+		// Only add loading if we have media to load
 		const totalMedia = $('.gallery-grid').find('img').length;
+		
+		if (totalMedia === 0) {
+			$items.addClass('loaded');
+			return;
+		}
+		
+		// Add loading state
+		$items.addClass('loading');
 		let loaded = 0;
 
 		function markLoaded() {
@@ -514,11 +532,15 @@ $(function() {
 			}
 		}
 
-		$('.gallery-grid').find('img').on('load error', markLoaded);
-
-		if (totalMedia === 0) {
-			$items.removeClass('loading').addClass('loaded');
-		}
+		// Handle already loaded/cached images
+		$('.gallery-grid').find('img').each(function() {
+			const img = this;
+			if (img.complete) {
+				markLoaded();
+			} else {
+				$(img).on('load error', markLoaded);
+			}
+		});
 	}
 	
 	// Initialize gallery animation
@@ -529,6 +551,29 @@ $(function() {
 	$(window).on('resize', function () {
 		clearTimeout(resizeTimer);
 		resizeTimer = setTimeout(initGalleryGrid, 250);
+	});
+
+	// Handle browser back/forward navigation
+	$(window).on('pageshow', function(event) {
+		setTimeout(function() {
+			initGalleryGrid();
+		}, 100);
+	});
+
+	// Handle page visibility change
+	$(document).on('visibilitychange', function() {
+		if (!document.hidden) {
+			setTimeout(function() {
+				initGalleryGrid();
+			}, 100);
+		}
+	});
+
+	// Force reset loading state after DOM is fully loaded
+	$(document).ready(function() {
+		setTimeout(function() {
+			$('.gallery-grid .thumbnail').removeClass('loading').addClass('loaded');
+		}, 500);
 	});
 });
 </script>

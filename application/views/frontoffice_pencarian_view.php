@@ -241,15 +241,21 @@
 		/* Smooth loading animation */
 		.gallery-grid .thumbnail {
 			animation: fadeInUp 0.3s ease-out;
+			opacity: 1; /* Default opacity - ensure it's always visible */
 		}
 		
 		.gallery-grid .thumbnail.loading {
-			opacity: 0.7;
+			opacity: 0.9; /* Reduced loading opacity effect - was 0.7 */
 		}
 		
 		.gallery-grid .thumbnail.loaded {
-			opacity: 1;
+			opacity: 1 !important; /* Force full opacity when loaded */
 			transform: translateY(0);
+		}
+
+		/* Fallback untuk browser cache issues */
+		.gallery-grid .thumbnail:not(.loading):not(.loaded) {
+			opacity: 1 !important;
 		}
 		
 		@keyframes fadeInUp {
@@ -874,8 +880,20 @@ $(function () {
 	// --- Gallery Grid Animation ---
 	function initGalleryGrid() {
 		const $items = $galleryGrid.find('.thumbnail');
-		$items.addClass('loading');
+		
+		// Reset all previous states first
+		$items.removeClass('loading loaded');
+		
+		// Only add loading if we have media to load
 		const totalMedia = $galleryGrid.find('img, video').length;
+		
+		if (totalMedia === 0) {
+			$items.addClass('loaded');
+			return;
+		}
+		
+		// Add loading state
+		$items.addClass('loading');
 		let loaded = 0;
 
 		function markLoaded() {
@@ -891,12 +909,25 @@ $(function () {
 			}
 		}
 
-		$galleryGrid.find('img').on('load error', markLoaded);
-		$galleryGrid.find('video').on('loadeddata error', markLoaded);
-
-		if (totalMedia === 0) {
-			$items.removeClass('loading').addClass('loaded');
-		}
+		// Handle already loaded/cached images
+		$galleryGrid.find('img').each(function() {
+			const img = this;
+			if (img.complete) {
+				markLoaded();
+			} else {
+				$(img).on('load error', markLoaded);
+			}
+		});
+		
+		// Handle videos
+		$galleryGrid.find('video').each(function() {
+			const video = this;
+			if (video.readyState >= 2) { // HAVE_CURRENT_DATA or higher
+				markLoaded();
+			} else {
+				$(video).on('loadeddata error', markLoaded);
+			}
+		});
 	}
 
 	// =========================
@@ -973,6 +1004,31 @@ $(function () {
 	$(window).on('resize', function () {
 		clearTimeout(resizeTimer);
 		resizeTimer = setTimeout(initGalleryGrid, 250);
+	});
+
+	// Handle browser back/forward navigation
+	$(window).on('pageshow', function(event) {
+		// Reset gallery state when page is shown (including from cache)
+		setTimeout(function() {
+			initGalleryGrid();
+		}, 100);
+	});
+
+	// Handle page visibility change (when user comes back to tab)
+	$(document).on('visibilitychange', function() {
+		if (!document.hidden) {
+			// Page became visible, reset gallery state
+			setTimeout(function() {
+				initGalleryGrid();
+			}, 100);
+		}
+	});
+
+	// Force reset loading state after DOM is fully loaded
+	$(document).ready(function() {
+		setTimeout(function() {
+			$('.gallery-grid .thumbnail').removeClass('loading').addClass('loaded');
+		}, 500);
 	});
 
 	// Initial UI update
