@@ -174,210 +174,212 @@ class Frontoffice extends Controller {
 		$template->set('data', $data);
 		$template->render();
 	}
+	/**
+	 * Set project filter in session via AJAX.
+	 * Expects POST 'project_id'.
+	 * Returns JSON status.
+	 */
 	function set_project_session() {
-		// Start session jika belum dimulai
+		// Start session if not started
 		if (session_status() == PHP_SESSION_NONE) {
 			session_start();
 		}
-		
-		// Ambil project_id dari POST
+
 		$project_id = isset($_POST['project_id']) ? $_POST['project_id'] : null;
+
 		if ($project_id !== null) {
 			$_SESSION['selected_project_id'] = $project_id;
-			error_log("Session set successfully: " . json_encode(['status' => 'success', 'project_id' => $project_id, 'session_id' => session_id()]));
-			echo json_encode(['status' => 'success', 'project_id' => $project_id]);
+			error_log("Project session set: " . $project_id);
+			echo json_encode([
+				'status'     => 'success',
+				'project_id' => $project_id
+			]);
 		} else {
-			error_log("Error: No project_id provided");
-			echo json_encode(['status' => 'error', 'message' => 'No project_id provided']);
+			error_log("set_project_session: No project_id provided");
+			echo json_encode([
+				'status'  => 'error',
+				'message' => 'No project_id provided'
+			]);
 		}
 		exit;
 	}
 
-	function clear_project_session() {
-		// Start session jika belum dimulai
+	/**
+	 * Clear project filter from session via AJAX.
+	 * Returns JSON status.
+	 */
+	function clear_project_session_ajax() {
+		// Start session if not started
 		if (session_status() == PHP_SESSION_NONE) {
 			session_start();
 		}
-		
-		// Clear session project
+
 		unset($_SESSION['selected_project_id']);
 		error_log("Project session cleared");
-		
-		// Redirect ke halaman pencarian
-		$this->redirect('frontoffice/pencarian/');
-	}
 
-	function clear_project_session_ajax() {
-		// Start session jika belum dimulai
-		if (session_status() == PHP_SESSION_NONE) {
-			session_start();
-		}
-		
-		// Clear session project
-		unset($_SESSION['selected_project_id']);
-		error_log("Project session cleared via AJAX");
-		
-		echo json_encode(['status' => 'success', 'message' => 'Project filter cleared']);
+		echo json_encode([
+			'status'  => 'success',
+			'message' => 'Project filter cleared'
+		]);
 		exit;
 	}
 
 	function pencarian()
 	{
-		$model                       = $this->loadModel('Frontoffice_model');
-		
+		$model = $this->loadModel('Frontoffice_model');
+
 		// Start session jika belum dimulai
 		if (session_status() == PHP_SESSION_NONE) {
 			session_start();
 		}
-		
-		error_log("Session ID: " . session_id());
-		error_log("Full session data: " . json_encode($_SESSION));
-		
-		$data                        = array();
-		$data['breadcrumb1']         = 'Gallery';
-		$data['title']               = 'Pencarian';
-		$data['q']                   = ( isset( $_GET['q'] ) ) ? $_GET['q'] : '';
-		
-		// Handle project filter - prioritas: POST > SESSION
+
+		// Inisialisasi data dasar
+		$data = [
+			'breadcrumb1' => 'Gallery',
+			'title'       => 'Pencarian',
+			'q'           => isset($_GET['q']) ? $_GET['q'] : '',
+			'tab'         => isset($_GET['tab']) ? $_GET['tab'] : '',
+			'page'        => isset($_GET['page']) ? $_GET['page'] : 1,
+			'limit'       => 12,
+		];
+
+		// Handle project filter: prioritas POST > SESSION
 		$project = '';
-		
-		if (isset($_POST['project']) && !empty($_POST['project'])) {
-			// Jika ada POST project (dari form filter)
+		if (!empty($_POST['project'])) {
 			$project = $_POST['project'];
-			// Update session dengan project terbaru
 			$_SESSION['selected_project_id'] = $project;
-			error_log("Project from POST, updated session: " . $project);
-		} elseif (isset($_SESSION['selected_project_id']) && !empty($_SESSION['selected_project_id'])) {
-			// Jika tidak ada POST, ambil dari session
+		} elseif (!empty($_SESSION['selected_project_id'])) {
 			$project = $_SESSION['selected_project_id'];
-			error_log("Project from SESSION: " . $project);
 		}
-		
-		error_log("Final project value: " . $project);
-		
-		// Store project untuk digunakan di view
 		$data['project'] = $project;
 
-		$filter_project = "";
-		
-		if($project){
-			$filter_project = "AND mp.autocode_mp = '".$this->base64url_decode($project)."'";
-			
-		}
-		error_log("filter : " . $filter_project);
-		$data['tab']                 = ( isset( $_GET['tab'] ) ) ? $_GET['tab'] : '';
-		$data['page']                = ( isset( $_GET['page'] ) ) ? $_GET['page'] : 1;
-		$data['limit']               = 12;
-		$input['keywords']           = str_replace('+',  ' ', $data['q']);
-
-		$query_filter_project = "SELECT DISTINCT d.project, mp.`nama_project`
+		// Query daftar project untuk filter
+		$query_filter_project = "
+			SELECT DISTINCT d.project, mp.nama_project
 			FROM tbl_dokumen d
-			LEFT JOIN m_project mp ON d.`project` = mp.`autocode`
-			WHERE d.project IS NOT NULL AND mp.`nama_project` IS NOT NULL;";
+			LEFT JOIN m_project mp ON d.project = mp.autocode
+			WHERE d.project IS NOT NULL AND mp.nama_project IS NOT NULL
+		";
+		$data['list_project'] = $model->query($query_filter_project);
 
-		$data["list_project"] = $model->query($query_filter_project);
-		error_log(json_encode($data["list_project"]));
-
-		
-		// Definisikan field yang perlu di-encode  
-        $fieldsToEncode = ['project', '0'];  
-        // Buat formatter reusable  
-        $formatter = $this->getBase64Formatter($fieldsToEncode); 
-		
-		if (is_callable($formatter)) {  
-			foreach ($data["list_project"] as &$row) {  
-				$row = $formatter($row); // Terapkan formatter ke setiap baris  
+		// Encode field project untuk keamanan
+		$fieldsToEncode = ['project', '0'];
+		$formatter = $this->getBase64Formatter($fieldsToEncode);
+		if (is_callable($formatter)) {
+			foreach ($data['list_project'] as &$row) {
+				$row = $formatter($row);
 			}
-		}  
+		}
 
-		// Foto - Tampilkan 1 card per project (GROUP BY parent_id)
-		$queryfoto                   = "SELECT autono, nama_kegiatan, mp.`autocode_mp`, mp.`nama_project`, tanggal, lokasi,
-		
-		GROUP_CONCAT(
-  DISTINCT mps.nm_pegawai
-  ORDER BY
-    CASE
-      WHEN mps.nm_pegawai IN ('Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi') THEN 0
-      ELSE 1
-    END,
-    FIELD(mps.nm_pegawai,'Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi'),
-    mps.id_jabatan,
-    mps.nm_pegawai
-  SEPARATOR ', '
-) AS team, keterangan, kode_parent, nama_file, dir, subdir, tipe_file,structured, ukuran  FROM tbl_dokumen a
+		// Siapkan filter project untuk query utama
+		$filter_project = '';
+		if ($project) {
+			$filter_project = "AND mp.autocode_mp = '" . $this->base64url_decode($project) . "'";
+		}
 
-		LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project`
+		// Keyword pencarian
+		$keyword = $data['q'];
 
-		RIGHT JOIN (SELECT parent_id,structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id 
-		
-		LEFT JOIN
-			(SELECT parent_id, kd_pegawai FROM tbl_dokumen_team) AS teams
-			ON teams.parent_id = a.`autono`
-		LEFT JOIN 
-			(SELECT autocode,nm_pegawai,id_jabatan FROM m_pegawai) AS mps
-			ON mps.autocode= teams.kd_pegawai
-		
-		WHERE a.`file_dokumen` = 1 $filter_project AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%' OR mp.nama_project LIKE '%".$data['q']."%') 
-		
-		
-		GROUP BY a.autono ORDER BY a.autono DESC";	
-		
-		$resTotalLengthFoto          = $model->query("SELECT COUNT(*) as total FROM (SELECT autono FROM tbl_dokumen a LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project` RIGHT JOIN (SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 $filter_project AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%' OR mp.nama_project LIKE '%".$data['q']."%')) as total_query");
-		$data['total_foto']          = $resTotalLengthFoto[0][0];
-		
-		$data['foto']                = $model->pagination($queryfoto, $data['limit'], $data['page']);
-
-		
-
-		
-
-
-		// error_log(json_encode($data['foto']));
-		$data['number_paging_foto']  = $model->createPagingSearch($data['q'],$data['foto']['total'],$data['foto']['limit'], $data['foto']['page'], "tab-image");
-		
-		// Video - Tampilkan 1 card per project (GROUP BY parent_id)
-
-				$queryvideo                  = "SELECT autono, nama_kegiatan, mp.`autocode_mp`, mp.`nama_project`, tanggal, lokasi,
-        
+		// Query Foto
+		$queryfoto = "SELECT a.autono, a.nama_kegiatan, mp.autocode_mp, mp.nama_project, a.tanggal, a.lokasi,
 				GROUP_CONCAT(
-	DISTINCT mps.nm_pegawai
-	ORDER BY
-		CASE
-			WHEN mps.nm_pegawai IN ('Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi') THEN 0
-			ELSE 1
-		END,
-		FIELD(mps.nm_pegawai,'Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi'),
-		mps.id_jabatan,
-		mps.nm_pegawai
-	SEPARATOR ', '
-)
- AS team
-				, keterangan, kode_parent, dir, subdir, nama_file, tipe_file,structured, ukuran  FROM tbl_dokumen a 
-        
-				LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project`  
+					DISTINCT mps.nm_pegawai
+					ORDER BY
+						CASE WHEN mps.nm_pegawai IN ('Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi') THEN 0 ELSE 1 END,
+						FIELD(mps.nm_pegawai,'Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi'),
+						mps.id_jabatan,
+						mps.nm_pegawai
+					SEPARATOR ', '
+				) AS team,
+				a.keterangan, b.kode_parent, b.nama_file, b.dir, b.subdir, b.tipe_file, b.structured, b.ukuran
+			FROM tbl_dokumen a
+			LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON mp.autocode_mp = a.project
+			RIGHT JOIN (
+				SELECT parent_id, structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran
+				FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id
+			) AS b ON a.autono = b.parent_id
+			LEFT JOIN (SELECT parent_id, kd_pegawai FROM tbl_dokumen_team) AS teams ON teams.parent_id = a.autono
+			LEFT JOIN (SELECT autocode, nm_pegawai, id_jabatan FROM m_pegawai) AS mps ON mps.autocode = teams.kd_pegawai
+			WHERE a.file_dokumen = 1 $filter_project
+				AND (a.nama_kegiatan LIKE '%$keyword%' OR a.narasi LIKE '%$keyword%' OR mp.nama_project LIKE '%$keyword%')
+			GROUP BY a.autono
+			ORDER BY a.autono DESC
+		";
+		// Hitung total foto
+		$resTotalLengthFoto = $model->query("SELECT COUNT(*) as total FROM (
+				SELECT a.autono
+				FROM tbl_dokumen a
+				LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON mp.autocode_mp = a.project
+				RIGHT JOIN (
+					SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran
+					FROM vt_files WHERE tipe_file LIKE 'image%' GROUP BY parent_id
+				) AS b ON a.autono = b.parent_id
+				WHERE a.file_dokumen = 1 $filter_project
+					AND (a.nama_kegiatan LIKE '%$keyword%' OR a.narasi LIKE '%$keyword%' OR mp.nama_project LIKE '%$keyword%')
+			) as total_query
+		");
+		$data['total_foto'] = $resTotalLengthFoto[0][0];
+		$data['foto'] = $model->pagination($queryfoto, $data['limit'], $data['page']);
+		$data['number_paging_foto'] = $model->createPagingSearch(
+			$keyword,
+			$data['foto']['total'],
+			$data['foto']['limit'],
+			$data['foto']['page'],
+			"tab-image"
+		);
 
-				RIGHT JOIN (SELECT parent_id,structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id 
-        
-				LEFT JOIN
-						(SELECT parent_id, kd_pegawai FROM tbl_dokumen_team) AS teams
-						ON teams.parent_id = a.`autono`
-				LEFT JOIN 
-						(SELECT autocode,nm_pegawai, id_jabatan FROM m_pegawai) AS mps
-						ON mps.autocode= teams.kd_pegawai
-        
-				WHERE a.`file_dokumen` = 1 $filter_project AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%' OR mp.nama_project LIKE '%".$data['q']."%') 
-        
-				GROUP BY a.autono ORDER BY a.autono DESC";  
-		
-		$resTotalLengthVideo         = $model->query("SELECT COUNT(*) as total FROM (SELECT autono FROM tbl_dokumen a LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON autocode_mp = a.`project` RIGHT JOIN (SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id) AS b ON a.`autono` = b.parent_id WHERE a.`file_dokumen` = 1 $filter_project AND (a.nama_kegiatan LIKE '%".$data['q']."%' OR a.narasi LIKE '%".$data['q']."%' OR mp.nama_project LIKE '%".$data['q']."%')) as total_query");
-		$data['total_video']         = $resTotalLengthVideo[0][0];
-		$data['video']               = $model->pagination($queryvideo, $data['limit'], $data['page']);
-		$data['number_paging_video'] = $model->createPagingSearch($data['q'],$data['video']['total'],$data['video']['limit'], $data['video']['page'], "tab-video");
+		// Query Video
+		$queryvideo = "SELECT a.autono, a.nama_kegiatan, mp.autocode_mp, mp.nama_project, a.tanggal, a.lokasi,
+				GROUP_CONCAT(
+					DISTINCT mps.nm_pegawai
+					ORDER BY
+						CASE WHEN mps.nm_pegawai IN ('Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi') THEN 0 ELSE 1 END,
+						FIELD(mps.nm_pegawai,'Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi'),
+						mps.id_jabatan,
+						mps.nm_pegawai
+					SEPARATOR ', '
+				) AS team,
+				a.keterangan, b.kode_parent, b.dir, b.subdir, b.nama_file, b.tipe_file, b.structured, b.ukuran
+			FROM tbl_dokumen a
+			LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON mp.autocode_mp = a.project
+			RIGHT JOIN (
+				SELECT parent_id, structured, kode_parent, dir, subdir, nama_file, tipe_file, ukuran
+				FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id
+			) AS b ON a.autono = b.parent_id
+			LEFT JOIN (SELECT parent_id, kd_pegawai FROM tbl_dokumen_team) AS teams ON teams.parent_id = a.autono
+			LEFT JOIN (SELECT autocode, nm_pegawai, id_jabatan FROM m_pegawai) AS mps ON mps.autocode = teams.kd_pegawai
+			WHERE a.file_dokumen = 1 $filter_project
+				AND (a.nama_kegiatan LIKE '%$keyword%' OR a.narasi LIKE '%$keyword%' OR mp.nama_project LIKE '%$keyword%')
+			GROUP BY a.autono
+			ORDER BY a.autono DESC
+		";
+		// Hitung total video
+		$resTotalLengthVideo = $model->query("SELECT COUNT(*) as total FROM (
+				SELECT a.autono
+				FROM tbl_dokumen a
+				LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON mp.autocode_mp = a.project
+				RIGHT JOIN (
+					SELECT parent_id, kode_parent, nama_file, tipe_file, ukuran
+					FROM vt_files WHERE tipe_file LIKE 'video%' AND tipe_file LIKE '%mp4%' GROUP BY parent_id
+				) AS b ON a.autono = b.parent_id
+				WHERE a.file_dokumen = 1 $filter_project
+					AND (a.nama_kegiatan LIKE '%$keyword%' OR a.narasi LIKE '%$keyword%' OR mp.nama_project LIKE '%$keyword%')
+			) as total_query
+		");
+		$data['total_video'] = $resTotalLengthVideo[0][0];
+		$data['video'] = $model->pagination($queryvideo, $data['limit'], $data['page']);
+		$data['number_paging_video'] = $model->createPagingSearch(
+			$keyword,
+			$data['video']['total'],
+			$data['video']['limit'],
+			$data['video']['page'],
+			"tab-video"
+		);
 
-		$template                    = $this->loadView('frontoffice_pencarian_view');
+		// Render view
+		$template = $this->loadView('frontoffice_pencarian_view');
 		$template->set('data', $data);
 		$template->render();
-
 	}
 
 	public function savedownload($x)
