@@ -2,6 +2,10 @@
 
 class Frontoffice extends Controller {
 
+	private $menu = null;
+	private $title = null;
+	private $curl = null;
+
 	public function __construct()
     {
         // $session = $this->loadHelper('Session_helper');
