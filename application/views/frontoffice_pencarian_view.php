@@ -493,112 +493,6 @@
 							<!-- Hidden input for project -->
 							<input type="hidden" name="project" id="selected-project-input" value="">
 						</form>
-						<script>
-						$(function() {
-							// Get active project from server
-							var activeProject = '<?php echo isset($data["project"]) ? $data["project"] : ""; ?>';
-							
-							// Update dropdown text to show selected project
-							function updateDropdownText() {
-								// Reset all selections
-								$('.project-select, .project-select-all').removeClass('selected').find('.checkmark').remove();
-								
-								if (activeProject) {
-									$('.project-select[data-project="' + activeProject + '"]').each(function() {
-										var projectName = $(this).text().trim().replace(/^\s*✓\s*/, ''); // Remove existing checkmark
-										$(this).html('<i class="icon-checkmark-circle text-success" style="margin-right: 5px;"></i><i class="icon-office"></i> ' + projectName);
-										
-										// Update dropdown button text
-										$('.dropdown-toggle:contains("Pilih Project")').html('<i class="icon-stack3 position-left text-success"></i> ' + projectName + ' <span class="caret"></span>');
-									});
-								} else {
-									// Show "All Project" as selected
-									$('.project-select-all').html('<i class="icon-checkmark-circle text-success" style="margin-right: 5px;"></i><i class="icon-stack3"></i> All Project');
-									$('.dropdown-toggle:contains("Pilih Project")').html('<i class="icon-stack3 position-left text-success"></i> All Project <span class="caret"></span>');
-								}
-							}
-							
-							// Initialize on page load
-							updateDropdownText();
-							
-							// Handle "All Project" selection (clear filter)
-							$('#project-dropdown-menu').on('click', '.project-select-all', function(e) {
-								e.preventDefault();
-								e.stopPropagation();
-								
-								console.log('Clearing project filter...');
-								
-								// Update active project
-								activeProject = '';
-								$('#selected-project-input').val('');
-								
-								// Clear session via AJAX
-								$.ajax({
-									url: '<?php echo BASE_URL; ?>frontoffice/clear_project_session_ajax',
-									type: 'POST',
-									dataType: 'json',
-									success: function(response) {
-										console.log('AJAX Clear Response:', response);
-										if (response.status === 'success') {
-											console.log('Project filter cleared successfully');
-											// Update UI
-											updateDropdownText();
-											// Reload page to show all results
-											window.location.href = '<?php echo BASE_URL; ?>frontoffice/pencarian/?q=<?php echo urlencode($data["q"]); ?>';
-										} else {
-											console.error('Failed to clear filter:', response.message);
-										}
-									},
-									error: function(xhr, status, error) {
-										console.error('AJAX Clear Error:', error);
-										console.error('Response Text:', xhr.responseText);
-										// Fallback - reload page anyway
-										window.location.href = '<?php echo BASE_URL; ?>frontoffice/pencarian/?q=<?php echo urlencode($data["q"]); ?>';
-									}
-								});
-							});
-							
-							// Submit form when a project is selected
-							$('#project-dropdown-menu').on('click', '.project-select', function(e) {
-								e.preventDefault();
-								e.stopPropagation();
-								var projectId = $(this).data('project');
-								var projectName = $(this).text().trim();
-								$('#selected-project-input').val(projectId);
-
-								console.log('Setting project to session:', projectId);
-								
-								// Update active project
-								activeProject = projectId;
-								
-								// Simpan project id ke session via AJAX
-								$.ajax({
-									url: '<?php echo BASE_URL; ?>frontoffice/set_project_session',
-									type: 'POST',
-									data: { project_id: projectId },
-									dataType: 'json',
-									success: function(response) {
-										console.log('AJAX Response:', response);
-										if (response.status === 'success') {
-											console.log('Project saved to session successfully');
-											// Setelah berhasil, submit form filter
-											$('#form-filter-project').submit();
-										} else {
-											console.error('Failed to save project:', response.message);
-											// Tetap submit form meskipun session gagal
-											$('#form-filter-project').submit();
-										}
-									},
-									error: function(xhr, status, error) {
-										console.error('AJAX Error:', error);
-										console.error('Response Text:', xhr.responseText);
-										// Tetap submit form meskipun ada error
-										$('#form-filter-project').submit();
-									}
-								});
-							});
-						});
-						</script>
 					</div>
 				</div>
 				<!-- /search field -->
@@ -866,13 +760,113 @@
 </body>
 </html>
 
-<!-- Commented out problematic scripts that cause conflicts -->
-<!-- <script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/bootstrap_multiselect.js"></script> -->
-<!-- <script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/select2.min.js"></script> -->
-<!-- <script type="text/javascript" src="<?php echo BASE_URL ?>static/js/plugins/forms/selects/selectboxit.min.js"></script> -->
-<!-- <script type="text/javascript" src="<?php echo BASE_URL ?>static/js/pages/form_select2.js"></script> -->
-<!-- <script type="text/javascript" src="<?php echo BASE_URL ?>static/js/pages/form_multiselect.js"></script> -->
+
 <script type="text/javascript">
+	$(function() {
+		// Get active project from server
+		var activeProject = '<?php echo isset($data["project"]) ? $data["project"] : ""; ?>';
+		
+		// Update dropdown text to show selected project
+		function updateDropdownText() {
+			// Reset all selections
+			$('.project-select, .project-select-all').removeClass('selected').find('.checkmark').remove();
+			
+			if (activeProject) {
+				$('.project-select[data-project="' + activeProject + '"]').each(function() {
+					var projectName = $(this).text().trim().replace(/^\s*✓\s*/, ''); // Remove existing checkmark
+					$(this).html('<i class="icon-checkmark-circle text-success" style="margin-right: 5px;"></i><i class="icon-office"></i> ' + projectName);
+					
+					// Update dropdown button text
+					$('.dropdown-toggle:contains("Pilih Project")').html('<i class="icon-stack3 position-left text-success"></i> ' + projectName + ' <span class="caret"></span>');
+				});
+			} else {
+				// Show "All Project" as selected
+				$('.project-select-all').html('<i class="icon-checkmark-circle text-success" style="margin-right: 5px;"></i><i class="icon-stack3"></i> All Project');
+				$('.dropdown-toggle:contains("Pilih Project")').html('<i class="icon-stack3 position-left text-success"></i> All Project <span class="caret"></span>');
+			}
+		}
+		
+		// Initialize on page load
+		updateDropdownText();
+		
+		// Handle "All Project" selection (clear filter)
+		$('#project-dropdown-menu').on('click', '.project-select-all', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			console.log('Clearing project filter...');
+			
+			// Update active project
+			activeProject = '';
+			$('#selected-project-input').val('');
+			
+			// Clear session via AJAX
+			$.ajax({
+				url: '<?php echo BASE_URL; ?>frontoffice/clear_project_session_ajax',
+				type: 'POST',
+				dataType: 'json',
+				success: function(response) {
+					console.log('AJAX Clear Response:', response);
+					if (response.status === 'success') {
+						console.log('Project filter cleared successfully');
+						// Update UI
+						updateDropdownText();
+						// Reload page to show all results
+						window.location.href = '<?php echo BASE_URL; ?>frontoffice/pencarian/?q=<?php echo urlencode($data["q"]); ?>';
+					} else {
+						console.error('Failed to clear filter:', response.message);
+					}
+				},
+				error: function(xhr, status, error) {
+					console.error('AJAX Clear Error:', error);
+					console.error('Response Text:', xhr.responseText);
+					// Fallback - reload page anyway
+					window.location.href = '<?php echo BASE_URL; ?>frontoffice/pencarian/?q=<?php echo urlencode($data["q"]); ?>';
+				}
+			});
+		});
+		
+		// Submit form when a project is selected
+		$('#project-dropdown-menu').on('click', '.project-select', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			var projectId = $(this).data('project');
+			var projectName = $(this).text().trim();
+			$('#selected-project-input').val(projectId);
+
+			console.log('Setting project to session:', projectId);
+			
+			// Update active project
+			activeProject = projectId;
+			
+			// Simpan project id ke session via AJAX
+			$.ajax({
+				url: '<?php echo BASE_URL; ?>frontoffice/set_project_session',
+				type: 'POST',
+				data: { project_id: projectId },
+				dataType: 'json',
+				success: function(response) {
+					console.log('AJAX Response:', response);
+					if (response.status === 'success') {
+						console.log('Project saved to session successfully');
+						// Setelah berhasil, submit form filter
+						$('#form-filter-project').submit();
+					} else {
+						console.error('Failed to save project:', response.message);
+						// Tetap submit form meskipun session gagal
+						$('#form-filter-project').submit();
+					}
+				},
+				error: function(xhr, status, error) {
+					console.error('AJAX Error:', error);
+					console.error('Response Text:', xhr.responseText);
+					// Tetap submit form meskipun ada error
+					$('#form-filter-project').submit();
+				}
+			});
+		});
+	});
+	
 	$(document).ready(function() {
 		// Improved project dropdown functionality
 		$('#project-dropdown-menu').on('click', '.project-select, .project-select-all', function(e) {
@@ -945,10 +939,10 @@
 
 
 	$(function() {
-			$(this).bind("contextmenu", function(e) {
-				e.preventDefault();
-			});
-		}); 
+		$(this).bind("contextmenu", function(e) {
+			e.preventDefault();
+		});
+	}); 
 
 	// Gallery Grid Enhancement
 	$(document).ready(function() {
