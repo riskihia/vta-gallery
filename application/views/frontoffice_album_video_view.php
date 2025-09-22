@@ -430,12 +430,12 @@
 		<div class="modal-dialog modal-lg" style="width: 90%; max-width: 1200px;">
 			<div class="modal-content" style="background: #000; border: none;">
 				<div class="modal-header" style="border: none; padding: 10px;">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #fff; opacity: 0.8;">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #fff; opacity: 0.8;position:static;font-size: 24px;">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body" style="padding: 0;">
-					<video id="modalVideo" width="100%" height="600px" controls style="background: #000;">
+					<video id="modalVideo" width="100%" style="max-height: 600px;" controls style="background: #000;">
 						<source id="modalVideoSource" src="" type="video/mp4">
 						Your browser does not support the video tag.
 					</video>
