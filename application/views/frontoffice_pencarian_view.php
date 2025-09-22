@@ -442,12 +442,12 @@
 				<div class="panel panel-flat">
 					<div class="panel-heading">
 						<h5 class="panel-title"><i class="icon-search4 text-muted text-size-base"></i> Pencarian</h5>
-						<div class="heading-elements">
+						<!-- <div class="heading-elements">
 							<ul class="icons-list">
 		                		<li><a data-action="collapse"></a></li>
 		                		<li><a data-action="close"></a></li>
 		                	</ul>
-	                	</div>
+	                	</div> -->
 					</div>
 
 					<div class="panel-body">
@@ -520,11 +520,11 @@
 									</ul>
 								</div>
 
-								<div class="col-sm-6 text-right">
+								<!-- <div class="col-sm-6 text-right">
 									<ul class="list-inline no-margin-bottom">
 										<li><a href="#" class="btn btn-link btn-sm"><i class="icon-menu7 position-left"></i></a></li>
 									</ul>
-								</div>
+								</div> -->
 							</div>
 							<!-- Hidden input for project -->
 							<input type="hidden" name="project" id="selected-project-input" value="">
