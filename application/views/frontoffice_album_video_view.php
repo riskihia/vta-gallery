@@ -254,7 +254,7 @@
 						<!-- Compact 3-Column Album Info -->
 						<div class="album-info-compact">
 							<div class="info-columns">
-								<!-- Kolom 1: Tanggal & Lokasi -->
+								<!-- Kolom 1: Tanggal, Lokasi, Total Video -->
 								<div class="info-col">
 									<div class="info-item-compact">
 										<div class="info-label">
@@ -275,9 +275,19 @@
 											<?php echo !empty($data['info']['lokasi']) ? $data['info']['lokasi'] : '<span class="text-muted">Tidak tersedia</span>'; ?>
 										</div>
 									</div>
+									
+									<div class="info-item-compact">
+										<div class="info-label">
+											<i class="icon-clapboard-play info-icon text-info"></i>
+											Total Video
+										</div>
+										<div class="info-value">
+											<span class="label label-success label-sm"><?php echo count($data['aadata']); ?> Video</span>
+										</div>
+									</div>
 								</div>
 								
-								<!-- Kolom 2: Project & Total Video -->
+								<!-- Kolom 2: Project, Kategori, Sub Kategori -->
 								<div class="info-col">
 									<div class="info-item-compact">
 										<div class="info-label">
@@ -289,15 +299,57 @@
 										</div>
 									</div>
 									
+									<?php if(!empty($data['info']['kategori'])): ?>
 									<div class="info-item-compact">
 										<div class="info-label">
-											<i class="icon-clapboard-play info-icon text-info"></i>
-											Total Video
+											<i class="icon-grid52 info-icon text-warning"></i>
+											Kategori
 										</div>
 										<div class="info-value">
-											<span class="label label-success label-sm"><?php echo count($data['aadata']); ?> Video</span>
+											<?php 
+											$categories = explode(', ', $data['info']['kategori']);
+											foreach($categories as $category): ?>
+												<span class="team-badge" style="background: #fff3cd; color: #856404; margin-right: 4px; margin-bottom: 2px; display: inline-block;"><?php echo trim($category); ?></span>
+											<?php endforeach; ?>
 										</div>
 									</div>
+									<?php else: ?>
+									<div class="info-item-compact">
+										<div class="info-label">
+											<i class="icon-grid52 info-icon text-muted"></i>
+											Kategori
+										</div>
+										<div class="info-value">
+											<span class="text-muted">Tidak tersedia</span>
+										</div>
+									</div>
+									<?php endif; ?>
+									
+									<?php if(!empty($data['info']['sub_kategori'])): ?>
+									<div class="info-item-compact">
+										<div class="info-label">
+											<i class="icon-grid4 info-icon text-success"></i>
+											Sub Kategori
+										</div>
+										<div class="info-value">
+											<?php 
+											$sub_categories = explode(', ', $data['info']['sub_kategori']);
+											foreach($sub_categories as $sub_category): ?>
+												<span class="team-badge" style="background: #d4edda; color: #155724; margin-right: 4px; margin-bottom: 2px; display: inline-block;"><?php echo trim($sub_category); ?></span>
+											<?php endforeach; ?>
+										</div>
+									</div>
+									<?php else: ?>
+									<div class="info-item-compact">
+										<div class="info-label">
+											<i class="icon-grid4 info-icon text-muted"></i>
+											Sub Kategori
+										</div>
+										<div class="info-value">
+											<span class="text-muted">Tidak tersedia</span>
+										</div>
+									</div>
+									<?php endif; ?>
 								</div>
 								
 								<!-- Kolom 3: Tim -->

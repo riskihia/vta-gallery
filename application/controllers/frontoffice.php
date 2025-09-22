@@ -93,7 +93,7 @@ class Frontoffice extends Controller {
 		$data['title']         = 'Foto';
 		$data['encode']        = $x;
 		
-		// Get detailed album information with team and project data
+		// Get detailed album information with team, project, kategori, and sub_kategori data
 		$detailQuery = "SELECT a.autono, a.autocode, a.nama_kegiatan, a.tanggal, a.lokasi, a.keterangan, a.narasi,
 				mp.nama_project,
 				GROUP_CONCAT(
@@ -104,11 +104,17 @@ class Frontoffice extends Controller {
 						mps.id_jabatan,
 						mps.nm_pegawai
 					SEPARATOR ', '
-				) AS team
+				) AS team,
+				GROUP_CONCAT(DISTINCT ktr_ref.nama_kategori SEPARATOR ', ') AS kategori,
+				GROUP_CONCAT(DISTINCT ktr_ref_sub.nama_sub_kategori SEPARATOR ', ') AS sub_kategori
 			FROM tbl_dokumen a
 			LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON mp.autocode_mp = a.project
 			LEFT JOIN (SELECT parent_id, kd_pegawai FROM tbl_dokumen_team) AS teams ON teams.parent_id = a.autono
 			LEFT JOIN (SELECT autocode, nm_pegawai, id_jabatan FROM m_pegawai) AS mps ON mps.autocode = teams.kd_pegawai
+			LEFT JOIN (SELECT autono, parent_id, kd_kategori FROM tbl_dokumen_kategori) AS ktr ON ktr.parent_id = a.autono 
+			LEFT JOIN (SELECT autono, autocode, nama_kategori FROM ref_kategori) AS ktr_ref ON ktr.kd_kategori = ktr_ref.autocode 
+			LEFT JOIN (SELECT autono, parent_id, kd_sub_kategori FROM tbl_dokumen_sub_kategori) AS ktr_sub ON ktr_sub.parent_id = a.autono 
+			LEFT JOIN (SELECT autono, autocode, nama_sub_kategori FROM ref_sub_kategori) AS ktr_ref_sub ON ktr_sub.kd_sub_kategori = ktr_ref_sub.autocode 
 			WHERE a.autono = $id
 			GROUP BY a.autono";
 		
@@ -137,7 +143,7 @@ class Frontoffice extends Controller {
 		$data['title']         = 'Video';
 		$data['encode']        = $x;
 		
-		// Get detailed album information with team and project data
+		// Get detailed album information with team, project, kategori, and sub_kategori data
 		$detailQuery = "SELECT a.autono, a.autocode, a.nama_kegiatan, a.tanggal, a.lokasi, a.keterangan, a.narasi,
 				mp.nama_project,
 				GROUP_CONCAT(
@@ -148,11 +154,17 @@ class Frontoffice extends Controller {
 						mps.id_jabatan,
 						mps.nm_pegawai
 					SEPARATOR ', '
-				) AS team
+				) AS team,
+				GROUP_CONCAT(DISTINCT ktr_ref.nama_kategori SEPARATOR ', ') AS kategori,
+				GROUP_CONCAT(DISTINCT ktr_ref_sub.nama_sub_kategori SEPARATOR ', ') AS sub_kategori
 			FROM tbl_dokumen a
 			LEFT JOIN (SELECT autocode AS autocode_mp, nama_project FROM m_project) AS mp ON mp.autocode_mp = a.project
 			LEFT JOIN (SELECT parent_id, kd_pegawai FROM tbl_dokumen_team) AS teams ON teams.parent_id = a.autono
 			LEFT JOIN (SELECT autocode, nm_pegawai, id_jabatan FROM m_pegawai) AS mps ON mps.autocode = teams.kd_pegawai
+			LEFT JOIN (SELECT autono, parent_id, kd_kategori FROM tbl_dokumen_kategori) AS ktr ON ktr.parent_id = a.autono 
+			LEFT JOIN (SELECT autono, autocode, nama_kategori FROM ref_kategori) AS ktr_ref ON ktr.kd_kategori = ktr_ref.autocode 
+			LEFT JOIN (SELECT autono, parent_id, kd_sub_kategori FROM tbl_dokumen_sub_kategori) AS ktr_sub ON ktr_sub.parent_id = a.autono 
+			LEFT JOIN (SELECT autono, autocode, nama_sub_kategori FROM ref_sub_kategori) AS ktr_ref_sub ON ktr_sub.kd_sub_kategori = ktr_ref_sub.autocode 
 			WHERE a.autono = $id
 			GROUP BY a.autono";
 		
@@ -354,7 +366,7 @@ class Frontoffice extends Controller {
 			ORDER BY a.tanggal DESC
 		";
 
-		error_log($queryfoto);
+		// error_log($queryfoto);
 
 		// Hitung total foto
 		$resTotalLengthFoto = $model->query("SELECT COUNT(*) as total FROM (
