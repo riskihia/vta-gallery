@@ -70,7 +70,7 @@
 		}
 		
 		.info-label {
-			font-size: 11px;
+			font-size: 14px;
 			color: #6c757d;
 			text-transform: uppercase;
 			font-weight: 600;
@@ -81,7 +81,7 @@
 		}
 		
 		.info-value {
-			font-size: 13px;
+			font-size: 16px;
 			color: #343a40;
 			font-weight: 500;
 			line-height: 1.3;
@@ -89,8 +89,8 @@
 		}
 		
 		.info-icon {
-			font-size: 12px;
-			width: 14px;
+			font-size: 16px;
+			width: 18px;
 		}
 		
 		.team-badges {
@@ -106,7 +106,7 @@
 			color: #1976d2;
 			padding: 2px 6px;
 			border-radius: 10px;
-			font-size: 10px;
+			font-size: 14px;
 			line-height: 1.2;
 		}
 		
@@ -121,7 +121,7 @@
 			padding: 10px;
 			border-radius: 4px;
 			border: 1px solid #e9ecef;
-			font-size: 12px;
+			font-size: 14px;
 			line-height: 1.4;
 			color: #495057;
 		}
