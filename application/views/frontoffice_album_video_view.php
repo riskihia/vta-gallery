@@ -228,7 +228,7 @@
 
 				<ul class="breadcrumb breadcrumb-caret position-right">
 					<li><a href="<?php echo BASE_URL."frontoffice/"; ?>">Home</a></li>
-					<li><a href="<?php echo BASE_URL."frontoffice/gallery_video/"; ?>">Gallery Video</a></li>
+					<li><a href="<?php echo BASE_URL."frontoffice/pencarian/"; ?>">Gallery Video</a></li>
                 	<li class="active"><?php $m = new Model(); echo $m->format_tanggal($data['info']['tanggal']);?></li>
 					<li class="active"><?php echo $data['info']['nama_kegiatan']?></li>
 				</ul>
