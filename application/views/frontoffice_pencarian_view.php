@@ -45,9 +45,9 @@
 			min-height: auto !important;
 		}
 		
-		/* Card styling dengan flexbox */
+		/* Card styling dengan flexbox dan fixed height */
 		.gallery-grid .thumbnail {
-			height: 100%;
+			height: 450px; /* Fixed height untuk semua card */
 			display: flex;
 			flex-direction: column;
 			border: 1px solid #ddd;
@@ -89,33 +89,34 @@
 			background-color: rgba(0,0,0,0.8);
 		}
 		
-		/* Caption area yang fleksibel */
+		/* Caption area dengan flex layout yang optimal */
 		.gallery-grid .caption {
 			flex-grow: 1;
 			display: flex;
 			flex-direction: column;
+			justify-content: flex-start; /* Konten mulai dari atas */
 			padding: 15px;
-			min-height: 120px;
+			height: 250px; /* Fixed height untuk caption area */
+			overflow: hidden;
 		}
 		
-		/* Project name styling */
+		/* Project name styling - tanpa pembatasan tinggi */
 		.project-name {
 			margin-bottom: 8px;
+			flex-shrink: 0;
 		}
 		
 		.project-name h6 {
 			margin-bottom: 0;
 			line-height: 1.3;
 			font-size: 12px;
-			max-height: 20px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
+			font-weight: bold;
+			word-wrap: break-word;
 		}
 		
-		/* Kegiatan name with flexible height */
+		/* Kegiatan name - tanpa pembatasan tinggi */
 		.kegiatan-name {
-			flex-grow: 1;
+			flex-shrink: 0;
 			margin-bottom: 10px;
 		}
 		
@@ -123,17 +124,15 @@
 			margin-bottom: 0;
 			line-height: 1.4;
 			font-size: 14px;
-			max-height: 56px; /* 4 lines max */
-			overflow: hidden;
-			display: -webkit-box;
-			-webkit-line-clamp: 3;
-			-webkit-box-orient: vertical;
-			line-clamp: 3; /* Standard property */
+			word-wrap: break-word;
 		}
 		
-		/* Info section at bottom */
+		/* Info section - posisi fleksibel tanpa margin-top auto */
 		.caption-info {
-			margin-top: auto;
+			flex-grow: 1; /* Mengisi ruang yang tersisa */
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start; /* Konten dimulai dari atas */
 		}
 		
 		   .gallery-grid .caption .help-block {
@@ -141,8 +140,9 @@
 			   font-size: 11px;
 			   line-height: 1.3;
 			   display: flex;
-			   align-items: center;
+			   align-items: flex-start; /* Align ke atas untuk multiline */
 			   gap: 2px;
+			   word-wrap: break-word;
 		   }
 
 		   .gallery-grid .caption .help-block:last-child {
@@ -155,7 +155,8 @@
 			   text-align: center;
 			   font-size: 13px;
 			   line-height: 1;
-			   align-self: center;
+			   align-self: flex-start; /* Icon tetap di atas untuk multiline text */
+			   margin-top: 2px; /* Sedikit offset agar sejajar dengan baris pertama text */
 		   }
 		
 		/* Caption overlay improvements */
@@ -177,7 +178,7 @@
 			opacity: 1;
 		}
 		
-		/* Responsive adjustments */
+		/* Responsive adjustments dengan fixed height */
 		@media (max-width: 767px) {
 			.gallery-grid {
 				grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -186,6 +187,14 @@
 			
 			.gallery-grid .thumb {
 				height: 180px;
+			}
+			
+			.gallery-grid .thumbnail {
+				height: 400px; /* Fixed height untuk tablet */
+			}
+			
+			.gallery-grid .caption {
+				height: 220px; /* Sesuaikan tinggi caption untuk tablet */
 			}
 		}
 		
@@ -197,6 +206,14 @@
 			
 			.gallery-grid .thumb {
 				height: 200px;
+			}
+			
+			.gallery-grid .thumbnail {
+				height: 420px; /* Fixed height untuk mobile */
+			}
+			
+			.gallery-grid .caption {
+				height: 220px; /* Sesuaikan tinggi caption untuk mobile */
 			}
 		}
 		
@@ -223,10 +240,19 @@
 				float: none !important;
 			}
 			
+			/* Pastikan thumbnail tetap fixed height di fallback */
+			.gallery-grid .thumbnail {
+				height: 450px !important;
+			}
+			
 			@media (max-width: 991px) {
 				.gallery-grid .col-lg-3, 
 				.gallery-grid .col-sm-6 {
 					width: calc(50% - 20px) !important;
+				}
+				
+				.gallery-grid .thumbnail {
+					height: 400px !important;
 				}
 			}
 			
@@ -234,6 +260,10 @@
 				.gallery-grid .col-lg-3, 
 				.gallery-grid .col-sm-6 {
 					width: calc(100% - 20px) !important;
+				}
+				
+				.gallery-grid .thumbnail {
+					height: 420px !important;
 				}
 			}
 		}
@@ -585,7 +615,7 @@
 											<div class="kegiatan-name">
 												<h6 class="no-margin">
 													<a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-default"><?php echo $string ?></a>
-													<a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a>
+													<!-- <a href="<?php echo BASE_URL."frontoffice/album_foto/".$idf; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a> -->
 												</h6>
 											</div>
 											
@@ -716,7 +746,7 @@
 											<div class="kegiatan-name">
 												<h6 class="no-margin">
 													<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx;?>" class="text-default" title="<?php echo $video['nama_kegiatan'];?>"><?php echo $string ?></a>
-													<a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a>
+													<!-- <a href="<?php echo BASE_URL."frontoffice/album_video/".$idx; ?>" class="text-muted"><i class="icon-three-bars pull-right"></i></a> -->
 												</h6>
 											</div>
 											<div class="caption-info">
