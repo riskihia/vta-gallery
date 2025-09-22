@@ -220,7 +220,11 @@
 	<div class="page-header">
 		<div class="page-header-content">
 			<div class="page-title">
-				<h4><a href="#" onclick="javascript:window.history.back();"><i class="icon-arrow-left52 position-left"></i></a> <span class="text-semibold">Gallery Video</span> - <?php echo $data['info']['nama_kegiatan']?> <div class="text-right" style="margin-top:-35px"><button type="button" class="btn btn-default btn-xs heading-btn" data-toggle="modal" data-target="#modal_form"><i class="icon-file-download2 position-left"></i> Download</button></div></h4>
+				<h4>
+					<a href="#" onclick="javascript:window.history.back();"><i class="icon-arrow-left52 position-left"></i></a> <span class="text-semibold">Gallery Video</span> - <?php echo $data['info']['nama_kegiatan']?> 
+					
+					<!-- <div class="text-right" style="margin-top:-35px"><button type="button" class="btn btn-default btn-xs heading-btn" data-toggle="modal" data-target="#modal_form"><i class="icon-file-download2 position-left"></i> Download</button></div> -->
+				</h4>
 
 				<ul class="breadcrumb breadcrumb-caret position-right">
 					<li><a href="<?php echo BASE_URL."frontoffice/"; ?>">Home</a></li>
