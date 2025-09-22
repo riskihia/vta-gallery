@@ -44,17 +44,61 @@
 	
 	<!-- Custom styles for album info -->
 	<style>
-		.info-item {
-			margin-bottom: 10px;
-			padding: 8px 12px;
+		/* Compact 3-column album info layout */
+		.album-info-compact {
 			background: #f8f9fa;
-			border-left: 3px solid #007bff;
-			border-radius: 4px;
+			border: 1px solid #dee2e6;
+			border-radius: 6px;
+			padding: 15px;
+			margin-bottom: 20px;
 		}
 		
-		.info-item.success { border-left-color: #28a745; }
-		.info-item.warning { border-left-color: #ffc107; }
-		.info-item.info { border-left-color: #17a2b8; }
+		.info-columns {
+			display: flex;
+			gap: 20px;
+			margin-bottom: 15px;
+		}
+		
+		.info-col {
+			flex: 1;
+			min-width: 0; /* Prevent flex item from growing beyond container */
+		}
+		
+		.info-item-compact {
+			margin-bottom: 8px;
+			padding: 6px 0;
+		}
+		
+		.info-label {
+			font-size: 14px;
+			color: #6c757d;
+			text-transform: uppercase;
+			font-weight: 600;
+			margin-bottom: 2px;
+			display: flex;
+			align-items: center;
+			gap: 4px;
+		}
+		
+		.info-value {
+			font-size: 16px;
+			color: #343a40;
+			font-weight: 500;
+			line-height: 1.3;
+			word-wrap: break-word;
+		}
+		
+		.info-icon {
+			font-size: 16px;
+			width: 18px;
+		}
+		
+		.team-badges {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 3px;
+			margin-top: 2px;
+		}
 		
 		.team-badge {
 			display: inline-block;
@@ -62,8 +106,42 @@
 			color: #1976d2;
 			padding: 2px 6px;
 			border-radius: 10px;
-			font-size: 11px;
-			margin: 1px;
+			font-size: 14px;
+			line-height: 1.2;
+		}
+		
+		.keterangan-section {
+			border-top: 1px solid #e9ecef;
+			padding-top: 12px;
+			margin-top: 5px;
+		}
+		
+		.keterangan-content {
+			background: #fff;
+			padding: 10px;
+			border-radius: 4px;
+			border: 1px solid #e9ecef;
+			font-size: 14px;
+			line-height: 1.4;
+			color: #495057;
+		}
+		
+		/* Responsive adjustments */
+		@media (max-width: 768px) {
+			.info-columns {
+				flex-direction: column;
+				gap: 10px;
+			}
+		}
+		
+		@media (max-width: 480px) {
+			.album-info-compact {
+				padding: 12px;
+			}
+			
+			.info-columns {
+				gap: 8px;
+			}
 		}
 	</style>
 
@@ -169,71 +247,65 @@
 						<h5 class="panel-title"><i class="icon-info22 position-left"></i> Informasi Album</h5>
 					</div>
 					<div class="panel-body">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="info-item">
-									<div class="media">
-										<div class="media-left">
-											<i class="icon-calendar22 text-primary"></i>
+						<!-- Compact 3-Column Album Info -->
+						<div class="album-info-compact">
+							<div class="info-columns">
+								<!-- Kolom 1: Tanggal & Lokasi -->
+								<div class="info-col">
+									<div class="info-item-compact">
+										<div class="info-label">
+											<i class="icon-calendar22 info-icon text-primary"></i>
+											Tanggal
 										</div>
-										<div class="media-body">
-											<div class="text-muted text-size-small">Tanggal</div>
-											<div class="text-semibold"><?php $m = new Model(); echo $m->format_tanggal($data['info']['tanggal']);?></div>
+										<div class="info-value">
+											<?php $m = new Model(); echo $m->format_tanggal($data['info']['tanggal']);?>
+										</div>
+									</div>
+									
+									<div class="info-item-compact">
+										<div class="info-label">
+											<i class="icon-location4 info-icon text-success"></i>
+											Lokasi
+										</div>
+										<div class="info-value">
+											<?php echo !empty($data['info']['lokasi']) ? $data['info']['lokasi'] : '<span class="text-muted">Tidak tersedia</span>'; ?>
 										</div>
 									</div>
 								</div>
 								
-								<div class="info-item success">
-									<div class="media">
-										<div class="media-left">
-											<i class="icon-location4 text-success"></i>
+								<!-- Kolom 2: Project & Total Foto -->
+								<div class="info-col">
+									<div class="info-item-compact">
+										<div class="info-label">
+											<i class="icon-folder-open info-icon text-warning"></i>
+											Project
 										</div>
-										<div class="media-body">
-											<div class="text-muted text-size-small">Lokasi</div>
-											<div class="text-semibold"><?php echo !empty($data['info']['lokasi']) ? $data['info']['lokasi'] : '<span class="text-muted">Tidak tersedia</span>'; ?></div>
+										<div class="info-value">
+											<?php echo !empty($data['info']['nama_project']) ? $data['info']['nama_project'] : '<span class="text-muted">Tidak tersedia</span>'; ?>
 										</div>
 									</div>
-								</div>
-							</div>
-							
-							<div class="col-md-6">
-								<div class="info-item warning">
-									<div class="media">
-										<div class="media-left">
-											<i class="icon-folder-open text-warning"></i>
+									
+									<div class="info-item-compact">
+										<div class="info-label">
+											<i class="icon-images2 info-icon text-info"></i>
+											Total Foto
 										</div>
-										<div class="media-body">
-											<div class="text-muted text-size-small">Project</div>
-											<div class="text-semibold"><?php echo !empty($data['info']['nama_project']) ? $data['info']['nama_project'] : '<span class="text-muted">Tidak tersedia</span>'; ?></div>
+										<div class="info-value">
+											<span class="label label-success label-sm"><?php echo count($data['aadata']); ?> Foto</span>
 										</div>
 									</div>
 								</div>
 								
-								<div class="info-item info">
-									<div class="media">
-										<div class="media-left">
-											<i class="icon-images2 text-info"></i>
+								<!-- Kolom 3: Tim -->
+								<div class="info-col">
+									<?php if(!empty($data['info']['team'])): ?>
+									<div class="info-item-compact">
+										<div class="info-label">
+											<i class="icon-users info-icon text-info"></i>
+											Tim Terlibat
 										</div>
-										<div class="media-body">
-											<div class="text-muted text-size-small">Total Foto</div>
-											<div class="text-semibold"><span class="label label-success"><?php echo count($data['aadata']); ?> Foto</span></div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<?php if(!empty($data['info']['team'])): ?>
-						<div class="row" style="margin-top: 15px;">
-							<div class="col-sm-12">
-								<div class="info-item info">
-									<div class="media">
-										<div class="media-left">
-											<i class="icon-users text-info"></i>
-										</div>
-										<div class="media-body">
-											<div class="text-muted text-size-small">Tim Terlibat</div>
-											<div style="margin-top: 5px;">
+										<div class="info-value">
+											<div class="team-badges">
 												<?php 
 												$team_members = explode(', ', $data['info']['team']);
 												foreach($team_members as $member): ?>
@@ -242,21 +314,33 @@
 											</div>
 										</div>
 									</div>
+									<?php else: ?>
+									<div class="info-item-compact">
+										<div class="info-label">
+											<i class="icon-users info-icon text-muted"></i>
+											Tim Terlibat
+										</div>
+										<div class="info-value">
+											<span class="text-muted">Tidak tersedia</span>
+										</div>
+									</div>
+									<?php endif; ?>
 								</div>
 							</div>
-						</div>
-						<?php endif; ?>
-						
-						<?php if(!empty($data['info']['keterangan'])): ?>
-						<div class="row" style="margin-top: 15px;">
-							<div class="col-sm-12">
-								<h6 class="text-semibold"><i class="icon-file-text text-slate"></i> Keterangan</h6>
-								<div class="well well-sm">
+							
+							<!-- Keterangan (Full Width di bawah) -->
+							<?php if(!empty($data['info']['keterangan'])): ?>
+							<div class="keterangan-section">
+								<div class="info-label" style="margin-bottom: 8px;">
+									<i class="icon-file-text info-icon text-slate"></i>
+									Keterangan
+								</div>
+								<div class="keterangan-content">
 									<?php echo nl2br(htmlspecialchars($data['info']['keterangan'])); ?>
 								</div>
 							</div>
+							<?php endif; ?>
 						</div>
-						<?php endif; ?>
 					</div>
 				</div>
 
