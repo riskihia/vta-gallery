@@ -258,9 +258,9 @@
                                       <span>
                                         <?php 
                                         if($tipe['0']== 'video'){
-                                          echo '<a href="'.$fileshow.'" data-popup="lightbox" target="_blank" class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-zoomin3"></i></a>';  
+                                          echo '<a href="'.$fileshow.'" data-popup="video-lightbox" class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-play3"></i></a>';  
                                         }  else { 
-                                          echo '<a href="'.$fileshow.'" data-popup="lightbox" rel="gallery" target="_blank" class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-zoomin3"></i></a>';  
+                                          echo '<a href="'.$fileshow.'" data-popup="lightbox" rel="gallery" class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-zoomin3"></i></a>';  
                                         }  
                                         ?>
                                         <a href="#" onClick="delete_filexx(1, '<?php echo $attch['autono'] ?>')" class="btn border-white text-white btn-flat btn-icon btn-rounded ml-5 red" title="Delete file"><i class="icon-trash"></i></a>
@@ -300,6 +300,26 @@
           
 
 <?php include('footer.php'); ?>
+
+<!-- Video Modal -->
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" style="width: 90%; max-width: 1200px;">
+		<div class="modal-content" style="background: #000; border: none;">
+			<div class="modal-header" style="border: none; padding: 10px;">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #fff; opacity: 0.8;position:static;font-size: 24px;">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="padding: 0;">
+				<video id="modalVideo" width="100%" style="max-height: 600px;" controls style="background: #000;">
+					<source id="modalVideoSource" src="" type="video/mp4">
+					Your browser does not support the video tag.
+				</video>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript">
   var url = '<?php echo $data['curl'] ?>/';
   var url_file = '<?php echo BASE_URL; ?>static/files/bahan/dokumen/';
@@ -340,6 +360,36 @@
 }
 
 $(function() {
+    // Video modal popup
+    $('[data-popup="video-lightbox"]').click(function(e) {
+        e.preventDefault();
+        var videoSrc = $(this).attr('href');
+        
+        // Set video source
+        $('#modalVideoSource').attr('src', videoSrc);
+        $('#modalVideo')[0].load(); // Reload video element
+        
+        // Show modal
+        $('#videoModal').modal('show');
+        
+        // Auto play when modal is shown
+        $('#videoModal').on('shown.bs.modal', function() {
+            $('#modalVideo')[0].play();
+        });
+    });
+
+    // Stop video when modal is closed
+    $('#videoModal').on('hidden.bs.modal', function() {
+        var video = $('#modalVideo')[0];
+        video.pause();
+        video.currentTime = 0;
+        $('#modalVideoSource').attr('src', '');
+    });
+
+    // Disable right click on video
+    $('#modalVideo').bind("contextmenu", function(e) {
+        e.preventDefault();
+    }); 
 
     $('#btn-proses').on('click', function() {
 
