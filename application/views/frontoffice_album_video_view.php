@@ -440,7 +440,7 @@
 					<div class="col-lg-3 col-sm-6">
 						<div class="thumbnail">
 							<div class="thumb">
-								<video width="100%" height="200px" muted style="outline: none;border: none;background: #090909">
+								<video width="100%" height="200px" muted style="outline: none;border: none;background: #090909; border-radius: 4px; object-fit: cover;">
 									<source src="<?php echo $fileshow; ?>#t=20" type="video/mp4" preload="metadata">
 								</video>
 								<div class="caption-overflow">

@@ -438,7 +438,7 @@
 					<div class="col-lg-3 col-sm-6">
 						<div class="thumbnail">
 							<div class="thumb">
-								<img src="<?php echo $fileshow; ?>" style="height: 200px;" alt="">
+								<img src="<?php echo $fileshow; ?>" style="height: 200px; border-radius: 4px; object-fit: cover;" alt="">
 								<div class="caption-overflow">
 									<span>
 										<a href="<?php echo $fileshow; ?>" data-popup="lightbox" rel="gallery" class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-zoomin3"></i></a>

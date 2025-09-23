@@ -591,7 +591,7 @@
 								<div class="col-lg-3 col-sm-6">
 									<div class="thumbnail">
 										<div class="thumb">
-											<img src="<?php echo $fileshow; ?>"   style="height: 200px;" alt="">
+											<img src="<?php echo $fileshow; ?>" style="height: 200px; border-top-left-radius: 6px; border-top-right-radius: 6px; object-fit: cover;" alt="">
 											<div class="caption-overflow">
 												<span>
 													<a href="<?php echo $fileshow; ?>" data-popup="lightbox" class="btn border-white text-white btn-flat btn-icon btn-rounded"><i class="icon-zoomin3"></i></a>
@@ -720,7 +720,7 @@
 								<div class="col-lg-3 col-sm-6">
 									<div class="thumbnail">
 										<div class="thumb">
-											<video width="100%" height="200px" muted style="outline: none;border: none;background: #090909">
+											<video width="100%" height="200px" muted style="outline: none;border: none;background: #090909; border-top-left-radius: 6px; border-top-right-radius: 6px; object-fit: cover;">
 												<source src="<?php echo $videofile; ?>#t=20" type="video/mp4" preload="metadata">
 											</video>
 											<div class="caption-overflow">
