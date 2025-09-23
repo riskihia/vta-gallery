@@ -775,7 +775,7 @@ class Dokumen extends Controller {
 	{
 		$uri      = $this->loadHelper('Url_helper');
 		$model    = $this->loadModel($this->model);
-		$dt       = $uri->segment(3); // Changed from segment(4) to segment(3)
+		$dt = $uri->segment(count(explode('/', trim($_SERVER['REQUEST_URI'], '/'))));
 		$autono   = str_replace("-", ",", $dt);
 		$zip_name = "foto_download_".time().".zip";
 		$datafile =  $model->query("SELECT structured, IF(structured = 0, (CONCAT('static/files/bahan/dokumen/bahan/', kode_parent,'/',subdir,'/',nama_file)), (CONCAT('static/files/bahan/', dir, '/', subdir, '/', nama_file))  ) AS direktori  FROM vt_files WHERE autono IN ($autono)");
