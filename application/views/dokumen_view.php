@@ -1,3 +1,12 @@
+<style>
+#modal_form .img-preview {
+  object-fit: cover !important;
+  max-height: 120px;
+  width: 100%;
+  display: block;
+}
+</style>
+
 <?php include('header.php'); ?>
 
               <!-- Page header -->
