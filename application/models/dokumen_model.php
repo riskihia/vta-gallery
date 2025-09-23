@@ -402,6 +402,8 @@ ORDER BY mp.`nama_project` ASC");
         $limit = self::limit( $request, $columns );
 
         $order = self::order( $request, $columns );
+        
+        $sOrder = "ORDER BY tanggal DESC";
 
         $where = self::filters( $request, $columns, $bindings, true );
 
@@ -428,6 +430,8 @@ ORDER BY mp.`nama_project` ASC");
 
              $where
 
+             $sOrder
+             
              $order
 
              $limit"
