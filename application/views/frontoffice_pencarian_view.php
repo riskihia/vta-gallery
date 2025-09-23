@@ -416,7 +416,12 @@
 	<div class="page-header">
 		<div class="page-header-content">
 			<div class="page-title">
-				<h4><a href="#" onclick="javascript:window.history.back();"><i class="icon-arrow-left52 position-left"></i> <span class="text-semibold">Pencarian</span></h4>
+				<h4>
+					<a href="<?php echo BASE_URL; ?>frontoffice/dashboard">
+						<i class="icon-arrow-left52 position-left"></i>
+						<span class="text-semibold">Pencarian</span>
+					</a>
+				</h4>
 
 				<ul class="breadcrumb breadcrumb-caret position-right">
 					<li><a href="<?php BASE_URL."frontoffice/"; ?>">Home</a></li>
