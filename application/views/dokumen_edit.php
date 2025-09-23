@@ -244,12 +244,11 @@
                                           $fileshow = BASE_URL."static/images/placeholder.jpg";
                                       }
 
-                                      if($tipe[0] == 'video'){
-                                        //echo '<video width="220" controls><source src="'.$fileshow.'" type="mp4"></video>'; 
-                                        echo '<img src="'.BASE_URL."static/images/placeholder.jpg".'" class=\"col-lg-2 col-sm-6\" heigth=\"100px\" alt="">'; 
-                                      } else {
-                                        echo '<img src="'.$fileshow.'" class=\"col-lg-2 col-sm-6\" heigth=\"100px\" alt="">'; 
-                                      }
+                                        if($tipe[0] == 'video'){
+                                        echo '<div style="width: 100%; height: 100px; overflow: hidden; display: flex; align-items: center; justify-content: center;"><video width="100%" height="100%" controls style="object-fit: cover;"><source src="'.$fileshow.'" type="video/mp4"></video></div>'; 
+                                        } else {
+                                        echo '<div style="width: 100%; height: 100px; overflow: hidden; display: flex; align-items: center; justify-content: center;"><img src="'.$fileshow.'" style="object-fit: cover; width: 100%; height: 100%;" alt=""></div>'; 
+                                        }
 
                                       
 
