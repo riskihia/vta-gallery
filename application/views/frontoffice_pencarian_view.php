@@ -569,12 +569,12 @@
 							<div class="gallery-grid">
 							<?php $c = new Controller(); $m = new Model(); foreach ($data['foto']['aadata'] as $key => $value) { 
 								$string = $value['nama_kegiatan']; 
-								if (strlen($string) > 30) {
-			                          $stringCut = substr($string, 0, 30);
-			                          $endPoint  = strrpos($stringCut, ' ');
-			                          $string    = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-			                          $string   .= "...";
-			                      }
+								// if (strlen($string) > 30) {
+			                    //       $stringCut = substr($string, 0, 30);
+			                    //       $endPoint  = strrpos($stringCut, ' ');
+			                    //       $string    = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+			                    //       $string   .= "...";
+			                    //   }
 
 			                      //echo "<p>dd</p>".$value['structured'];
 
@@ -701,12 +701,12 @@
 							<div class="gallery-grid">
 							<?php foreach ($data['video']['aadata'] as $key => $video) { 
 								$string = $video['nama_kegiatan']; 
-								if (strlen($string) > 32) {
-			                          $stringCut = substr($string, 0, 32);
-			                          $endPoint  = strrpos($stringCut, ' ');
-			                          $string    = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-			                          $string   .= "...";
-			                      }
+								// if (strlen($string) > 32) {
+			                    //       $stringCut = substr($string, 0, 32);
+			                    //       $endPoint  = strrpos($stringCut, ' ');
+			                    //       $string    = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+			                    //       $string   .= "...";
+			                    //   }
 
 			                      if($video['structured'] == 0){
 			                    	
