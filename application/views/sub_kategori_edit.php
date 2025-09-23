@@ -36,7 +36,7 @@
                         <fieldset class="content-group">
                           <?php foreach ($data['aadata'] as $key => $value) { ?>
 <div class="form-group">
-                            <label class="control-label col-lg-2">Nama kategori</label>
+                            <label class="control-label col-lg-2">Nama sub kategori</label>
                             <div class="col-lg-10">
                              <input type="text" class="form-control" name="nama_sub_kategori" value="<?php echo $value['nama_sub_kategori'] ?>" >
                             </div>
