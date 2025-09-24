@@ -336,13 +336,13 @@
                 : data;
               }
             },
-						{
-                "data": 1,
-                "width": 'auto',
-                "sortable": true,
-                    render: function (data, type, row, meta) {
-                    return "<code>"+row[10]+"</code> "+row[1];
-                }
+            {
+              "data": 1,
+              "width": 'auto',
+              "sortable": true,
+              "render": function (data, type, row, meta) {
+                return row[1];
+              }
             },
 						
             {"data": 8,width:'auto'},
