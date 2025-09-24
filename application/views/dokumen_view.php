@@ -186,20 +186,39 @@
       $('#submit').prop("disabled", true);
     }
     
-    // Update checkbox all tanpa trigger event
-    if (checkedCount === totalCount && totalCount > 0) {
-      $('#checkAll').prop('checked', true);
-    } else if (checkedCount === 0) {
+    // Update checkbox all dengan logika yang benar
+    if (checkedCount === 0) {
+      // Tidak ada yang dipilih - checkbox all harus unchecked
+      $('#checkAll').prop('indeterminate', false);
       $('#checkAll').prop('checked', false);
+    } else if (checkedCount === totalCount && totalCount > 0) {
+      // Semua dipilih - checkbox all harus checked
+      $('#checkAll').prop('indeterminate', false);
+      $('#checkAll').prop('checked', true);
     } else {
+      // Sebagian dipilih - checkbox all dalam keadaan indeterminate
+      $('#checkAll').prop('checked', false);
       $('#checkAll').prop('indeterminate', true);
     }
   }
   
   // Event handler untuk checkbox all
+  $("#checkAll").on('click', function () {
+      // Jika dalam keadaan indeterminate, set ke checked
+      if ($(this).prop('indeterminate')) {
+          $(this).prop('indeterminate', false);
+          $(this).prop('checked', true);
+      }
+  });
+  
   $("#checkAll").change(function () {
+      // Reset indeterminate state ketika user mengklik checkAll
+      $(this).prop('indeterminate', false);
+      
       var isChecked = $(this).prop("checked");
       $(".chk").prop('checked', isChecked);
+      
+      // Update state setelah perubahan
       updateCheckboxState();
   });
 
