@@ -182,7 +182,7 @@ class Dokumen_model extends Model {
 
     public function get_team()
     {
-        $result = $this->query("SELECT autocode, nm_pegawai FROM m_pegawai WHERE id_jabatan IS NOT NULL AND id_jabatan != 0 ORDER BY id_jabatan ASC;");
+        $result = $this->query("SELECT autocode, nm_pegawai FROM m_pegawai WHERE id_jabatan IS NOT NULL AND id_jabatan != 0 ORDER BY CASE WHEN nm_pegawai IN ('Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi') THEN 0 ELSE 1 END, FIELD(nm_pegawai,'Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi'), id_jabatan, nm_pegawai");
 
         return $result;
     }
@@ -260,7 +260,7 @@ class Dokumen_model extends Model {
 
     public function get_teamedit($id)
     {
-    	$result = $this->query("SELECT
+        $result = $this->query("SELECT
             a.autocode,
             a.`nm_pegawai`,
             IF (
@@ -279,9 +279,9 @@ class Dokumen_model extends Model {
                 tbl_dokumen_team
                 WHERE parent_id = $id) b
                 ON b.`kd_pegawai` = a.`autocode`
-            WHERE id_jabatan IS NOT NULL AND id_jabatan != 0 ORDER BY id_jabatan ASC");
+            WHERE id_jabatan IS NOT NULL AND id_jabatan != 0 ORDER BY CASE WHEN a.nm_pegawai IN ('Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi') THEN 0 ELSE 1 END, FIELD(a.nm_pegawai,'Fernandus beh','Ricco','Andryan Rachman','Siti Maryam','Very Noviandi'), a.id_jabatan, a.nm_pegawai");
 
-    	return $result;
+        return $result;
     }
 
 
