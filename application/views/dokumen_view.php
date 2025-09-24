@@ -5,6 +5,10 @@
   width: 100%;
   display: block;
 }
+
+.file-drop-zone{
+  height: auto !important;
+}
 </style>
 
 <?php include('header.php'); ?>
