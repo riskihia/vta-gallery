@@ -223,6 +223,9 @@
   });
 
 	function tes(i){
+    // Reset fileinput sebelum inisialisasi ulang
+    $('.file-input-video').fileinput('destroy');
+    
     $('.file-input-video').fileinput({   
         uploadUrl: url+"uploadfoto/"+i,
         uploadAsync: true,
@@ -241,6 +244,11 @@
 
     });
     }
+
+  // Event handler untuk mereset fileinput saat modal ditutup
+  $('#modal_video').on('hidden.bs.modal', function () {
+    $('.file-input-video').fileinput('clear');
+  });
 
   $(function() {
 
