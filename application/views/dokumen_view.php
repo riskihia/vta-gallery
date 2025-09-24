@@ -173,22 +173,70 @@
   var url_file = '<?php echo BASE_URL; ?>static/files/bahan/';
 
   $('#submit').prop("disabled", true);
-  $("#checkAll").change(function () {
-      $("input:checkbox").prop('checked', $(this).prop("checked"));
+  
+  // Fungsi untuk mengupdate status tombol submit dan checkbox all
+  function updateCheckboxState() {
+    var checkedCount = $('.chk:checked').length;
+    var totalCount = $('.chk').length;
+    
+    // Update tombol submit
+    if (checkedCount > 0) {
       $('#submit').prop("disabled", false);
-      if ($('.chk').filter(':checked').length < 1){
-        $('#submit').attr('disabled',true);
-        
-      }
+    } else {
+      $('#submit').prop("disabled", true);
+    }
+    
+    // Update checkbox all tanpa trigger event
+    if (checkedCount === totalCount && totalCount > 0) {
+      $('#checkAll').prop('checked', true);
+    } else if (checkedCount === 0) {
+      $('#checkAll').prop('checked', false);
+    } else {
+      $('#checkAll').prop('indeterminate', true);
+    }
+  }
+  
+  // Event handler untuk checkbox all
+  $("#checkAll").change(function () {
+      var isChecked = $(this).prop("checked");
+      $(".chk").prop('checked', isChecked);
+      updateCheckboxState();
   });
 
-  $('input:checkbox').click(function() {
-      if ($(this).is(':checked')) {
-        $('#submit').prop("disabled", false);
-          } else {
-      if ($('.chk').filter(':checked').length < 1){
-        $('#submit').attr('disabled',true);}
-      }
+  // Event handler untuk checkbox individual menggunakan event delegation
+  $(document).on('change', '.chk', function() {
+      updateCheckboxState();
+  });
+  
+  // Fungsi countChecked yang baru untuk menggantikan yang lama di app.js
+  // Fungsi ini akan dipanggil dari DataTable untuk checkbox yang dibuat dinamis
+  window.countChecked = function() {
+    updateCheckboxState();
+  };
+  
+  // Event listener untuk ketika modal datatable di-reload
+  $(document).on('draw.dt', '#datafile1', function() {
+    // Reset checkbox all state ketika tabel di-reload
+    $('#checkAll').prop('checked', false);
+    $('#checkAll').prop('indeterminate', false);
+    $('#submit').prop("disabled", true);
+  });
+  
+  // Event listener untuk ketika modal dibuka
+  $('#modal_form').on('shown.bs.modal', function() {
+    // Reset state ketika modal dibuka
+    $('#checkAll').prop('checked', false);
+    $('#checkAll').prop('indeterminate', false);
+    $('#submit').prop("disabled", true);
+  });
+  
+  // Event listener untuk ketika modal ditutup
+  $('#modal_form').on('hidden.bs.modal', function() {
+    // Reset semua checkbox ketika modal ditutup
+    $('#checkAll').prop('checked', false);
+    $('#checkAll').prop('indeterminate', false);
+    $('.chk').prop('checked', false);
+    $('#submit').prop("disabled", true);
   });
 
   $('#submit').on('click', function() {
