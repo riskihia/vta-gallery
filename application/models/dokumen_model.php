@@ -403,7 +403,7 @@ ORDER BY mp.`nama_project` ASC");
 
         $order = self::order( $request, $columns );
         
-        $sOrder = "ORDER BY tanggal DESC";
+        $sOrder = "ORDER BY tanggal DESC, autono DESC";
 
         $where = self::filters( $request, $columns, $bindings, true );
 

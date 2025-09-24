@@ -363,7 +363,7 @@ class Frontoffice extends Controller {
 			WHERE a.file_dokumen = 1 $filter_project
 				AND (a.nama_kegiatan LIKE '%$keyword%' OR a.narasi LIKE '%$keyword%' OR mp.nama_project LIKE '%$keyword%')
 			GROUP BY a.autono
-			ORDER BY a.tanggal DESC
+			ORDER BY a.tanggal DESC, autono DESC
 		";
 
 		// error_log($queryfoto);
@@ -414,7 +414,7 @@ class Frontoffice extends Controller {
 			WHERE a.file_dokumen = 1 $filter_project
 				AND (a.nama_kegiatan LIKE '%$keyword%' OR a.narasi LIKE '%$keyword%' OR mp.nama_project LIKE '%$keyword%')
 			GROUP BY a.autono
-			ORDER BY a.tanggal DESC
+			ORDER BY a.tanggal DESC, autono DESC
 		";
 		// Hitung total video
 		$resTotalLengthVideo = $model->query("SELECT COUNT(*) as total FROM (
